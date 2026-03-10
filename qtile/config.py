@@ -155,8 +155,6 @@ def autostart():
         ["dunst"],
         # Network tray (runs fine on Wayland via XWayland)
         ["nm-applet"],
-        # Banana cursor
-        ['xsetroot', '-cursor_name', 'left_ptr'] 
     ]
     for cmd in cmds:
         subprocess.Popen(cmd)
@@ -175,5 +173,5 @@ auto_minimize              = True
 wmname                     = "LG3D"
 
 wl_input_rules = {
-    "*": InputConfig(kb_layout="real-prog-dvorak", kb_variant="real-prog-dvorak"),
+    "*": InputConfig(kb_layout="real-prog-dvorak"),
 }
