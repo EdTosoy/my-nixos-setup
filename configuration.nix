@@ -182,6 +182,14 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
   #################################
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  services.xserver.xkb.extraLayouts = {
+    real-prog-dvorak = {
+      description = "Real Programmers Dvorak";
+      languages = [ "eng" ];
+      symbolsFile = "./real-prog-dvorak"
+    };
+  }; 
+
   #################################
   # State Version
   #################################

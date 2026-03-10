@@ -57,7 +57,7 @@ keys = [
     # Apps
     Key([mod], "Return", lazy.spawn(terminal),                               desc="Terminal"),
     Key([mod], "q",      lazy.window.kill(),                                 desc="Kill window"),
-    Key([mod], "d",      lazy.spawn("rofi -show drun -font 'Hack 11'"),      desc="Launcher"),
+    Key([mod], "o",      lazy.spawn("rofi -show drun -font 'Hack 11'"),      desc="Launcher"),
     Key([mod], "n",      lazy.spawn("kitty yazi"),                           desc="File manager"),
     Key([mod], "w",      lazy.spawn("firefox"),                              desc="Browser"),
     Key([mod], "Escape", lazy.spawn("kitty -e htop"),                        desc="Monitor"),
@@ -174,5 +174,5 @@ auto_minimize              = True
 wmname                     = "LG3D"
 
 wl_input_rules = {
-    "*": InputConfig(kb_layout="us", kb_variant="dvorak"),
+    "*": InputConfig(kb_layout="real-prog-dvorak"),
 }
