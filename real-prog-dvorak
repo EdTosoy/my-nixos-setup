@@ -6,16 +6,16 @@ xkb_symbols "real-prog-dvorak" {
 
     key <TLDE> { [       dollar,        asciitilde, dead_grave, dead_tilde      ] };
 
-    key <AE01> { [          plus,       1               ]       };
-    key <AE02> { [          bracketleft,        2               ]       };
-    key <AE03> { [          braceleft,  3       ]       };
-    key <AE04> { [          parenleft,  4               ]       };
-    key <AE05> { [          ampersand,      5               ]       };
-    key <AE06> { [          equal,  6, dead_circumflex, dead_circumflex ]   };
-    key <AE07> { [          parenright, 7       ]       };
-    key <AE08> { [          braceright, 8       ]       };
-    key <AE09> { [          bracketright,       9,  dead_grave] };
-    key <AE10> { [          asterisk,   0       ]       };
+    key <AE01> { [          1,plus             ]       };
+    key <AE02> { [          2,bracketleft        ]       };
+    key <AE03> { [          3,braceleft         ]       };
+    key <AE04> { [          4,parenleft            ]       };
+    key <AE05> { [          5,ampersand             ]       };
+    key <AE06> { [          6,equal, dead_circumflex, dead_circumflex ]   };
+    key <AE07> { [          7,parenright     ]       };
+    key <AE08> { [          8,braceright  ]       };
+    key <AE09> { [          9,bracketright,  dead_grave] };
+    key <AE10> { [          0,asterisk ]       };
     key <AE11> { [ exclam,      percent ]       };
     key <AE12> { [ bar, grave,  dead_tilde] };
 
