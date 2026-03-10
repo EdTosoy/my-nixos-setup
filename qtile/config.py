@@ -50,8 +50,6 @@ keys = [
 
     # Layout / window
     Key([mod], "f",              lazy.window.toggle_fullscreen(),  desc="Fullscreen"),
-    Key([mod, "shift"], "space", lazy.window.toggle_floating(),    desc="Float toggle"),
-    Key([mod], "space",          lazy.layout.next(),               desc="Focus mode toggle"),
     Key([mod], "e",              lazy.next_layout(),               desc="Cycle layout"),
 
     # Apps
@@ -61,6 +59,7 @@ keys = [
     Key([mod], "n",      lazy.spawn("kitty yazi"),                           desc="File manager"),
     Key([mod], "w",      lazy.spawn("firefox"),                              desc="Browser"),
     Key([mod], "Escape", lazy.spawn("kitty -e htop"),                        desc="Monitor"),
+    Key([mod], "b",      lazy.spawn("beeper"),                               desc="Communication"),
 
     # Wallpaper swap (swaybg — Wayland)
     Key([mod, "shift"], "s",
@@ -156,6 +155,8 @@ def autostart():
         ["dunst"],
         # Network tray (runs fine on Wayland via XWayland)
         ["nm-applet"],
+        # Banana cursor
+        ['xsetroot', '-cursor_name', 'left_ptr'] 
     ]
     for cmd in cmds:
         subprocess.Popen(cmd)

@@ -161,6 +161,7 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
 
     #other
     beeper
+    banana-cursor 
   ];
 
   #################################
