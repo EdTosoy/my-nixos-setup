@@ -186,7 +186,7 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
     real-prog-dvorak = {
       description = "Real Programmers Dvorak";
       languages = [ "eng" ];
-      symbolsFile = "./real-prog-dvorak"
+      symbolsFile = "./real-prog-dvorak";
     };
   }; 
 
