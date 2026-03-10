@@ -174,5 +174,5 @@ auto_minimize              = True
 wmname                     = "LG3D"
 
 wl_input_rules = {
-    "*": InputConfig(kb_layout="real-prog-dvorak"),
+    "*": InputConfig(kb_layout="real-prog-dvorak", kb_variant="real-prog-dvorak"),
 }
