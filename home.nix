@@ -55,4 +55,5 @@
     		user.email = "edberto.tosoy@gmail.com";
   		};
 	};
+  programs.dconf.enable = true;
 }
