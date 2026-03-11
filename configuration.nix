@@ -153,6 +153,7 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
     # dev
     vscode
     nodejs
+    nodePackages.nx
 
     # network
     networkmanagerapplet
