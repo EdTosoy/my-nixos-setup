@@ -9,7 +9,7 @@
       getFrom = url: hash: name: {
           gtk.enable = true;
           name = name;
-          size = 48;
+          size = 36;
           package = 
             pkgs.runCommand "moveUp" {} ''
               mkdir -p $out/share/icons
@@ -24,6 +24,24 @@
         "https://github.com/dreamsofautonomy/banana-cursor/releases/download/v2.2.0/Banana.tar.xz"
         "sha256-FA7iKldiuvWizVcrbANGAKgtQ3r/7nQovn2Lk+utvIU="
         "Banana";
+  home.sessionVariables = {
+    XCURSOR_THEME = "Banana";
+    XCURSOR_SIZE = "36";
+  };
+
+  gtk = {
+    enable = true;
+    cursorTheme = {
+      name = "Banana";
+      size = 36;
+    };
+  };
+
+  qt = {
+    enable = true;
+    platformTheme.name = "gtk";
+  }; 
+
 	programs.bash = {
 		enable = true;
 		shellAliases = {

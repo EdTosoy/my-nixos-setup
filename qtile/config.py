@@ -155,6 +155,10 @@ def autostart():
         ["dunst"],
         # Network tray (runs fine on Wayland via XWayland)
         ["nm-applet"],
+
+        # Banana Cursor
+        ["gsettings", "set", "org.gnome.desktop.interface", "cursor-theme", "Banana"],
+        ["gsettings", "set", "org.gnome.desktop.interface", "cursor-size", "36"],
     ]
     for cmd in cmds:
         subprocess.Popen(cmd)
