@@ -175,6 +175,8 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
   # Allow unfree
   #################################
   nixpkgs.config.allowUnfree = true;
+  
+  programs.dconf.enable = true;
 
   
 
