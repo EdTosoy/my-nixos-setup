@@ -90,6 +90,7 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
       "networkmanager"
       "audio"
       "video"
+      "docker"
     ];
     initialPassword = "kuya";
     packages = with pkgs; [
@@ -153,7 +154,6 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
     # dev
     vscode
     nodejs
-    nodePackages.nx
 
     # network
     networkmanagerapplet
@@ -186,6 +186,14 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
   # Nix settings
   #################################
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;    # start docker daemon on boot
+    autoPrune.enable = true; # auto clean unused images/containers
+  };
+
 
   services.xserver.xkb.extraLayouts = {
     real-prog-dvorak = {
