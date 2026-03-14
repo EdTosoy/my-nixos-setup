@@ -10,6 +10,7 @@
   #################################
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
 
   #################################
   # Hostname / Networking
@@ -24,22 +25,14 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   #################################
-  # Console keyboard layout
-  # Dvorak for TTY and greetd/tuigreet
-  #################################
-  console.keyMap = "dvorak";
-
-  #################################
-  # Display / Qtile + Greetd
-  # windowManager.qtile registers Qtile and manages Python deps.
-  # greetd + tuigreet replaces LightDM as the display manager.
-  # XWayland is kept for app compatibility.
+  # Display / Qtile + LightDM
   #################################
   services.xserver = {
-    enable = true;  # keep for XWayland support
+    enable = true;
     videoDrivers = [ "modesetting" ];
     xkb.layout = "us";
     xkb.variant = "dvorak";
+    displayManager.lightdm.enable = true;
     windowManager.qtile = {
       enable = true;
       extraPackages = python3Packages: with python3Packages; [
@@ -54,16 +47,6 @@
       description = "Real Programmers Dvorak";
       languages = [ "eng" ];
       symbolsFile = "${./real-prog-dvorak}";
-    };
-  };
-
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --cmd 'qtile start -b wayland' --time --remember --remember-session --user johncarlojose";
-        user = "greeter";
-      };
     };
   };
 
@@ -154,8 +137,6 @@
     bluez-tools
     # audio
     pavucontrol
-    # greeter
-    tuigreet
   ];
 
   #################################
@@ -186,7 +167,6 @@
   };
 
   #################################
-  # State Version
   #################################
   system.stateVersion = "25.11";
 }
