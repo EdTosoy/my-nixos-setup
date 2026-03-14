@@ -1,9 +1,10 @@
 { config, lib, pkgs, ... }:
 {
   imports =
-    [ 
+    [
       ./hardware-configuration.nix
     ];
+
   #################################
   # Bootloader
   #################################
@@ -23,25 +24,16 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   #################################
-  # Display / Qtile
-  # LightDM is used as the display manager.
-  # At login, select "Qtile (Wayland)" session manually.
-  # windowManager.qtile registers the X11 session entry —
-  # the Wayland session is provided by Qtile itself.
+  # Display / Greetd
+  # greetd launches Qtile Wayland directly.
+  # Qtile is managed via home.packages in home.nix.
+  # XWayland is kept for app compatibility.
   #################################
   services.xserver = {
-    enable = true;
+    enable = true;  # keep for XWayland support
     videoDrivers = [ "modesetting" ];
     xkb.layout = "us";
     xkb.variant = "dvorak";
-    displayManager.lightdm.enable = true;
-    windowManager.qtile = {
-      enable = true;
-      extraPackages = python3Packages: with python3Packages; [
-        psutil
-        dbus-python
-      ];
-    };
   };
 
   services.xserver.xkb.extraLayouts = {
@@ -49,6 +41,16 @@
       description = "Real Programmers Dvorak";
       languages = [ "eng" ];
       symbolsFile = "${./real-prog-dvorak}";
+    };
+  };
+
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --cmd 'qtile start -b wayland' --time --remember";
+        user = "greeter";
+      };
     };
   };
 
@@ -101,7 +103,7 @@
       "audio"
       "video"
       "docker"
-    ];  
+    ];
     # password is set via secrets.nix module in flake.nix
   };
 
@@ -139,6 +141,8 @@
     bluez-tools
     # audio
     pavucontrol
+    # greeter
+    greetd.tuigreet
   ];
 
   #################################

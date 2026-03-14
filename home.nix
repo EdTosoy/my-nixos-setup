@@ -14,14 +14,29 @@
     ".config/qutebrowser/styles".source         = ./qutebrowser/styles;
     ".config/rofi/config.rasi".source           = ./rofi/config.rasi;
     ".config/rofi/oneDarkPro.rasi".source       = ./rofi/oneDarkPro.rasi;
-    ".config/Code/User/settings.json".source    = ./vscode/settings.json;
     ".config/Code/User/keybindings.json".source = ./vscode/keybindings.json;
+
+    # settings.json is generated dynamically to inject the correct nvim path
+    ".config/Code/User/settings.json" = {
+      text = builtins.toJSON (
+        builtins.fromJSON (builtins.readFile ./vscode/settings.json) // {
+          "vscode-neovim.neovimExecutablePaths.linux" =
+            "/etc/profiles/per-user/${config.home.username}/bin/nvim";
+        }
+      );
+    };
   };
 
   #################################
   # User Packages
   #################################
   home.packages = with pkgs; [
+    # window manager
+    qtile
+    (python3.withPackages (ps: with ps; [
+      psutil
+      dbus-python
+    ]))
     # terminals
     kitty
     bat           # better cat
@@ -108,8 +123,8 @@
       btw = "echo I use nixos, btw";
 
       # NixOS
-      nrs       = "sudo nixos-rebuild switch --flake .#nixos-btw";
-      hms       = "home-manager switch --flake .#nixos-btw";
+      nrs       = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-btw";
+      hms       = "home-manager switch --flake ~/nixos-dotfiles#nixos-btw";
       nix-clean = "sudo nix-collect-garbage -d";
 
       # Git

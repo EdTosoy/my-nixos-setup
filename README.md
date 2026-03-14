@@ -15,7 +15,7 @@ My personal NixOS setup. Minimal, keyboard-driven, and built for development.
 | --------------------- | ------------------------------------------------ |
 | NixOS 25.11 (flakes)  | The OS                                           |
 | Qtile (Wayland)       | Window manager                                   |
-| LightDM               | Login screen — pick "Qtile Wayland" at login     |
+| greetd + tuigreet     | Login screen                                     |
 | Home Manager          | Manages dotfiles and user packages declaratively |
 | Qutebrowser           | Keyboard-driven browser (JS off by default)      |
 | Rofi                  | App launcher                                     |
@@ -95,7 +95,8 @@ Then edit `secrets.nix`:
 }
 ```
 
-This file is gitignored — it will never be committed.
+This file is gitignored — it will never be committed. If you skip this step,
+the build will still succeed but your initial password will default to `"changeme"`.
 
 ### 4. Update these values to match your system
 
@@ -147,8 +148,9 @@ sudo nixos-rebuild switch --flake /home/your-username/nixos-dotfiles#your-hostna
 reboot
 ```
 
-After reboot, LightDM will appear. Select **"Qtile Wayland"** from the session
-menu and log in with the password you set in `secrets.nix`.
+After reboot, greetd will launch tuigreet — a minimal TUI login screen.
+Log in with the password you set in `secrets.nix`.
+Qtile Wayland starts automatically — no session selection needed.
 
 ### 7. Finish up
 
@@ -450,16 +452,15 @@ automatically with a `.backup` extension. Check `~/.config` for `.backup` files
 after rebuilding.
 
 **Cursor not showing in some apps**
-Make sure you log in using the **Wayland** session from LightDM. The cursor
-theme is set via both GTK settings and `gsettings` in the Qtile autostart.
+Make sure Qtile launched as a Wayland session. The cursor theme is set via both
+GTK settings and `gsettings` in the Qtile autostart.
 
 **Qutebrowser site not working**
 JavaScript is off by default. Add the site to `TRUSTED_JS_SITES` in
 `qutebrowser/config.py` and restart the browser.
 
 **Wrong keyboard layout after install**
-If your keyboard feels wrong after logging in, make sure the RPD layout is
-selected. You can verify with:
+If your keyboard feels wrong after logging in, verify the layout with:
 
 ```bash
 setxkbmap -query
