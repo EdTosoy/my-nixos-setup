@@ -20,7 +20,7 @@ My personal NixOS setup. Minimal, keyboard-driven, and built for development.
 | Qutebrowser          | Keyboard-driven browser (JS off by default)      |
 | Rofi                 | App launcher                                     |
 | Kitty                | Terminal                                         |
-| Neovim               | Editor                                           |
+| Neovim (in VS Code)  | Editor                                           |
 | Yazi                 | Terminal file manager                            |
 | Dunst                | Notifications                                    |
 | PipeWire             | Audio                                            |
