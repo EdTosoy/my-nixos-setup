@@ -124,11 +124,9 @@ sudo nixos-rebuild switch --flake ~/nixos-dotfiles#your-hostname
 
 ### 5. Set your password
 
-Do this while still in the TTY — before you reboot:
-
-```bash
-passwd your-username
-```
+Either run `passwd your-username` in the TTY, or add `initialPassword` to your
+user in `configuration.nix`(Under Users) before rebuilding — this way you won't need to set
+it manually on every fresh install. Do not commit this value to git.`
 
 ### 6. Reboot
 

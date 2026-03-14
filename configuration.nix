@@ -103,6 +103,7 @@
       "video"
       "docker"
     ];
+    # initialPassword = "your-password";  # add locally, do not commit
   };
 
   #################################
