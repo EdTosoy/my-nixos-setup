@@ -202,7 +202,7 @@ c.content.unknown_url_scheme_policy = 'allow-from-user-interaction'
 # Trusted JS sites
 # -------------------------
 TRUSTED_JS_SITES = [
-    "https://chatgpt.com/*",
+    "https://claude.ai/*",
     "https://www.blinkist.com/*",
     "https://music.youtube.com/*",
     "https://www.youtube.com/*",
@@ -261,7 +261,7 @@ c.url.searchengines = {
 # --- Quicklaunch sites ---
 config.bind(",b", "open -t https://www.blinkist.com")
 config.bind(",m", "open -t https://music.youtube.com")
-config.bind(",c", "open -t https://chatgpt.com")
+config.bind(",c", "open -t https://claude.ai")
 config.bind(",y", "open -t https://www.youtube.com/feed/subscriptions")
 config.bind(",i", "open -t https://inv.nadeko.net")
 config.bind(",r", "open -t https://libreddit.de")

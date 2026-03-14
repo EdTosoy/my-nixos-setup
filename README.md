@@ -6,6 +6,8 @@ My personal NixOS setup. Minimal, keyboard-driven, and built for development.
 > [ThePrimeagen](https://github.com/ThePrimeagen). If you've seen his streams,
 > this is exactly what he types on. It's a non-standard layout — read the
 > [Keyboard](#keyboard-layout) section before you do anything.
+> Don't worry though, switching to a standard QWERTY layout is straightforward
+> and covered in that section.
 
 ---
 
@@ -81,22 +83,21 @@ sudo nixos-generate-config --show-hardware-config > hardware-configuration.nix
 
 ### 3. Set up your secrets
 
-Copy the example secrets file and fill in your password:
-
 ```bash
 cp secrets.nix.example secrets.nix
 ```
 
-Then edit `secrets.nix`:
+Then edit `secrets.nix` — replace the username and password:
 
 ```nix
+{ ... }:
 {
-  initialPassword = "your-password-here";
+  users.users.your-username.initialPassword = "your-password-here";
 }
 ```
 
 This file is gitignored — it will never be committed. If you skip this step,
-the build will still succeed but your initial password will default to `"changeme"`.
+the build will still succeed but no password will be set.
 
 ### 4. Update these values to match your system
 
@@ -195,7 +196,7 @@ Notable differences from standard Dvorak:
 - `'` moves to where `z` was
 - `/` and `?` replace `[` and `]`
 
-**To use a standard layout instead:**
+**To use a standard QWERTY layout instead:**
 
 In `configuration.nix`, find the xserver block and change:
 
