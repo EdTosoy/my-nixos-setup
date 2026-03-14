@@ -1,4 +1,7 @@
 { config, lib, pkgs, ... }:
+let
+  secrets = import ./secrets.nix;
+in
 {
   imports =
     [
@@ -103,7 +106,7 @@
       "video"
       "docker"
     ];
-    # initialPassword = "your-password";  # add locally, do not commit
+    initialPassword = secrets.initialPassword;
   };
 
   #################################

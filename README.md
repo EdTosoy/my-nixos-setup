@@ -11,20 +11,20 @@ My personal NixOS setup. Minimal, keyboard-driven, and built for development.
 
 ## What's inside
 
-| Tool                 | What it does                                     |
-| -------------------- | ------------------------------------------------ |
-| NixOS 25.11 (flakes) | The OS                                           |
-| Qtile (Wayland)      | Window manager                                   |
-| LightDM              | Login screen — pick "Qtile Wayland" at login     |
-| Home Manager         | Manages dotfiles and user packages declaratively |
-| Qutebrowser          | Keyboard-driven browser (JS off by default)      |
-| Rofi                 | App launcher                                     |
-| Kitty                | Terminal                                         |
-| Neovim (in VS Code)  | Editor                                           |
-| Yazi                 | Terminal file manager                            |
-| Dunst                | Notifications                                    |
-| PipeWire             | Audio                                            |
-| bat + eza            | Better `cat` and `ls`                            |
+| Tool                  | What it does                                     |
+| --------------------- | ------------------------------------------------ |
+| NixOS 25.11 (flakes)  | The OS                                           |
+| Qtile (Wayland)       | Window manager                                   |
+| LightDM               | Login screen — pick "Qtile Wayland" at login     |
+| Home Manager          | Manages dotfiles and user packages declaratively |
+| Qutebrowser           | Keyboard-driven browser (JS off by default)      |
+| Rofi                  | App launcher                                     |
+| Kitty                 | Terminal                                         |
+| VSCode (Neovim setup) | Editor                                           |
+| Yazi                  | Terminal file manager                            |
+| Dunst                 | Notifications                                    |
+| PipeWire              | Audio                                            |
+| bat + eza             | Better `cat` and `ls`                            |
 
 ---
 
@@ -38,6 +38,7 @@ nixos-dotfiles/
 ├── home.nix                   # user config (packages, dotfiles, shell)
 ├── hardware-configuration.nix # generated — do not copy this one
 ├── real-prog-dvorak           # custom keyboard layout file
+├── secrets.nix.example        # copy to secrets.nix and fill in your values
 ├── qtile/
 │   └── config.py              # window manager config
 ├── qutebrowser/
@@ -56,15 +57,18 @@ nixos-dotfiles/
 
 ## Fresh install
 
-On a fresh NixOS install you'll boot into a TTY — no GUI yet. Here's the full
-flow from zero to desktop:
+On a fresh NixOS install you'll boot into a TTY logged in as `root` — no GUI
+yet. Here's the full flow from zero to desktop.
 
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/EdTosoy/nixos-dotfiles ~/nixos-dotfiles
-cd ~/nixos-dotfiles
+git clone https://github.com/EdTosoy/nixos-dotfiles /home/your-username/nixos-dotfiles
+cd /home/your-username/nixos-dotfiles
 ```
+
+> Use the full path instead of `~` — you're running as root so `~` points to
+> `/root`, not your user's home directory.
 
 ### 2. Generate your own hardware config
 
@@ -75,10 +79,25 @@ to my machine and will likely break yours. Generate your own:
 sudo nixos-generate-config --show-hardware-config > hardware-configuration.nix
 ```
 
-### 3. Update these values to match your system
+### 3. Set up your secrets
 
-There are a handful of places where my personal details need to be replaced.
-Go through each file below before rebuilding.
+Copy the example secrets file and fill in your password:
+
+```bash
+cp secrets.nix.example secrets.nix
+```
+
+Then edit `secrets.nix`:
+
+```nix
+{
+  initialPassword = "your-password-here";
+}
+```
+
+This file is gitignored — it will never be committed.
+
+### 4. Update these values to match your system
 
 **`configuration.nix`** — your hostname:
 
@@ -86,7 +105,7 @@ Go through each file below before rebuilding.
 networking.hostName = "your-hostname";
 ```
 
-**`flake.nix`** — your hostname and username in two places:
+**`flake.nix`** — your hostname and username:
 
 ```nix
 nixosConfigurations.your-hostname = ...
@@ -109,24 +128,18 @@ programs.git.settings = {
 };
 ```
 
-**`home.nix`** — your shell aliases (find these two and update the hostname):
+**`home.nix`** — your shell aliases:
 
 ```nix
 nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#your-hostname";
 hms = "home-manager switch --flake ~/nixos-dotfiles#your-hostname";
 ```
 
-### 4. Rebuild
+### 5. Rebuild
 
 ```bash
-sudo nixos-rebuild switch --flake ~/nixos-dotfiles#your-hostname
+sudo nixos-rebuild switch --flake /home/your-username/nixos-dotfiles#your-hostname
 ```
-
-### 5. Set your password
-
-Either run `passwd your-username` in the TTY, or add `initialPassword` to your
-user in `configuration.nix`(Under Users) before rebuilding — this way you won't need to set
-it manually on every fresh install. Do not commit this value to git.`
 
 ### 6. Reboot
 
@@ -135,7 +148,7 @@ reboot
 ```
 
 After reboot, LightDM will appear. Select **"Qtile Wayland"** from the session
-menu and log in.
+menu and log in with the password you set in `secrets.nix`.
 
 ### 7. Finish up
 
@@ -454,3 +467,13 @@ setxkbmap -query
 
 If it's not set, check that `real-prog-dvorak` is correctly referenced in
 `configuration.nix` and rebuild.
+
+**Forgot your password**
+Reboot, hold `Shift` at boot to open GRUB, press `e` on the NixOS entry, add
+`init=/bin/sh` to the end of the `linux` line, boot with `Ctrl+x`, then:
+
+```bash
+mount -o remount,rw /
+passwd your-username
+exec /sbin/init
+```
