@@ -24,6 +24,12 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   #################################
+  # Console keyboard layout
+  # Dvorak for TTY and greetd/tuigreet
+  #################################
+  console.keyMap = "dvorak";
+
+  #################################
   # Display / Qtile + Greetd
   # windowManager.qtile registers Qtile and manages Python deps.
   # greetd + tuigreet replaces LightDM as the display manager.
@@ -55,7 +61,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --cmd 'qtile start -b wayland' --time --remember";
+        command = "${pkgs.tuigreet}/bin/tuigreet --cmd 'qtile start -b wayland' --time --remember --remember-session --user johncarlojose";
         user = "greeter";
       };
     };
