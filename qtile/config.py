@@ -1,30 +1,19 @@
 # ~/.config/qtile/config.py
-# Ported from i3 — Gruvbox Green | NixOS 25.11 | Wayland
-# user: johncarlojose
+# NixOS 25.11 | Qtile Wayland
 
 import subprocess
-from libqtile import bar, layout, widget, hook
+from libqtile import layout, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.backend.wayland import InputConfig
 
 mod      = "mod4"
 terminal = "kitty"
-home     = "/home/johncarlojose"
 
-# ── Gruvbox ───────────────────────────────────────────────────────────────
-c = {
-    "bg":       "#282828",
-    "red":      "#cc241d",
-    "green":    "#98971a",
-    "yellow":   "#d79921",
-    "blue":     "#458588",
-    "purple":   "#b16286",
-    "aqua":     "#689d68",
-    "gray":     "#a89984",
-    "darkgray": "#1d2021",
-    "white":    "#ffffff",
-    "fg":       "#ebdbb2",
+# ── Colors ────────────────────────────────────────────────────────────────
+gruvbox = {
+    "olive":    "#98971a",  # active window border
+    "darkgray": "#1d2021",  # inactive window border
 }
 
 # ── Keys ──────────────────────────────────────────────────────────────────
@@ -34,65 +23,50 @@ keys = [
     Key([mod], "l", lazy.layout.right(), desc="Focus right"),
     Key([mod], "j", lazy.layout.down(),  desc="Focus down"),
     Key([mod], "k", lazy.layout.up(),    desc="Focus up"),
-
     # Move
     Key([mod, "shift"], "h", lazy.layout.shuffle_left(),  desc="Move left"),
     Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move right"),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(),  desc="Move down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(),    desc="Move up"),
-
     # Resize
     Key([mod, "control"], "h", lazy.layout.grow_left(),  desc="Grow left"),
     Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow right"),
     Key([mod, "control"], "j", lazy.layout.grow_down(),  desc="Grow down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(),    desc="Grow up"),
     Key([mod, "control"], "n", lazy.layout.normalize(),  desc="Reset sizes"),
-
     # Layout / window
-    Key([mod], "f",              lazy.window.toggle_fullscreen(),  desc="Fullscreen"),
-    Key([mod], "e",              lazy.next_layout(),               desc="Cycle layout"),
-
+    Key([mod], "f", lazy.window.toggle_fullscreen(), desc="Fullscreen"),
+    Key([mod], "e", lazy.next_layout(),              desc="Cycle layout"),
     # Apps
-    Key([mod], "Return", lazy.spawn(terminal),                               desc="Terminal"),
-    Key([mod], "q",      lazy.window.kill(),                                 desc="Kill window"),
-    Key([mod], "o",      lazy.spawn("rofi -show drun -font 'Hack 11'"),      desc="Launcher"),
-    Key([mod], "n",      lazy.spawn("kitty yazi"),                           desc="File manager"),
-    Key([mod], "w",      lazy.spawn("firefox"),                              desc="Browser"),
-    Key([mod], "Escape", lazy.spawn("kitty -e htop"),                        desc="Monitor"),
-    Key([mod], "b",      lazy.spawn("beeper"),                               desc="Communication"),
-
-    # Wallpaper swap (swaybg — Wayland)
-    Key([mod, "shift"], "s",
-        lazy.spawn(f"swaybg -i '{home}/Downloads/Arch Linux Wallpaper 4K.jpg' -m fill"),
-        desc="Alt wallpaper"),
-
+    Key([mod], "Return", lazy.spawn(terminal),                                                  desc="Terminal"),
+    Key([mod], "q",      lazy.window.kill(),                                                    desc="Kill window"),
+    Key([mod], "o",      lazy.spawn("rofi -show drun -font 'JetBrainsMono Nerd Font Mono 11'"), desc="Launcher"),
+    Key([mod], "n",      lazy.spawn("kitty yazi"),                                              desc="File manager"),
+    Key([mod], "w",      lazy.spawn("firefox"),                                                 desc="Browser"),
+    Key([mod], "Escape", lazy.spawn("kitty -e htop"),                                           desc="Monitor"),
+    Key([mod], "b",      lazy.spawn("beeper"),                                                  desc="Communication"),
     # Qtile controls
     Key([mod, "shift"], "c", lazy.reload_config(), desc="Reload config"),
     Key([mod, "shift"], "r", lazy.restart(),       desc="Restart Qtile"),
     Key([mod, "shift"], "e", lazy.shutdown(),      desc="Quit Qtile"),
-
     # Multi-monitor
     Key([mod], "Right", lazy.next_screen(), desc="Next screen"),
     Key([mod], "Left",  lazy.prev_screen(), desc="Prev screen"),
-
     # Audio
     Key([], "XF86AudioRaiseVolume", lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.0")),
     Key([], "XF86AudioLowerVolume", lazy.spawn("wpctl set-volume @DEFAULT_SINK@ 5%-")),
     Key([], "XF86AudioMute",        lazy.spawn("wpctl set-mute @DEFAULT_SINK@ toggle")),
     Key([], "XF86AudioMicMute",     lazy.spawn("pactl set-source-mute @DEFAULT_SOURCE@ toggle")),
-
     # Media
     Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
     Key([], "XF86AudioNext", lazy.spawn("playerctl next")),
     Key([], "XF86AudioPrev", lazy.spawn("playerctl previous")),
-
-    # Screenshot (Wayland)
+    # Screenshot
     Key([], "Print", lazy.spawn("flameshot gui")),
 ]
 
 # ── Groups (workspaces 1–10) ──────────────────────────────────────────────
 groups = [Group(str(i)) for i in range(1, 11)]
-
 for g in groups:
     ws_key = g.name if g.name != "10" else "0"
     keys += [
@@ -106,7 +80,8 @@ for g in groups:
 
 # ── Layouts ───────────────────────────────────────────────────────────────
 lt = dict(border_width=2, margin=1,
-          border_focus=c["green"], border_normal=c["darkgray"])
+          border_focus=gruvbox["olive"],
+          border_normal=gruvbox["darkgray"])
 
 layouts = [
     layout.Columns(**lt),
@@ -124,8 +99,8 @@ floating_layout = layout.Floating(
         Match(wm_class="pavucontrol"),
         Match(title="pinentry"),
     ],
-    border_focus=c["green"],
-    border_normal=c["darkgray"],
+    border_focus=gruvbox["olive"],
+    border_normal=gruvbox["darkgray"],
     border_width=2,
 )
 
@@ -138,25 +113,17 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
-# ── No bar — 100% screen usage ───────────────────────────────────────────
+# ── Screens ───────────────────────────────────────────────────────────────
 screens = [
     Screen(),
 ]
 
-# ── Autostart (Wayland-safe only) ─────────────────────────────────────────
+# ── Autostart ─────────────────────────────────────────────────────────────
 @hook.subscribe.startup_once
 def autostart():
     cmds = [
-        # Wallpaper via swaybg
-        ["swaybg", "-i",
-         f"{home}/Downloads/peach-cat-goma-cat-3840x2160-10116.png",
-         "-m", "fill"],
-        # Notifications
         ["dunst"],
-        # Network tray (runs fine on Wayland via XWayland)
         ["nm-applet"],
-
-        # Banana Cursor
         ["gsettings", "set", "org.gnome.desktop.interface", "cursor-theme", "Banana"],
         ["gsettings", "set", "org.gnome.desktop.interface", "cursor-size", "36"],
     ]

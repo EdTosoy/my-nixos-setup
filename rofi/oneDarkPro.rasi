@@ -1,0 +1,133 @@
+/*
+ * One Dark Pro Night Flat — rofi theme
+ * Synced with qutebrowser / VSCode config
+ */
+* {
+    bg:          #1E1E1E;   // webpage.bg / editor base
+    bg2:         #2D2D2D;   // statusbar.normal.bg / tabs.bar.bg
+    bg3:         #3C3C3C;   // selected tab bg / statusbar.command.bg
+    hv:          #094771;   // completion.item.selected.bg — deep blue selection
+    primary:     #3C3C3C;   // border color (statusbar bg)
+    font:        "JetBrainsMono Nerd Font Mono 11";
+    background-color: @bg;
+    border:      0px;
+    kl:          #CCCCCC;   // statusbar fg / tab fg
+    fg-dim:      #7A7A7A;   // unselected tab fg
+    accent:      #61AFEF;   // url.hover / tab indicator / category fg
+    black:       #1E1E1E;   // for selected text contrast
+    transparent: rgba(30,30,30,0);
+}
+
+window {
+    width: 700;
+    orientation: horizontal;
+    location: center;
+    anchor: center;
+    transparency: "screenshot";
+    border-color: @transparent;
+    border: 0px;
+    border-radius: 6px;
+    spacing: 0;
+    children: [ mainbox ];
+}
+
+mainbox {
+    spacing: 0;
+    children: [ inputbar, message, listview ];
+}
+
+inputbar {
+    color: @accent;
+    padding: 11px;
+    border: 3px 3px 2px 3px;
+    border-color: @primary;
+    border-radius: 6px 6px 0px 0px;
+    background-color: @bg2;
+}
+
+message {
+    padding: 0;
+    border-color: @primary;
+    border: 0px 1px 1px 1px;
+    background-color: @bg2;
+}
+
+entry, prompt, case-indicator {
+    text-font: inherit;
+    text-color: inherit;
+    background-color: @bg2;
+}
+
+entry {
+    cursor: pointer;
+}
+
+prompt {
+    margin: 0px 5px 0px 0px;
+    text-color: @accent;
+}
+
+listview {
+    layout: vertical;
+    padding: 8px;
+    lines: 7;
+    columns: 2;
+    border: 0px 3px 3px 3px;
+    border-radius: 0px 0px 6px 6px;
+    border-color: @primary;
+    background-color: @bg;
+    dynamic: false;
+}
+
+element {
+    padding: 2px;
+    vertical-align: 1;
+    color: @kl;
+    font: inherit;
+    background-color: @bg;
+}
+
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
+
+element selected.normal {
+    color: @kl;
+    background-color: @hv;   // #094771 — deep blue, mirrors completion selected
+}
+
+element normal active {
+    background-color: @hv;
+    color: @kl;
+}
+
+element-icon {
+    background-color: inherit;
+    text-color: inherit;
+    size: 2.5em;
+}
+
+element normal urgent {
+    background-color: @primary;
+}
+
+element selected active {
+    background: @hv;
+    foreground: @bg;
+}
+
+button {
+    padding: 6px;
+    color: @primary;
+    horizonatal-align: 0.5;
+    border: 2px 0px 2px 2px;
+    border-radius: 4px 0px 0px 4px;
+    border-color: @primary;
+}
+
+button selected normal {
+    border: 2px 0px 2px 2px;
+    border-color: @accent;
+}

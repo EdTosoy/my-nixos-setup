@@ -1,0 +1,251 @@
+{
+  "vscode-neovim.neovimExecutablePaths.linux": "/run/current-system/sw/bin/nvim",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferGoToSourceDefinition": true,
+  "typescript.preferGoToSourceDefinition": true,
+  "debug.javascript.autoAttachFilter": "onlyWithFlag",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "gopls": {
+    "ui.semanticTokens": true
+  },
+  "[go.mod]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "go.toolsManagement.autoUpdate": false,
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "[terraform-vars]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
+  },
+  "gitlens.showWhatsNewAfterUpgrades": false,
+  "gitlens.defaultGravatarsStyle": "retro",
+  "gitlens.plusFeatures.enabled": false,
+  "gitlens.codeLens.enabled": false,
+  "gitlens.statusBar.enabled": false,
+  "gitlens.terminalLinks.enabled": false,
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+  "auto-close-tag.activationOnLanguage": [
+    "html",
+    "javascriptreact",
+    "typescriptreact",
+    "vue"
+  ],
+  "oneDarkPro.bold": true,
+  "oneDarkPro.vivid": true,
+  "todohighlight.keywords": [
+    {
+      "text": "NOTE:",
+      "color": "#3c3c3c",
+      "backgroundColor": "lightblue"
+    }
+  ],
+  "todo-tree.filtering.excludeGlobs": ["**/node_modules/**"],
+  "breadcrumbs.symbolPath": "off",
+  "breadcrumbs.icons": false,
+  "breadcrumbs.enabled": true,
+  "window.systemColorTheme": "dark",
+  "window.title": " ",
+  "window.density.editorTabHeight": "compact",
+  "window.restoreWindows": "preserve",
+  "workbench.tips.enabled": false,
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.colorTheme": "One Dark Pro Night Flat",
+  "workbench.editor.showTabs": "multiple",
+  "workbench.startupEditor": "none",
+  "workbench.activityBar.orientation": "vertical",
+  "workbench.sideBar.location": "right",
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "workbench.editorAssociations": {
+    "git-rebase-todo": "default"
+  },
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#3C3C3C",
+    "statusBar.foreground": "#CCCCCC",
+    "statusBar.noFolderBackground": "#3C3C3C",
+    "statusBar.debuggingBackground": "#3C3C3C"
+  },
+  "vsicons.dontShowNewVersionMessage": true,
+  "editor.wordWrap": "on",
+  "editor.scrollbar.verticalScrollbarSize": 12,
+  "editor.cursorBlinking": "solid",
+  "editor.fontSize": 14,
+  "editor.lineHeight": 20,
+  "editor.fontFamily": "JetBrainsMono Nerd Font Mono, Fira Code, Courier New, monospace",
+  "editor.fontLigatures": true,
+  "editor.minimap.enabled": false,
+  "editor.linkedEditing": true,
+  "editor.formatOnSave": true,
+  "editor.accessibilitySupport": "off",
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "name": "italic font",
+        "scope": [
+          "comment",
+          "keyword",
+          "storage",
+          "keyword.control",
+          "keyword.control.from",
+          "keyword.control.flow",
+          "keyword.operator.new",
+          "keyword.control.import",
+          "keyword.control.export",
+          "keyword.control.default",
+          "keyword.control.trycatch",
+          "keyword.control.conditional",
+          "storage.type",
+          "storage.type.class",
+          "storage.modifier.tsx",
+          "storage.type.function",
+          "storage.modifier.async",
+          "variable.language",
+          "variable.language.this",
+          "variable.language.super",
+          "meta.class",
+          "meta.var.expr",
+          "constant.language.null",
+          "support.type.primitive",
+          "entity.name.method.js",
+          "entity.other.attribute-name",
+          "punctuation.definition.comment",
+          "text.html.basic entity.other.attribute-name",
+          "tag.decorator.js entity.name.tag.js",
+          "tag.decorator.js punctuation.definition.tag.js",
+          "source.js constant.other.object.key.js string.unquoted.label.js"
+        ],
+        "settings": {
+          "fontStyle": "italic"
+        }
+      },
+      {
+        "scope": "html-template.ng.interpolation.begin",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.interpolation.end",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.attributes.animationtrigger.prefix",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "punctuation.definition.ng-binding-name.begin.html",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "punctuation.definition.ng-binding-name.end.html",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.attributes.prefix.ref",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.attributes.prefix.sugar",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.attributes.template.prefix",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.control-flow.prefix",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.tag.colon",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.attributes.colon",
+        "settings": { "foreground": "#56B6C2" }
+      },
+      {
+        "scope": "html-template.ng.occurrence.dtd",
+        "settings": { "foreground": "#56B6C2" }
+      }
+    ]
+  },
+  "zenMode.hideStatusBar": false,
+  "zenMode.fullScreen": true,
+  "zenMode.hideLineNumbers": false,
+  "files.autoSave": "onWindowChange",
+  "terminal.integrated.fontSize": 15,
+  "terminal.integrated.scrollback": 3000,
+  "terminal.integrated.enableMultiLinePasteWarning": "never",
+  "terminal.integrated.commandsToSkipShell": ["workbench.action.closePanel"],
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "/usr/bin/bash",
+      "args": ["--rcfile", "$HOME/.config/vscode-terminal/bashrc"]
+    }
+  },
+  "extensions.ignoreRecommendations": true,
+  "security.workspace.trust.banner": "never",
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.startupPrompt": "never",
+  "security.workspace.trust.enabled": false,
+  "git.openRepositoryInParentFolders": "always",
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autoStash": true,
+  "git.autofetch": false,
+  "explorer.autoReveal": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmPasteNative": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.renderSideBySide": true,
+  "json.schemaDownload.enable": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "vscode-angular-html.angularAnimationTriggerPrefix": "#56B6C2",
+  "vscode-angular-html.angularBindingAttributeDelimiter": "#56B6C2",
+  "vscode-angular-html.angularExpression": "#56B6C2",
+  "vscode-angular-html.angularPrefixedAttributesRefPrefix": "#56B6C2",
+  "vscode-angular-html.angularSyntaxSugarAttributesPrefix": "#56B6C2",
+  "vscode-angular-html.angularTemplateVariablePrefix": "#56B6C2",
+  "vscode-angular-html.colorCustomizations": true,
+  "vscode-angular-html.dtdDoctypeQuantifier": "#56B6C2",
+  "vscode-angular-html.xmlAttributeNamespaceDivider": "#56B6C2",
+  "vscode-angular-html.xmlTagNamespaceDivider": "#56B6C2",
+  "vscode-angular-html.controlFlowPrefix": "#56B6C2",
+  "cSpell.userWords": ["johncarlojose", "nixos", "pkgs", "qtile"],
+  "[dockercompose]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

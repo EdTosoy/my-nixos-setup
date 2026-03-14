@@ -24,22 +24,32 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   #################################
-  # X11 / Qtile
+  # Display / Qtile
+  # LightDM is used as the display manager.
+  # At login, select "Qtile (Wayland)" session manually.
+  # windowManager.qtile registers the X11 session entry —
+  # the Wayland session is provided by Qtile itself.
   #################################
   services.xserver = {
     enable = true;
     videoDrivers = [ "modesetting" ];
     xkb.layout = "us";
     xkb.variant = "dvorak";
-
     displayManager.lightdm.enable = true;
-
     windowManager.qtile = {
       enable = true;
       extraPackages = python3Packages: with python3Packages; [
-        psutil        # CPU / Memory widgets
-        dbus-python   # systray & notifications
+        psutil
+        dbus-python
       ];
+    };
+  };
+
+  services.xserver.xkb.extraLayouts = {
+    real-prog-dvorak = {
+      description = "Real Programmers Dvorak";
+      languages = [ "eng" ];
+      symbolsFile = "${./real-prog-dvorak}";
     };
   };
 
@@ -54,20 +64,21 @@
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    pulse.enable = true;       # makes wpctl + pactl work
+    pulse.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     wireplumber.enable = true;
   };
+
   # Fix bluetooth audio stuttering — increase PipeWire buffer
-services.pipewire.extraConfig.pipewire."92-low-latency" = {
-  context.properties = {
-    default.clock.rate = 48000;
-    default.clock.quantum = 1024;
-    default.clock.min-quantum = 1024;
-    default.clock.max-quantum = 1024;
+  services.pipewire.extraConfig.pipewire."92-low-latency" = {
+    context.properties = {
+      default.clock.rate = 48000;
+      default.clock.quantum = 1024;
+      default.clock.min-quantum = 1024;
+      default.clock.max-quantum = 1024;
+    };
   };
-};
 
   #################################
   # Bluetooth
@@ -92,10 +103,6 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
       "video"
       "docker"
     ];
-    initialPassword = "kuya";
-    packages = with pkgs; [
-      tree
-    ];
   };
 
   #################################
@@ -119,53 +126,19 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
   # System Packages
   #################################
   environment.systemPackages = with pkgs; [
-   # terminals
-    kitty
-
-    # browsers
-    qutebrowser
-
-    # WM tooling (Wayland-compatible)
-    rofi    # rofi with Wayland support
-    flameshot       # screenshot (works on Wayland with env var)
-    dunst           # notifications
-    libnotify
-    swaybg          # Wayland wallpaper setter
-
-    # file management
-    yazi
-    wl-clipboard    # Wayland clipboard (wl-copy / wl-paste)
+    # system utilities
     tree
-
-    # CLI
-    neovim
-    ripgrep
-    fd
-    unzip
     wget
     curl
-
-    # media
-    playerctl
+    unzip
+    # networking
+    networkmanagerapplet
+    wireguard-tools
+    # bluetooth
     bluez
     bluez-tools
+    # audio
     pavucontrol
-
-    # dev
-    vscode
-    nodejs
-
-    # network
-    networkmanagerapplet
-    protonvpn-gui
-    wireguard-tools
-
-    # brightness
-    brightnessctl
-
-    #other
-    beeper
-    banana-cursor 
   ];
 
   #################################
@@ -173,39 +146,27 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
   #################################
   programs.firefox.enable = true;
 
-
-
   #################################
   # Allow unfree
   #################################
   nixpkgs.config.allowUnfree = true;
-  
-  programs.dconf.enable = true;
 
-  
+  programs.dconf.enable = true;
 
   #################################
   # Nix settings
   #################################
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
   networking.firewall.checkReversePath = false;
 
-
+  #################################
+  # Docker
+  #################################
   virtualisation.docker = {
     enable = true;
-    enableOnBoot = true;    # start docker daemon on boot
-    autoPrune.enable = true; # auto clean unused images/containers
+    enableOnBoot = true;
+    autoPrune.enable = true;
   };
-
-
-  services.xserver.xkb.extraLayouts = {
-    real-prog-dvorak = {
-      description = "Real Programmers Dvorak";
-      languages = [ "eng" ];
-     symbolsFile = "${./real-prog-dvorak}";
-    };
-  }; 
 
   #################################
   # State Version
