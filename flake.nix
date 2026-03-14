@@ -14,6 +14,7 @@
       system = "x86_64-linux";
       modules = [
         ./configuration.nix
+        (if builtins.pathExists ./secrets.nix then ./secrets.nix else {})
         home-manager.nixosModules.home-manager
         {
           home-manager = {
