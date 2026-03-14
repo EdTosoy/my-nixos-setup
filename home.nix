@@ -31,12 +31,6 @@
   # User Packages
   #################################
   home.packages = with pkgs; [
-    # window manager
-    qtile
-    (python3.withPackages (ps: with ps; [
-      psutil
-      dbus-python
-    ]))
     # terminals
     kitty
     bat           # better cat

@@ -24,9 +24,9 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   #################################
-  # Display / Greetd
-  # greetd launches Qtile Wayland directly.
-  # Qtile is managed via home.packages in home.nix.
+  # Display / Qtile + Greetd
+  # windowManager.qtile registers Qtile and manages Python deps.
+  # greetd + tuigreet replaces LightDM as the display manager.
   # XWayland is kept for app compatibility.
   #################################
   services.xserver = {
@@ -34,6 +34,13 @@
     videoDrivers = [ "modesetting" ];
     xkb.layout = "us";
     xkb.variant = "dvorak";
+    windowManager.qtile = {
+      enable = true;
+      extraPackages = python3Packages: with python3Packages; [
+        psutil
+        dbus-python
+      ];
+    };
   };
 
   services.xserver.xkb.extraLayouts = {
@@ -48,7 +55,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --cmd 'qtile start -b wayland' --time --remember";
+        command = "${pkgs.tuigreet}/bin/tuigreet --cmd 'qtile start -b wayland' --time --remember";
         user = "greeter";
       };
     };
@@ -142,7 +149,7 @@
     # audio
     pavucontrol
     # greeter
-    greetd.tuigreet
+    tuigreet
   ];
 
   #################################
