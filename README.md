@@ -59,18 +59,18 @@ nixos-dotfiles/
 
 ## Fresh install
 
-On a fresh NixOS install you'll boot into a TTY logged in as `root` — no GUI
-yet. Here's the full flow from zero to desktop.
+This config assumes NixOS is already installed and you have a working user
+account. If you're on a fresh machine, complete the base NixOS installation
+first, then come back here.
 
 ### 1. Clone the repo
 
-```bash
-git clone https://github.com/EdTosoy/nixos-dotfiles /home/your-username/nixos-dotfiles
-cd /home/your-username/nixos-dotfiles
-```
+Once NixOS is installed and you're logged in as your user:
 
-> Use the full path instead of `~` — you're running as root so `~` points to
-> `/root`, not your user's home directory.
+```bash
+git clone https://github.com/EdTosoy/nixos-dotfiles ~/nixos-dotfiles
+cd ~/nixos-dotfiles
+```
 
 ### 2. Generate your own hardware config
 
@@ -140,7 +140,7 @@ hms = "home-manager switch --flake ~/nixos-dotfiles#your-hostname";
 ### 5. Rebuild
 
 ```bash
-sudo nixos-rebuild switch --flake /home/your-username/nixos-dotfiles#your-hostname
+sudo nixos-rebuild switch --flake ~/nixos-dotfiles#your-hostname
 ```
 
 ### 6. Reboot
