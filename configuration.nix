@@ -157,6 +157,8 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
 
     # network
     networkmanagerapplet
+    protonvpn-gui
+    wireguard-tools
 
     # brightness
     brightnessctl
@@ -186,6 +188,8 @@ services.pipewire.extraConfig.pipewire."92-low-latency" = {
   # Nix settings
   #################################
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  networking.firewall.checkReversePath = false;
 
 
   virtualisation.docker = {
