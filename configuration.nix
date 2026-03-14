@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-let
-  secrets = import "${./secrets.nix}";
-in
 {
   imports =
     [ 
@@ -104,8 +101,8 @@ in
       "audio"
       "video"
       "docker"
-    ];
-    initialPassword = secrets.initialPassword;
+    ];  
+    # password is set via secrets.nix module in flake.nix
   };
 
   #################################
