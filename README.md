@@ -11,20 +11,20 @@ My personal NixOS setup. Minimal, keyboard-driven, and built for development.
 
 ## What's inside
 
-| Tool                  | What it does                                     |
-| --------------------- | ------------------------------------------------ |
-| NixOS 25.11 (flakes)  | The OS                                           |
-| Qtile (Wayland)       | Window manager                                   |
-| greetd + tuigreet     | Login screen                                     |
-| Home Manager          | Manages dotfiles and user packages declaratively |
-| Qutebrowser           | Keyboard-driven browser (JS off by default)      |
-| Rofi                  | App launcher                                     |
-| Kitty                 | Terminal                                         |
-| VSCode (Neovim setup) | Editor                                           |
-| Yazi                  | Terminal file manager                            |
-| Dunst                 | Notifications                                    |
-| PipeWire              | Audio                                            |
-| bat + eza             | Better `cat` and `ls`                            |
+| Tool                  | What it does                                                  |
+| --------------------- | ------------------------------------------------------------- |
+| NixOS 25.11 (flakes)  | The OS                                                        |
+| Qtile (Wayland)       | Window manager                                                |
+| LightDM               | Login screen — always pick **"Qtile (Wayland)"**, not "Qtile" |
+| Home Manager          | Manages dotfiles and user packages declaratively              |
+| Qutebrowser           | Keyboard-driven browser (JS off by default)                   |
+| Rofi                  | App launcher                                                  |
+| Kitty                 | Terminal                                                      |
+| VSCode (Neovim setup) | Editor                                                        |
+| Yazi                  | Terminal file manager                                         |
+| Dunst                 | Notifications                                                 |
+| PipeWire              | Audio                                                         |
+| bat + eza             | Better `cat` and `ls`                                         |
 
 ---
 
@@ -148,9 +148,12 @@ sudo nixos-rebuild switch --flake /home/your-username/nixos-dotfiles#your-hostna
 reboot
 ```
 
-After reboot, greetd will launch tuigreet — a minimal TUI login screen.
+After reboot, LightDM will appear with two Qtile session options:
+
+- **Qtile (Wayland)** ← always pick this one
+- Qtile ← this is the X11 session, ignore it
+
 Log in with the password you set in `secrets.nix`.
-Qtile Wayland starts automatically — no session selection needed.
 
 ### 7. Finish up
 
@@ -446,14 +449,20 @@ All VSCode keybindings are remapped for Real Programmers Dvorak.
 
 ## Troubleshooting
 
+**Two Qtile options at login**
+LightDM shows both "Qtile" (X11) and "Qtile (Wayland)" — this is normal.
+Always select **"Qtile (Wayland)"**. The X11 entry is registered automatically
+by the NixOS Qtile module and cannot be easily removed.
+
 **Home Manager conflicts on rebuild**
 If you get a conflict error about existing files, Home Manager will back them up
 automatically with a `.backup` extension. Check `~/.config` for `.backup` files
 after rebuilding.
 
 **Cursor not showing in some apps**
-Make sure Qtile launched as a Wayland session. The cursor theme is set via both
-GTK settings and `gsettings` in the Qtile autostart.
+Make sure you selected the **"Qtile (Wayland)"** session at the LightDM login
+screen. The cursor theme is set via both GTK settings and `gsettings` in the
+Qtile autostart.
 
 **Qutebrowser site not working**
 JavaScript is off by default. Add the site to `TRUSTED_JS_SITES` in
@@ -477,4 +486,13 @@ Reboot, hold `Shift` at boot to open GRUB, press `e` on the NixOS entry, add
 mount -o remount,rw /
 passwd your-username
 exec /sbin/init
+```
+
+**Too many boot entries**
+Generations are automatically limited to 5 and cleaned up weekly. To manually
+clean up old generations right now:
+
+```bash
+nix-clean
+sudo nixos-rebuild boot --flake ~/nixos-dotfiles#your-hostname
 ```
