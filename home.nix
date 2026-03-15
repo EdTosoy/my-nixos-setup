@@ -56,6 +56,7 @@
     vscode
     nodejs
     pnpm
+    tmux
     # network
     protonvpn-gui
     # other

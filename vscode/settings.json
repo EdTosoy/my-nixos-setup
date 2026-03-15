@@ -246,5 +246,6 @@
   "cSpell.userWords": ["johncarlojose", "nixos", "pkgs", "qtile"],
   "[dockercompose]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "update.mode": "none"
 }
