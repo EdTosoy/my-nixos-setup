@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 {
   home.username = "johncarlojose";
   home.homeDirectory = "/home/johncarlojose";
@@ -57,7 +57,7 @@
     nodejs
     pnpm
     tmux
-    bruno
+    pkgs-unstable.bruno
     # network
     protonvpn-gui
     # other
