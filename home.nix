@@ -57,6 +57,7 @@
     nodejs
     pnpm
     tmux
+    bruno
     # network
     protonvpn-gui
     # other
