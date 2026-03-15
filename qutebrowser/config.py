@@ -241,20 +241,6 @@ config.set(
     "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
     "https://www.youtube.com/*",
 )
-
-# -------------------------
-# Search engines
-# -------------------------
-c.url.searchengines = {
-    "DEFAULT": "https://duckduckgo.com/?q={}",
-    "+yt":  "https://www.youtube.com/results?search_query={}",
-    "+i":   "https://inv.nadeko.net/search?q={}",
-    "+rs":  "https://libreddit.de/search?q={}",
-    "+sx":  "https://searx.be/search?q={}",
-    "+gh":  "https://github.com/search?q={}",
-    "+npm": "https://www.npmjs.com/search?q={}",
-}
-
 # -------------------------
 # Keybindings
 # -------------------------
