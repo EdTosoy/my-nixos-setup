@@ -55,6 +55,7 @@
     # dev
     vscode
     nodejs
+    pnpm
     # network
     protonvpn-gui
     # other
