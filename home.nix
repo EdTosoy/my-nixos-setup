@@ -107,49 +107,36 @@
   # Shell
   #################################
   programs.bash = {
-    enable = true;
-    historyControl = [ "ignoredups" "erasedups" ];
-    bashrcExtra = ''
-      prisma() {
-        nix-shell -p prisma_7 --run "prisma $*"
-      }
-      npx() {
-        if [ "$1" = "prisma" ]; then
-          shift
-          nix-shell -p prisma_7 --run "prisma $*"
-        else
-          command npx "$@"
-        fi
-      }
-    '';
-    shellAliases = {
-      btw = "echo I use nixos, btw";
-      # NixOS
-      nrs       = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-btw";
-      hms       = "home-manager switch --flake ~/nixos-dotfiles#nixos-btw";
-      nix-clean = "sudo nix-collect-garbage -d";
-      # Git
-      gs  = "git status";
-      ga  = "git add .";
-      gc  = "git commit -m";
-      gp  = "git push";
-      gl  = "git pull";
-      glo = "git log --oneline --graph --decorate";
-      gco = "git checkout";
-      gb  = "git branch";
-      gd  = "git diff";
-      # Navigation
-      ".."  = "cd ..";
-      "..." = "cd ../..";
-      # Dev
-      v    = "nvim";
-      grep = "rg";
-      cat  = "bat";
-      ls   = "eza --icons";
-      ll   = "eza -al --icons";
-      la   = "eza -A --icons";
-    };
+  enable = true;
+  historyControl = [ "ignoredups" "erasedups" ];
+  shellAliases = {
+    btw = "echo I use nixos, btw";
+    # NixOS
+    nrs       = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-btw";
+    hms       = "home-manager switch --flake ~/nixos-dotfiles#nixos-btw";
+    nix-clean = "sudo nix-collect-garbage -d";
+    # Git
+    gs  = "git status";
+    ga  = "git add .";
+    gc  = "git commit -m";
+    gp  = "git push";
+    gl  = "git pull";
+    glo = "git log --oneline --graph --decorate";
+    gco = "git checkout";
+    gb  = "git branch";
+    gd  = "git diff";
+    # Navigation
+    ".."  = "cd ..";
+    "..." = "cd ../..";
+    # Dev
+    v    = "nvim";
+    grep = "rg";
+    cat  = "bat";
+    ls   = "eza --icons";
+    ll   = "eza -al --icons";
+    la   = "eza -A --icons";
   };
+};
   #################################
   # Git
   #################################
