@@ -109,6 +109,19 @@
   programs.bash = {
     enable = true;
     historyControl = [ "ignoredups" "erasedups" ];
+    bashrcExtra = ''
+      prisma() {
+        nix-shell -p prisma_7 --run "prisma $*"
+      }
+      npx() {
+        if [ "$1" = "prisma" ]; then
+          shift
+          nix-shell -p prisma_7 --run "prisma $*"
+        else
+          command npx "$@"
+        fi
+      }
+    '';
     shellAliases = {
       btw = "echo I use nixos, btw";
       # NixOS
@@ -129,13 +142,12 @@
       ".."  = "cd ..";
       "..." = "cd ../..";
       # Dev
-      v      = "nvim";
-      grep   = "rg";
-      cat    = "bat";
-      ls     = "eza --icons";
-      ll     = "eza -al --icons";
-      la     = "eza -A --icons";
-      prisma = "nix-shell -p prisma_7 --run 'prisma'";
+      v    = "nvim";
+      grep = "rg";
+      cat  = "bat";
+      ls   = "eza --icons";
+      ll   = "eza -al --icons";
+      la   = "eza -A --icons";
     };
   };
   #################################
