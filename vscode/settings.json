@@ -73,6 +73,43 @@
     "statusBar.noFolderBackground": "#3C3C3C",
     "statusBar.debuggingBackground": "#3C3C3C"
   },
+  "nvim-ui-modes.ColorCustomizationsByModes": {
+    "normal": {
+      "editorCursor.foreground": "#CCCCCC",
+      "activityBarBadge.background": "#61AFEF",
+      "activityBarBadge.foreground": "#1E1E1E",
+      "statusBar.background": "#3C3C3C",
+      "statusBar.foreground": "#CCCCCC"
+    },
+    "insert": {
+      "editorCursor.foreground": "#98C379",
+      "activityBarBadge.background": "#4B6E6E",
+      "activityBarBadge.foreground": "#1E1E1E",
+      "statusBar.background": "#4B6E6E",
+      "statusBar.foreground": "#CCCCCC"
+    },
+    "visual": {
+      "editorCursor.foreground": "#61AFEF",
+      "activityBarBadge.background": "#094771",
+      "activityBarBadge.foreground": "#CCCCCC",
+      "statusBar.background": "#094771",
+      "statusBar.foreground": "#CCCCCC"
+    },
+    "replace": {
+      "editorCursor.foreground": "#E06C75",
+      "activityBarBadge.background": "#6E4B4B",
+      "activityBarBadge.foreground": "#CCCCCC",
+      "statusBar.background": "#6E4B4B",
+      "statusBar.foreground": "#CCCCCC"
+    },
+    "command": {
+      "editorCursor.foreground": "#D19A66",
+      "activityBarBadge.background": "#3C3C3C",
+      "activityBarBadge.foreground": "#CCCCCC",
+      "statusBar.background": "#2D2D2D",
+      "statusBar.foreground": "#CCCCCC"
+    }
+  },
   "vsicons.dontShowNewVersionMessage": true,
   "editor.wordWrap": "on",
   "editor.scrollbar.verticalScrollbarSize": 12,
@@ -243,7 +280,7 @@
   "vscode-angular-html.xmlAttributeNamespaceDivider": "#56B6C2",
   "vscode-angular-html.xmlTagNamespaceDivider": "#56B6C2",
   "vscode-angular-html.controlFlowPrefix": "#56B6C2",
-  "cSpell.userWords": ["johncarlojose", "nixos", "pkgs", "qtile"],
+  "cSpell.userWords": ["johncarlojose", "nixos", "pkgs", "qtile", "sway"],
   "[dockercompose]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
