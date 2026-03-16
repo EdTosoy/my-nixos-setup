@@ -25,21 +25,18 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   #################################
-  # Display / Qtile + LightDM
+  # Display / Sway + LightDM
+  # LightDM is used as the display manager.
+  # At login, select "Sway" session.
+  # XWayland is kept for app compatibility.
+  # Keyboard layout is handled by Sway's input config.
   #################################
   services.xserver = {
-    enable = true;
+    enable = true;  # keep for XWayland + LightDM
     videoDrivers = [ "modesetting" ];
     xkb.layout = "us";
     xkb.variant = "dvorak";
     displayManager.lightdm.enable = true;
-    windowManager.qtile = {
-      enable = true;
-      extraPackages = python3Packages: with python3Packages; [
-        psutil
-        dbus-python
-      ];
-    };
   };
 
   services.xserver.xkb.extraLayouts = {
@@ -48,6 +45,11 @@
       languages = [ "eng" ];
       symbolsFile = "${./real-prog-dvorak}";
     };
+  };
+
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
   };
 
   #################################
@@ -99,6 +101,7 @@
       "audio"
       "video"
       "docker"
+      "sway"
     ];
     # password is set via secrets.nix module in flake.nix
   };
@@ -155,6 +158,11 @@
   # Nix settings
   #################################
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
   networking.firewall.checkReversePath = false;
 
   #################################
@@ -167,6 +175,7 @@
   };
 
   #################################
+  # State Version
   #################################
   system.stateVersion = "25.11";
 }

@@ -8,7 +8,8 @@
   # Dotfiles
   #################################
   home.file = {
-    ".config/qtile/config.py".source            = ./qtile/config.py;
+    ".config/sway/config".source                = ./sway/config;
+    ".config/qtile/config.py".source            = ./qtile/config.py;  # kept for reference
     ".config/qutebrowser/config.py".source      = ./qutebrowser/config.py;
     ".config/qutebrowser/greasemonkey".source   = ./qutebrowser/greasemonkey;
     ".config/qutebrowser/styles".source         = ./qutebrowser/styles;
@@ -43,6 +44,7 @@
     dunst
     libnotify
     swaybg
+    swayidle
     # file management
     yazi
     wl-clipboard
@@ -58,6 +60,8 @@
     pnpm
     tmux
     pkgs-unstable.bruno
+    prisma-engines
+    openssl
     # network
     protonvpn-gui
     # other
@@ -91,6 +95,11 @@
   home.sessionVariables = {
     XCURSOR_THEME = "Banana";
     XCURSOR_SIZE  = "36";
+    # Prisma NixOS fix
+    PRISMA_SCHEMA_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/schema-engine";
+    PRISMA_QUERY_ENGINE_BINARY  = "${pkgs.prisma-engines}/bin/query-engine";
+    PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines}/lib/libquery_engine.node";
+    PRISMA_FMT_BINARY           = "${pkgs.prisma-engines}/bin/prisma-fmt";
   };
 
   #################################

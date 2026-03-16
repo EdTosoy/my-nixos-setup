@@ -4,7 +4,6 @@ from PyQt6.QtCore import QUrl
 # ==========================
 # qutebrowser — Focused Dev Setup
 # Synced with VSCode config (One Dark Pro Night Flat)
-
 # ==========================
 config.load_autoconfig(False)
 
@@ -14,7 +13,7 @@ config.load_autoconfig(False)
 # -------------------------
 c.colors.statusbar.normal.bg = '#3C3C3C'
 c.colors.statusbar.normal.fg = '#CCCCCC'
-c.colors.statusbar.insert.bg = '#6E4B4B'
+c.colors.statusbar.insert.bg = '#4B6E6E'  # teal — distinct from error red
 c.colors.statusbar.insert.fg = '#CCCCCC'
 c.colors.statusbar.passthrough.bg = '#5C4B6E'
 c.colors.statusbar.passthrough.fg = '#CCCCCC'
@@ -25,6 +24,7 @@ c.colors.statusbar.caret.fg = '#CCCCCC'
 c.colors.statusbar.caret.selection.bg = '#6E6E4B'
 c.colors.statusbar.caret.selection.fg = '#CCCCCC'
 c.colors.statusbar.progress.bg = '#2D2D2D'
+
 # Status bar URL colors (One Dark Pro palette)
 c.colors.statusbar.url.fg = '#CCCCCC'
 c.colors.statusbar.url.success.http.fg = '#98C379'
@@ -35,10 +35,6 @@ c.colors.statusbar.url.hover.fg = '#61AFEF'
 
 # -------------------------
 # Tabs
-# Mirrors workbench.editor.showTabs = "multiple"
-# JS indicator in tab title injected by greasemonkey script (see interceptor.py)
-#   "[JS] Claude"  → JS on
-#   "Claude"       → JS off
 # -------------------------
 c.tabs.position = 'right'
 c.tabs.show = 'multiple'
@@ -68,7 +64,6 @@ c.colors.tabs.indicator.error = '#E06C75'
 
 # -------------------------
 # Hints
-# Mirrors vim.easymotion colors — bright on dark
 # -------------------------
 c.colors.hints.bg = '#2D2D2D'
 c.colors.hints.fg = '#D19A66'
@@ -78,7 +73,6 @@ c.hints.padding = {"top": 2, "bottom": 2, "left": 4, "right": 4}
 
 # -------------------------
 # Completion widget
-# Mirrors VSCode autocomplete palette
 # -------------------------
 c.colors.completion.fg = '#CCCCCC'
 c.colors.completion.odd.bg = '#2D2D2D'
@@ -114,7 +108,6 @@ c.colors.messages.error.border = '#6E4B4B'
 
 # -------------------------
 # Webpage background (dark)
-# Mirrors One Dark Pro Night Flat base: #1E1E1E
 # -------------------------
 c.colors.webpage.bg = '#1E1E1E'
 c.colors.webpage.darkmode.enabled = True
@@ -124,8 +117,6 @@ c.colors.webpage.darkmode.threshold.background = 100
 
 # -------------------------
 # Fonts
-# Mirrors editor.fontFamily = "JetBrainsMono Nerd Font Mono, Fira Code, ..."
-# Mirrors editor.fontSize = 14, terminal.integrated.fontSize = 15
 # -------------------------
 c.fonts.default_family = [
     "JetBrainsMono Nerd Font Mono",
@@ -155,7 +146,6 @@ c.fonts.web.size.minimum = 10
 
 # -------------------------
 # Status bar
-# Mirrors zenMode.hideStatusBar = false (always show)
 # -------------------------
 c.statusbar.show = 'always'
 c.statusbar.padding = {"top": 3, "bottom": 3, "left": 6, "right": 6}
@@ -163,7 +153,6 @@ c.statusbar.widgets = ['keypress', 'url', 'scroll', 'history', 'tabs', 'progress
 
 # -------------------------
 # Session / window restore
-# Mirrors window.restoreWindows = "none"
 # -------------------------
 c.auto_save.session = True
 c.session.lazy_restore = True
@@ -181,7 +170,6 @@ c.downloads.remove_finished = 5000
 
 # -------------------------
 # Scrolling
-# Mirrors terminal.integrated.scrollback = 10000
 # -------------------------
 c.scrolling.smooth = True
 c.scrolling.bar = 'overlay'
@@ -222,8 +210,6 @@ TRUSTED_JS_SITES = [
 for site in TRUSTED_JS_SITES:
     config.set("content.javascript.enabled", True, site)
 
-
-
 # -------------------------
 # YouTube overrides
 # -------------------------
@@ -241,6 +227,20 @@ config.set(
     "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
     "https://www.youtube.com/*",
 )
+
+# -------------------------
+# Search engines
+# -------------------------
+c.url.searchengines = {
+    "DEFAULT": "https://duckduckgo.com/?q={}",
+    "+yt":  "https://www.youtube.com/results?search_query={}",
+    "+i":   "https://inv.nadeko.net/search?q={}",
+    "+rs":  "https://libreddit.de/search?q={}",
+    "+sx":  "https://searx.be/search?q={}",
+    "+gh":  "https://github.com/search?q={}",
+    "+npm": "https://www.npmjs.com/search?q={}",
+}
+
 # -------------------------
 # Keybindings
 # -------------------------
@@ -252,48 +252,54 @@ config.bind(",y", "open -t https://www.youtube.com/feed/subscriptions")
 config.bind(",i", "open -t https://inv.nadeko.net")
 config.bind(",r", "open -t https://libreddit.de")
 config.bind(",t", "open -t https://safetwitch.drgns.space/ThePrimeagen")
+
 # --- Session ---
 config.bind(",s", "session-load default", mode="normal")
 config.bind("<ctrl-s>", "session-save",   mode="normal")
+
 # --- JS toggle ---
-# Tab title shows "[JS]" prefix automatically via greasemonkey script.
-# Toggle with <ctrl-j>, tab title updates on next page load.
 config.bind("<ctrl-j>",
     "config-cycle content.javascript.enabled true false",
     mode="normal")
+
 # --- Darkmode toggle ---
 config.bind("<ctrl-d>", "config-cycle colors.webpage.darkmode.enabled true false")
+
 # --- Search / highlight ---
-# Mirrors vim normalMode <Esc> → :nohl
 config.bind("<Escape>", "search", mode="normal")
-# --- Clipboard (mirrors vim.useSystemClipboard = true) ---
+
+# --- Clipboard ---
 config.bind("yy", "yank url")
 config.bind("yt", "yank title")
 config.bind("ys", "yank selection")
 config.bind("p",  "open {clipboard}",    mode="normal")
 config.bind("P",  "open -t {clipboard}", mode="normal")
-# Caret mode: yank selection with feedback (mirrors vim.highlightedyank)
 config.bind("p", "yank selection ;; message-info 'yanked selection'", mode="caret")
-# --- Hints (mirrors vim.easymotion = true) ---
+
+# --- Hints ---
 config.bind("f",  "hint all",             mode="normal")
 config.bind("F",  "hint all tab",         mode="normal")
 config.bind(";r", "hint --rapid all tab", mode="normal")
-# --- Navigation (vim-natural) ---
+
+# --- Navigation ---
 config.bind("H", "back",     mode="normal")
 config.bind("L", "forward",  mode="normal")
 config.bind("J", "tab-prev", mode="normal")
 config.bind("K", "tab-next", mode="normal")
-# --- Scrolling (mirrors vim.smartRelativeLine feel) ---
+
+# --- Scrolling ---
 config.bind("gg", "scroll-to-perc 0",        mode="normal")
 config.bind("G",  "scroll-to-perc 100",       mode="normal")
 config.bind("<ctrl-u>", "scroll-page 0 -0.5", mode="normal")
+
 # --- Tabs ---
-# No-confirm close (mirrors explorer.confirmDelete = false)
 config.bind("d", "tab-close", mode="normal")
 config.bind("u", "undo",      mode="normal")
-# --- Passthrough (mirrors vim.handleKeys) ---
+
+# --- Passthrough ---
 config.bind("<ctrl-f>", "search",            mode="normal")
 config.bind("<ctrl-a>", "fake-key <ctrl-a>", mode="normal")
+
 # --- Reload ---
 config.bind("<ctrl-shift-r>", "reload -f", mode="normal")
 
