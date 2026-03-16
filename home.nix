@@ -3,7 +3,6 @@
   home.username = "johncarlojose";
   home.homeDirectory = "/home/johncarlojose";
   home.stateVersion = "25.11";
-
   #################################
   # Dotfiles
   #################################
@@ -16,8 +15,6 @@
     ".config/rofi/config.rasi".source           = ./rofi/config.rasi;
     ".config/rofi/oneDarkPro.rasi".source       = ./rofi/oneDarkPro.rasi;
     ".config/Code/User/keybindings.json".source = ./vscode/keybindings.json;
-
-    # settings.json is generated dynamically to inject the correct nvim path
     ".config/Code/User/settings.json" = {
       text = builtins.toJSON (
         builtins.fromJSON (builtins.readFile ./vscode/settings.json) // {
@@ -27,15 +24,14 @@
       );
     };
   };
-
   #################################
   # User Packages
   #################################
   home.packages = with pkgs; [
     # terminals
     kitty
-    bat           # better cat
-    eza           # better ls
+    bat
+    eza
     # browsers
     qutebrowser
     # WM tooling
@@ -60,14 +56,12 @@
     pnpm
     tmux
     pkgs-unstable.bruno
-    prisma-engines
     openssl
     # network
     protonvpn-gui
     # other
     beeper
   ];
-
   #################################
   # Cursor
   #################################
@@ -91,12 +85,10 @@
         "https://github.com/dreamsofautonomy/banana-cursor/releases/download/v2.2.0/Banana.tar.xz"
         "sha256-FA7iKldiuvWizVcrbANGAKgtQ3r/7nQovn2Lk+utvIU="
         "Banana";
-
   home.sessionVariables = {
     XCURSOR_THEME = "Banana";
     XCURSOR_SIZE  = "36";
   };
-
   #################################
   # GTK / Qt
   #################################
@@ -107,12 +99,10 @@
       size = 36;
     };
   };
-
   qt = {
     enable = true;
     platformTheme.name = "gtk";
   };
-
   #################################
   # Shell
   #################################
@@ -120,14 +110,11 @@
     enable = true;
     historyControl = [ "ignoredups" "erasedups" ];
     shellAliases = {
-      # the most important alias
       btw = "echo I use nixos, btw";
-
       # NixOS
       nrs       = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-btw";
       hms       = "home-manager switch --flake ~/nixos-dotfiles#nixos-btw";
       nix-clean = "sudo nix-collect-garbage -d";
-
       # Git
       gs  = "git status";
       ga  = "git add .";
@@ -138,21 +125,19 @@
       gco = "git checkout";
       gb  = "git branch";
       gd  = "git diff";
-
       # Navigation
       ".."  = "cd ..";
       "..." = "cd ../..";
-
       # Dev
-      v    = "nvim";
-      grep = "rg";
-      cat  = "bat";
-      ls   = "eza --icons";
-      ll   = "eza -al --icons";
-      la   = "eza -A --icons";
+      v      = "nvim";
+      grep   = "rg";
+      cat    = "bat";
+      ls     = "eza --icons";
+      ll     = "eza -al --icons";
+      la     = "eza -A --icons";
+      prisma = "nix-shell -p prisma_7 --run 'prisma'";
     };
   };
-
   #################################
   # Git
   #################################
