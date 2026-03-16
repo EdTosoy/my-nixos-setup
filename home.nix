@@ -95,11 +95,6 @@
   home.sessionVariables = {
     XCURSOR_THEME = "Banana";
     XCURSOR_SIZE  = "36";
-    # Prisma NixOS fix
-    PRISMA_SCHEMA_ENGINE_BINARY = "${pkgs.prisma-engines}/bin/schema-engine";
-    PRISMA_QUERY_ENGINE_BINARY  = "${pkgs.prisma-engines}/bin/query-engine";
-    PRISMA_QUERY_ENGINE_LIBRARY = "${pkgs.prisma-engines}/lib/libquery_engine.node";
-    PRISMA_FMT_BINARY           = "${pkgs.prisma-engines}/bin/prisma-fmt";
   };
 
   #################################
