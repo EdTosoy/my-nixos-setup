@@ -13,20 +13,20 @@ My personal NixOS setup. Minimal, keyboard-driven, and built for development.
 
 ## What's inside
 
-| Tool                  | What it does                                                  |
-| --------------------- | ------------------------------------------------------------- |
-| NixOS 25.11 (flakes)  | The OS                                                        |
-| Qtile (Wayland)       | Window manager                                                |
-| LightDM               | Login screen — always pick **"Qtile (Wayland)"**, not "Qtile" |
-| Home Manager          | Manages dotfiles and user packages declaratively              |
-| Qutebrowser           | Keyboard-driven browser (JS off by default)                   |
-| Rofi                  | App launcher                                                  |
-| Kitty                 | Terminal                                                      |
-| VSCode (Neovim setup) | Editor                                                        |
-| Yazi                  | Terminal file manager                                         |
-| Dunst                 | Notifications                                                 |
-| PipeWire              | Audio                                                         |
-| bat + eza             | Better `cat` and `ls`                                         |
+| Tool                  | What it does                                     |
+| --------------------- | ------------------------------------------------ |
+| NixOS 25.11 (flakes)  | The OS                                           |
+| Sway (Wayland)        | Window manager                                   |
+| LightDM               | Login screen — select **"Sway"** at login        |
+| Home Manager          | Manages dotfiles and user packages declaratively |
+| Qutebrowser           | Keyboard-driven browser (JS off by default)      |
+| Rofi                  | App launcher                                     |
+| Kitty                 | Terminal                                         |
+| VSCode (Neovim setup) | Editor                                           |
+| Yazi                  | Terminal file manager                            |
+| Dunst                 | Notifications                                    |
+| PipeWire              | Audio                                            |
+| bat + eza             | Better `cat` and `ls`                            |
 
 ---
 
@@ -41,8 +41,10 @@ nixos-dotfiles/
 ├── hardware-configuration.nix # generated — do not copy this one
 ├── real-prog-dvorak           # custom keyboard layout file
 ├── secrets.nix.example        # copy to secrets.nix and fill in your values
+├── sway/
+│   └── config                 # window manager config
 ├── qtile/
-│   └── config.py              # window manager config
+│   └── config.py              # old WM config — kept for reference
 ├── qutebrowser/
 │   ├── config.py              # browser config + keybindings
 │   ├── greasemonkey/          # userscripts
@@ -149,12 +151,8 @@ sudo nixos-rebuild switch --flake ~/nixos-dotfiles#your-hostname
 reboot
 ```
 
-After reboot, LightDM will appear with two Qtile session options:
-
-- **Qtile (Wayland)** ← always pick this one
-- Qtile ← this is the X11 session, ignore it
-
-Log in with the password you set in `secrets.nix`.
+After reboot, LightDM will appear. Select **"Sway"** and log in with the
+password you set in `secrets.nix`.
 
 ### 7. Finish up
 
@@ -176,7 +174,7 @@ Here's what the layout actually looks like compared to QWERTY:
 
 ```
 QWERTY:  ` 1 2 3 4 5 6 7 8 9 0 - =
-RPD:     $ 1 2 3 4 5 & 7 8 9 0 ! |
+RPD:     $ + [ { ( & = ) } ] * ! |
 
 QWERTY:  q w e r t y u i o p [ ] \
 RPD:     ; , . p y f g c r l / @ \
@@ -190,11 +188,15 @@ RPD:     ' q j k x b m w v z
 
 Notable differences from standard Dvorak:
 
-- Number row symbols are completely rearranged for programming (`(`, `)`, `{`, `}`, `[`, `]` on shift)
+- Number row **base layer is symbols** — numbers are on shift
 - `$` replaces `` ` `` on the tilde key
 - `;` and `:` move to where `q` was
 - `'` moves to where `z` was
 - `/` and `?` replace `[` and `]`
+
+> **Workspace switching** uses the base layer symbols (`+`, `[`, `{`, etc.)
+> since numbers require shift in this layout. See the [Workspaces](#workspaces)
+> section for the full mapping.
 
 **To use a standard QWERTY layout instead:**
 
@@ -205,21 +207,28 @@ xkb.layout = "us";  # or "gb", "de", "fr", etc.
 xkb.variant = "";   # remove "dvorak"
 ```
 
-Also remove the entire `xkb.extraLayouts` block:
+Also remove the entire `xkb.extraLayouts` block and `environment.etc` entry:
 
 ```nix
-# delete this whole block
-services.xserver.xkb.extraLayouts = {
-  real-prog-dvorak = { ... };
-};
+# delete these blocks
+services.xserver.xkb.extraLayouts = { ... };
+environment.etc."xkb/symbols/real-prog-dvorak" = { ... };
 ```
 
-In `qtile/config.py`, update the Wayland input rule:
+In `sway/config`, update the input block:
 
-```python
-wl_input_rules = {
-    "*": InputConfig(kb_layout="us"),  # your layout here
+```
+input * {
+    xkb_layout us
 }
+```
+
+And update the workspace bindings back to numbers:
+
+```
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+# etc.
 ```
 
 Then delete the `real-prog-dvorak` file — you won't need it.
@@ -230,37 +239,44 @@ Then delete the `real-prog-dvorak` file — you won't need it.
 
 ### Terminal
 
-In `qtile/config.py`:
+In `sway/config`:
 
-```python
-terminal = "kitty"  # swap with alacritty, foot, wezterm, etc.
+```
+set $term kitty  # swap with alacritty, foot, wezterm, etc.
 ```
 
 ### Browser
 
-In `qtile/config.py`:
+In `sway/config`:
 
-```python
-Key([mod], "w", lazy.spawn("firefox"), desc="Browser"),
+```
+bindsym $mod+w exec firefox
 ```
 
 ### Wallpaper
 
-`swaybg` is already installed. Add this to `autostart()` in `qtile/config.py`:
+`swaybg` is already installed. Add to `sway/config`:
 
-```python
-["swaybg", "-i", "/path/to/wallpaper.jpg", "-m", "fill"],
+```
+output * bg /path/to/wallpaper.jpg fill
 ```
 
 ### Window border colors
 
-In `qtile/config.py`:
+In `sway/config`:
 
-```python
-gruvbox = {
-    "olive":    "#98971a",  # active window border
-    "darkgray": "#1d2021",  # inactive window border
-}
+```
+client.focused   #98971a  #98971a  #1d2021  #98971a  #98971a
+client.unfocused #1d2021  #1d2021  #7A7A7A  #1d2021  #1d2021
+```
+
+### Gaps
+
+In `sway/config`:
+
+```
+gaps inner 4
+gaps outer 0
 ```
 
 ### Enabling JavaScript in Qutebrowser
@@ -286,7 +302,7 @@ the VSCode UI. Settings and keybindings are tracked though.
 
 ## Keybindings
 
-### Qtile
+### Sway
 
 `mod` = Super (Windows key)
 
@@ -298,15 +314,31 @@ the VSCode UI. Settings and keybindings are tracked though.
 | `mod + shift + h/j/k/l` | Move window                     |
 | `mod + ctrl + h/j/k/l`  | Resize window                   |
 | `mod + f`               | Toggle fullscreen               |
-| `mod + e`               | Cycle layout                    |
+| `mod + e`               | Toggle split layout             |
 | `mod + q`               | Close window                    |
+| `mod + semicolon`       | Split horizontal                |
+| `mod + v`               | Split vertical                  |
+| `mod + shift + space`   | Toggle floating                 |
+| `mod + space`           | Focus floating/tiling toggle    |
 
 #### Workspaces
 
-| Binding                | Action                   |
-| ---------------------- | ------------------------ |
-| `mod + 1–9, 0`         | Switch to workspace      |
-| `mod + shift + 1–9, 0` | Move window to workspace |
+> RPD number row base layer is symbols — use these to switch workspaces.
+
+| Binding              | Workspace | Key |
+| -------------------- | --------- | --- |
+| `mod + plus`         | 1         | `+` |
+| `mod + bracketleft`  | 2         | `[` |
+| `mod + braceleft`    | 3         | `{` |
+| `mod + parenleft`    | 4         | `(` |
+| `mod + ampersand`    | 5         | `&` |
+| `mod + equal`        | 6         | `=` |
+| `mod + parenright`   | 7         | `)` |
+| `mod + braceright`   | 8         | `}` |
+| `mod + bracketright` | 9         | `]` |
+| `mod + asterisk`     | 10        | `*` |
+
+Add `shift` to any of the above to **move the focused window** to that workspace.
 
 #### Apps
 
@@ -322,12 +354,12 @@ the VSCode UI. Settings and keybindings are tracked though.
 
 #### System
 
-| Binding            | Action              |
-| ------------------ | ------------------- |
-| `mod + shift + c`  | Reload Qtile config |
-| `mod + shift + r`  | Restart Qtile       |
-| `mod + shift + e`  | Quit Qtile          |
-| `mod + Left/Right` | Switch monitor      |
+| Binding            | Action             |
+| ------------------ | ------------------ |
+| `mod + shift + c`  | Reload Sway config |
+| `mod + shift + r`  | Restart Sway       |
+| `mod + shift + e`  | Exit Sway          |
+| `mod + Left/Right` | Switch monitor     |
 
 ---
 
@@ -450,34 +482,33 @@ All VSCode keybindings are remapped for Real Programmers Dvorak.
 
 ## Troubleshooting
 
-**Two Qtile options at login**
-LightDM shows both "Qtile" (X11) and "Qtile (Wayland)" — this is normal.
-Always select **"Qtile (Wayland)"**. The X11 entry is registered automatically
-by the NixOS Qtile module and cannot be easily removed.
-
 **Home Manager conflicts on rebuild**
 If you get a conflict error about existing files, Home Manager will back them up
 automatically with a `.backup` extension. Check `~/.config` for `.backup` files
 after rebuilding.
 
 **Cursor not showing in some apps**
-Make sure you selected the **"Qtile (Wayland)"** session at the LightDM login
-screen. The cursor theme is set via both GTK settings and `gsettings` in the
-Qtile autostart.
+Make sure you selected the **"Sway"** session at the LightDM login screen. The
+cursor theme is set via both GTK settings and `gsettings` in the Sway autostart.
 
 **Qutebrowser site not working**
 JavaScript is off by default. Add the site to `TRUSTED_JS_SITES` in
 `qutebrowser/config.py` and restart the browser.
 
 **Wrong keyboard layout after install**
-If your keyboard feels wrong after logging in, verify the layout with:
+Check the input config in `sway/config`:
 
-```bash
-setxkbmap -query
+```
+input * {
+    xkb_layout real-prog-dvorak
+}
 ```
 
-If it's not set, check that `real-prog-dvorak` is correctly referenced in
-`configuration.nix` and rebuild.
+Reload Sway with `mod + shift + c` after any changes.
+
+**Workspace switching not working**
+This layout's number row produces symbols on the base layer. Use the symbol
+keys — see the [Workspaces](#workspaces) table above for the full mapping.
 
 **Forgot your password**
 Reboot, hold `Shift` at boot to open GRUB, press `e` on the NixOS entry, add
@@ -490,7 +521,7 @@ exec /sbin/init
 ```
 
 **Too many boot entries**
-Generations are automatically limited to 5 and cleaned up weekly. To manually
+Generations are automatically limited and cleaned up weekly. To manually
 clean up old generations right now:
 
 ```bash
