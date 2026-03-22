@@ -43,8 +43,6 @@ nixos-dotfiles/
 ├── secrets.nix.example        # copy to secrets.nix and fill in your values
 ├── sway/
 │   └── config                 # window manager config
-├── qtile/
-│   └── config.py              # old WM config — kept for reference
 ├── qutebrowser/
 │   ├── config.py              # browser config + keybindings
 │   ├── greasemonkey/          # userscripts

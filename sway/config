@@ -108,7 +108,7 @@ bindsym $mod+equal        workspace number 6
 bindsym $mod+parenright   workspace number 7
 bindsym $mod+braceright   workspace number 8
 bindsym $mod+bracketright workspace number 9
-bindsym $mod+asterisk     workspace number 100
+bindsym $mod+asterisk     workspace number 10
 
 bindsym $mod+Shift+plus         move container to workspace number 1
 bindsym $mod+Shift+bracketleft  move container to workspace number 2

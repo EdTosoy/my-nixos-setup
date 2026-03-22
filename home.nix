@@ -8,7 +8,6 @@
   #################################
   home.file = {
     ".config/sway/config".source                = ./sway/config;
-    ".config/qtile/config.py".source            = ./qtile/config.py;  # kept for reference
     ".config/qutebrowser/config.py".source      = ./qutebrowser/config.py;
     ".config/qutebrowser/greasemonkey".source   = ./qutebrowser/greasemonkey;
     ".config/qutebrowser/styles".source         = ./qutebrowser/styles;
@@ -63,6 +62,14 @@
     protonvpn-gui
     # other
     beeper
+    # neovim LSP
+    nodePackages.typescript-language-server
+    nodePackages.vscode-langservers-extracted  # html, cssls, eslint
+    angular-language-server
+    nil        # nil_ls
+    lua-language-server
+    prettierd
+    stylua
   ];
   #################################
   # Cursor

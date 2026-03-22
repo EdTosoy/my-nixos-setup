@@ -290,18 +290,6 @@ config.bind("<ctrl-a>", "fake-key <ctrl-a>", mode="normal")
 # --- Reload ---
 config.bind("<ctrl-shift-r>", "reload -f", mode="normal")
 
-# --- Tab switching (matches RPD number row: +[{()}]*=!|&) ---
-config.bind("+", "tab-focus 1",  mode="normal")
-config.bind("[", "tab-focus 2",  mode="normal")
-config.bind("{", "tab-focus 3",  mode="normal")
-config.bind("(", "tab-focus 4",  mode="normal")
-config.bind(")", "tab-focus 5",  mode="normal")
-config.bind("}", "tab-focus 6",  mode="normal")
-config.bind("]", "tab-focus 7",  mode="normal")
-config.bind("*", "tab-focus 8",  mode="normal")
-config.bind("=", "tab-focus 9",  mode="normal")
-config.bind("!", "tab-focus 10", mode="normal")
-
 # -------------------------
 # Adblock
 # -------------------------

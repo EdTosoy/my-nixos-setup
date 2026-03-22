@@ -280,7 +280,7 @@
   "vscode-angular-html.xmlAttributeNamespaceDivider": "#56B6C2",
   "vscode-angular-html.xmlTagNamespaceDivider": "#56B6C2",
   "vscode-angular-html.controlFlowPrefix": "#56B6C2",
-  "cSpell.userWords": ["johncarlojose", "nixos", "pkgs", "qtile", "sway"],
+  "cSpell.userWords": ["johncarlojose", "nixos", "pkgs", "sway"],
   "[dockercompose]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

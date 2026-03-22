@@ -4,19 +4,18 @@ name[Group1] = "English (Real Programmers Dvorak)";
 
 // ── Number row ─────────────────────────────────────────────────────────
 key <TLDE> { [ dollar,       asciitilde,  dead_grave,       dead_tilde      ] };
-key <AE01> { [ plus,         1                                               ] };
-key <AE02> { [ bracketleft,  2                                               ] };
-key <AE03> { [ braceleft,    3                                               ] };
-key <AE04> { [ parenleft,    4                                               ] };
-key <AE05> { [ parenright,   5                                               ] };
-key <AE06> { [ braceright,   6,           dead_circumflex,  dead_circumflex  ] };
-key <AE07> { [ bracketright, 7                                               ] };
-key <AE08> { [ asterisk,     8                                               ] };
-key <AE09> { [ exclam,        9,           dead_grave                         ] };
-key <AE10> { [ equal,       0                                               ] };
-key <AE11> { [ bar,          percent                                         ] };
-key <AE12> { [ ampersand,    grave,       dead_tilde                         ] };
-
+key <AE01> { [ 1,            plus                                            ] };
+key <AE02> { [ 2,            bracketleft                                     ] };
+key <AE03> { [ 3,            braceleft                                       ] };
+key <AE04> { [ 4,            parenleft                                       ] };
+key <AE05> { [ 5,            parenright                                      ] };
+key <AE06> { [ 6,            braceright,  dead_circumflex,  dead_circumflex  ] };
+key <AE07> { [ 7,            bracketright                                    ] };
+key <AE08> { [ 8,            asterisk                                        ] };
+key <AE09> { [ 9,            exclam,      dead_grave                         ] };
+key <AE10> { [ 0,            equal                                           ] };
+key <AE11> { [ percent,      bar                                             ] };
+key <AE12> { [ grave,        ampersand,   dead_tilde                         ] };
 // ── Top row ────────────────────────────────────────────────────────────
 key <AD01> { [ semicolon,    colon,       dead_acute,       dead_diaeresis  ] };
 key <AD02> { [ comma,        less,        dead_cedilla,     dead_caron      ] };
