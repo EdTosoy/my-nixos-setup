@@ -12,8 +12,8 @@ key <AE05> { [ parenright,   5                                               ] }
 key <AE06> { [ braceright,   6,           dead_circumflex,  dead_circumflex  ] };
 key <AE07> { [ bracketright, 7                                               ] };
 key <AE08> { [ asterisk,     8                                               ] };
-key <AE09> { [ equal,        9,           dead_grave                         ] };
-key <AE10> { [ exclam,       0                                               ] };
+key <AE09> { [ exclam,        9,           dead_grave                         ] };
+key <AE10> { [ equal,       0                                               ] };
 key <AE11> { [ bar,          percent                                         ] };
 key <AE12> { [ ampersand,    grave,       dead_tilde                         ] };
 

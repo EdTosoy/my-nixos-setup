@@ -45,9 +45,11 @@
     yazi
     wl-clipboard
     # CLI
-    neovim
     ripgrep
     fd
+    gnumake
+    gcc
+    tree-sitter
     # media
     playerctl
     # dev
@@ -142,6 +144,17 @@
       la   = "eza -A --icons";
     };
   };
+
+  #################################
+  # NeoVim
+  #################################
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+  };
+
   #################################
   # Git
   #################################
