@@ -65,6 +65,8 @@
     # neovim LSP
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted  # html, cssls, eslint
+    nodePackages."@tailwindcss/language-server"
+    emmet-language-server
     angular-language-server
     nil        # nil_ls
     lua-language-server
@@ -149,6 +151,7 @@
       ls   = "eza --icons";
       ll   = "eza -al --icons";
       la   = "eza -A --icons";
+      ng   = "npx @angular/cli@latest";
     };
   };
 

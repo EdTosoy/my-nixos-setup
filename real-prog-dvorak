@@ -14,8 +14,8 @@ key <AE07> { [ 7,            bracketright                                    ] }
 key <AE08> { [ 8,            asterisk                                        ] };
 key <AE09> { [ 9,            exclam,      dead_grave                         ] };
 key <AE10> { [ 0,            equal                                           ] };
-key <AE11> { [ percent,      bar                                             ] };
-key <AE12> { [ grave,        ampersand,   dead_tilde                         ] };
+key <AE11> { [ bar,          percent                                         ] };
+key <AE12> { [ ampersand,    grave,       dead_tilde                         ] };
 // ── Top row ────────────────────────────────────────────────────────────
 key <AD01> { [ semicolon,    colon,       dead_acute,       dead_diaeresis  ] };
 key <AD02> { [ comma,        less,        dead_cedilla,     dead_caron      ] };
