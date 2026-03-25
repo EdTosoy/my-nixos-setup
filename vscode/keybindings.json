@@ -1,4 +1,4 @@
-// Place your key bindings in this file to override the defaults
+/* // Place your key bindings in this file to override the defaults
 //
 // DVORAK REMAP — only keys that physically moved are updated.
 // QWERTY → Dvorak: q→' w→, e→. r→p t→y y→f u→g i→c o→r p→l
@@ -392,3 +392,4 @@
     "when": "editorTextFocus && neovim.mode == 'normal'"
   }
 ]
+ */

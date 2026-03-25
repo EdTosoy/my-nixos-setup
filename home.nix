@@ -21,8 +21,11 @@
             "/etc/profiles/per-user/${config.home.username}/bin/nvim";
         }
       );
-    };
+    }; 
   };
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ]; 
   #################################
   # User Packages
   #################################
