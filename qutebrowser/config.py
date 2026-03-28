@@ -106,6 +106,7 @@ c.colors.messages.error.bg = '#6E4B4B'
 c.colors.messages.error.fg = '#E06C75'
 c.colors.messages.error.border = '#6E4B4B'
 
+
 # -------------------------
 # Webpage background (dark)
 # -------------------------
@@ -227,6 +228,9 @@ config.set(
     "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
     "https://www.youtube.com/*",
 )
+
+# --- Hints ---
+c.hints.chars = "aouehtns"
 
 # -------------------------
 # Keybindings
