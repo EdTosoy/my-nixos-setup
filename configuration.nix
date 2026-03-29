@@ -1,9 +1,13 @@
-{ config, lib, pkgs, ... }:
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   #################################
   # Bootloader
@@ -32,7 +36,7 @@
   # Keyboard layout is handled by Sway's input config.
   #################################
   services.xserver = {
-    enable = true;  # keep for XWayland + LightDM
+    enable = true; # keep for XWayland + LightDM
     videoDrivers = [ "modesetting" ];
     xkb.layout = "us";
     xkb.variant = "dvorak";
@@ -51,7 +55,6 @@
     enable = true;
     wrapperFeatures.gtk = true;
   };
-
 
   #################################
   # Graphics
@@ -119,7 +122,10 @@
       noto-fonts-color-emoji
     ];
     fontconfig.defaultFonts = {
-      monospace = [ "JetBrainsMono Nerd Font" "Hack Nerd Font" ];
+      monospace = [
+        "JetBrainsMono Nerd Font"
+        "Hack Nerd Font"
+      ];
       sansSerif = [ "Noto Sans" ];
     };
   };
@@ -144,11 +150,6 @@
   ];
 
   #################################
-  # Firefox
-  #################################
-  programs.firefox.enable = true;
-
-  #################################
   # Allow unfree
   #################################
   nixpkgs.config.allowUnfree = true;
@@ -158,7 +159,10 @@
   #################################
   # Nix settings
   #################################
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   nix.gc = {
     automatic = true;
     dates = "weekly";
@@ -180,3 +184,4 @@
   #################################
   system.stateVersion = "25.11";
 }
+

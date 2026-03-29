@@ -307,6 +307,11 @@ c.content.blocking.adblock.lists = [
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts",
 ]
 
+# --- Adblock toggle ---
+config.bind("<ctrl-b>",
+    "config-cycle content.blocking.enabled true false",
+    mode="normal")
+
 # -------------------------
 # HTTPS everywhere
 # -------------------------

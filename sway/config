@@ -121,11 +121,6 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
-# ── Floating rules ────────────────────────────────────────
-for_window [app_id="pavucontrol"]          floating enable
-for_window [app_id="nm-connection-editor"] floating enable
-for_window [app_id="blueman-manager"]      floating enable
-
 # ── Autostart ─────────────────────────────────────────────
 exec dunst
 exec nm-applet
