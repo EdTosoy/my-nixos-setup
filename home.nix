@@ -13,6 +13,7 @@
   #################################
   home.file = {
     ".config/sway/config".source = ./sway/config;
+    ".config/tmux/tmux.conf".source = ./tmux/tmux.conf;
     ".config/qutebrowser/config.py".source = ./qutebrowser/config.py;
     ".config/qutebrowser/greasemonkey".source = ./qutebrowser/greasemonkey;
     ".config/qutebrowser/styles".source = ./qutebrowser/styles;
@@ -44,7 +45,6 @@
     qutebrowser
     # WM tooling
     rofi
-    flameshot
     dunst
     libnotify
     swaybg
@@ -52,6 +52,9 @@
     # file management
     yazi
     wl-clipboard
+    grim # for screenshots
+    slurp # for region selection
+    satty
     # CLI
     ripgrep
     fd
@@ -61,7 +64,6 @@
     # media
     playerctl
     # dev
-    vscode
     nodejs
     pnpm
     tmux
@@ -189,4 +191,3 @@
     };
   };
 }
-

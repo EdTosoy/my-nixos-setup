@@ -84,9 +84,8 @@ bindsym $mod+Shift+r exec swaymsg reload
 bindsym $mod+Right focus output right
 bindsym $mod+Left  focus output left
 
-# Screenshot
-bindsym Print exec flameshot gui
-
+bindsym F12 exec grim -g "$(slurp)" - | satty --filename -
+bindsym F11 grim -g "$(slurp)" - | satty --filename - --copy-command=wl-copy
 # Audio
 bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.0
 bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_SINK@ 5%-
