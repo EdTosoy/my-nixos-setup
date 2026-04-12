@@ -232,9 +232,6 @@ config.set(
 # Keybindings
 # -------------------------
 
-# Unbind space from default scroll down
-config.unbind("<space>")
-
 # --- Quicklaunch sites (space as leader) ---
 config.bind("<space>b", "open -t https://www.blinkist.com")
 config.bind("<space>m", "open -t https://music.youtube.com")
