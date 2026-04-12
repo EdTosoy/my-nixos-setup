@@ -245,7 +245,6 @@ config.bind("<space>r", "open -t https://libreddit.de")
 config.bind("<space>t", "open -t https://safetwitch.drgns.space/ThePrimeagen")
 
 # --- Session ---
-config.bind("<space>s", "session-load default", mode="normal")
 config.bind("<ctrl-s>", "session-save",         mode="normal")
 
 # --- Toggles ---
