@@ -9,11 +9,10 @@ config.load_autoconfig(False)
 
 # -------------------------
 # Status bar colors by mode
-# Mirrors vim.statusBarColors.* from VSCode
 # -------------------------
 c.colors.statusbar.normal.bg = '#3C3C3C'
 c.colors.statusbar.normal.fg = '#CCCCCC'
-c.colors.statusbar.insert.bg = '#4B6E6E'  # teal — distinct from error red
+c.colors.statusbar.insert.bg = '#4B6E6E'
 c.colors.statusbar.insert.fg = '#CCCCCC'
 c.colors.statusbar.passthrough.bg = '#5C4B6E'
 c.colors.statusbar.passthrough.fg = '#CCCCCC'
@@ -25,7 +24,7 @@ c.colors.statusbar.caret.selection.bg = '#6E6E4B'
 c.colors.statusbar.caret.selection.fg = '#CCCCCC'
 c.colors.statusbar.progress.bg = '#2D2D2D'
 
-# Status bar URL colors (One Dark Pro palette)
+# Status bar URL colors
 c.colors.statusbar.url.fg = '#CCCCCC'
 c.colors.statusbar.url.success.http.fg = '#98C379'
 c.colors.statusbar.url.success.https.fg = '#98C379'
@@ -70,6 +69,7 @@ c.colors.hints.fg = '#D19A66'
 c.colors.hints.match.fg = '#E5C07B'
 c.hints.border = '1px solid #3C3C3C'
 c.hints.padding = {"top": 2, "bottom": 2, "left": 4, "right": 4}
+c.hints.chars = "aouehtns"
 
 # -------------------------
 # Completion widget
@@ -105,7 +105,6 @@ c.colors.messages.warning.border = '#6E4B4B'
 c.colors.messages.error.bg = '#6E4B4B'
 c.colors.messages.error.fg = '#E06C75'
 c.colors.messages.error.border = '#6E4B4B'
-
 
 # -------------------------
 # Webpage background (dark)
@@ -176,7 +175,7 @@ c.scrolling.smooth = True
 c.scrolling.bar = 'overlay'
 
 # -------------------------
-# Privacy / Security (global defaults — overridden per-site below)
+# Privacy / Security
 # -------------------------
 c.content.javascript.enabled = False
 c.content.webgl = False
@@ -229,32 +228,33 @@ config.set(
     "https://www.youtube.com/*",
 )
 
-# --- Hints ---
-c.hints.chars = "aouehtns"
-
 # -------------------------
 # Keybindings
 # -------------------------
-# --- Quicklaunch sites ---
-config.bind(",b", "open -t https://www.blinkist.com")
-config.bind(",m", "open -t https://music.youtube.com")
-config.bind(",c", "open -t https://claude.ai")
-config.bind(",y", "open -t https://www.youtube.com/feed/subscriptions")
-config.bind(",i", "open -t https://inv.nadeko.net")
-config.bind(",r", "open -t https://libreddit.de")
-config.bind(",t", "open -t https://safetwitch.drgns.space/ThePrimeagen")
+
+# Unbind space from default scroll down
+config.unbind("<space>")
+
+# --- Quicklaunch sites (space as leader) ---
+config.bind("<space>b", "open -t https://www.blinkist.com")
+config.bind("<space>m", "open -t https://music.youtube.com")
+config.bind("<space>c", "open -t https://claude.ai")
+config.bind("<space>y", "open -t https://www.youtube.com/feed/subscriptions")
+config.bind("<space>i", "open -t https://inv.nadeko.net")
+config.bind("<space>r", "open -t https://libreddit.de")
+config.bind("<space>t", "open -t https://safetwitch.drgns.space/ThePrimeagen")
 
 # --- Session ---
-config.bind(",s", "session-load default", mode="normal")
-config.bind("<ctrl-s>", "session-save",   mode="normal")
+config.bind("<space>s", "session-load default", mode="normal")
+config.bind("<ctrl-s>", "session-save",         mode="normal")
 
-# --- JS toggle ---
+# --- Toggles ---
 config.bind("<ctrl-j>",
     "config-cycle content.javascript.enabled true false",
     mode="normal")
-
-# --- Darkmode toggle ---
 config.bind("<ctrl-d>", "config-cycle colors.webpage.darkmode.enabled true false")
+config.bind("<ctrl-b>", "config-cycle content.blocking.enabled true false", mode="normal")
+config.bind("<space>.", "config-cycle tabs.show always never")  # toggle tab bar
 
 # --- Search / highlight ---
 config.bind("<Escape>", "search", mode="normal")
@@ -306,11 +306,6 @@ c.content.blocking.adblock.lists = [
     "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/annoyances.txt",
     "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts",
 ]
-
-# --- Adblock toggle ---
-config.bind("<ctrl-b>",
-    "config-cycle content.blocking.enabled true false",
-    mode="normal")
 
 # -------------------------
 # HTTPS everywhere
