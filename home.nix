@@ -72,8 +72,6 @@
     firefox-devedition
     # network
     protonvpn-gui
-    # other
-    beeper
     # neovim LSP
     nodePackages.typescript-language-server
     nodePackages.vscode-langservers-extracted # html, cssls, eslint
