@@ -69,7 +69,7 @@ c.colors.hints.fg = '#D19A66'
 c.colors.hints.match.fg = '#E5C07B'
 c.hints.border = '1px solid #3C3C3C'
 c.hints.padding = {"top": 2, "bottom": 2, "left": 4, "right": 4}
-c.hints.chars = "aouehtns"
+c.hints.chars = "aouehtns"  # removed 'd'
 
 # -------------------------
 # Completion widget
@@ -232,7 +232,7 @@ config.set(
 # Keybindings
 # -------------------------
 
-# --- Quicklaunch sites (space as leader) ---
+# --- Quicklaunch sites ---
 config.bind("<space>b", "open -t https://www.blinkist.com")
 config.bind("<space>m", "open -t https://music.youtube.com")
 config.bind("<space>c", "open -t https://claude.ai")
@@ -242,7 +242,7 @@ config.bind("<space>r", "open -t https://libreddit.de")
 config.bind("<space>t", "open -t https://safetwitch.drgns.space/ThePrimeagen")
 
 # --- Session ---
-config.bind("<ctrl-s>", "session-save",         mode="normal")
+config.bind("<ctrl-s>", "session-save", mode="normal")
 
 # --- Toggles ---
 config.bind("<ctrl-j>",
@@ -250,7 +250,7 @@ config.bind("<ctrl-j>",
     mode="normal")
 config.bind("<ctrl-d>", "config-cycle colors.webpage.darkmode.enabled true false")
 config.bind("<ctrl-b>", "config-cycle content.blocking.enabled true false", mode="normal")
-config.bind("<space>.", "config-cycle tabs.show always never")  # toggle tab bar
+config.bind("<space>.", "config-cycle tabs.show always never")
 
 # --- Search / highlight ---
 config.bind("<Escape>", "search", mode="normal")
@@ -264,8 +264,10 @@ config.bind("P",  "open -t {clipboard}", mode="normal")
 config.bind("p", "yank selection ;; message-info 'yanked selection'", mode="caret")
 
 # --- Hints ---
-config.bind("f",  "hint all",             mode="normal")
-config.bind("F",  "hint all tab",         mode="normal")
+# d now triggers hint all (replaces f)
+# f removed
+config.bind("d",  "hint all",             mode="normal")
+config.bind("D",  "hint all tab",         mode="normal")
 config.bind(";r", "hint --rapid all tab", mode="normal")
 
 # --- Navigation ---
@@ -280,8 +282,8 @@ config.bind("G",  "scroll-to-perc 100",       mode="normal")
 config.bind("<ctrl-u>", "scroll-page 0 -0.5", mode="normal")
 
 # --- Tabs ---
-config.bind("d", "tab-close", mode="normal")
-config.bind("u", "undo",      mode="normal")
+config.bind("<space>;", "tab-close", mode="normal")  # safe close — no accidental d
+config.bind("u", "undo",             mode="normal")
 
 # --- Passthrough ---
 config.bind("<ctrl-f>", "search",            mode="normal")
