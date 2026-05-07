@@ -276,6 +276,10 @@ config.bind("L", "forward",  mode="normal")
 config.bind("J", "tab-prev", mode="normal")
 config.bind("K", "tab-next", mode="normal")
 
+# --- Insert mode ---
+config.bind("a", "mode-enter insert", mode="normal")
+config.bind("i", "mode-enter insert", mode="normal")
+
 # --- Scrolling ---
 config.bind("gg", "scroll-to-perc 0",        mode="normal")
 config.bind("G",  "scroll-to-perc 100",       mode="normal")
