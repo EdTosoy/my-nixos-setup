@@ -63,10 +63,15 @@
     tree-sitter
     # media
     playerctl
+    discord
     # dev
     nodejs
     yarn
     pnpm
+    python3
+    python3Packages.pip
+    python3Packages.virtualenv
+    uv
     tmux
     pkgs-unstable.bruno
     openssl
