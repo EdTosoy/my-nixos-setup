@@ -201,6 +201,7 @@ TRUSTED_JS_SITES = [
     "https://docs.nestjs.com/*",
     "https://www.prisma.io/*",
     "https://nodejs.org/*",
+    "https://neetcode.io/roadmap",
     "https://developer.mozilla.org/*",
     "https://stackoverflow.com/*",
     "http://localhost:*",
@@ -233,13 +234,11 @@ config.set(
 # -------------------------
 
 # --- Quicklaunch sites ---
-config.bind("<space>b", "open -t https://www.blinkist.com")
 config.bind("<space>m", "open -t https://music.youtube.com")
 config.bind("<space>c", "open -t https://claude.ai")
 config.bind("<space>y", "open -t https://www.youtube.com/feed/subscriptions")
 config.bind("<space>i", "open -t https://inv.nadeko.net")
-config.bind("<space>r", "open -t https://libreddit.de")
-config.bind("<space>t", "open -t https://safetwitch.drgns.space/ThePrimeagen")
+config.bind("<space>n", "open -t https://neetcode.io/roadmap")
 
 # --- Session ---
 config.bind("<ctrl-s>", "session-save", mode="normal")
