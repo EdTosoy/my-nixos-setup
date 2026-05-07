@@ -65,6 +65,7 @@
     playerctl
     # dev
     nodejs
+    yarn
     pnpm
     tmux
     pkgs-unstable.bruno
