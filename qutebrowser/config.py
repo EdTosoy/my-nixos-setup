@@ -312,11 +312,9 @@ c.content.blocking.adblock.lists = [
 # HTTPS everywhere
 # -------------------------
 config.set("content.headers.custom", {"Upgrade-Insecure-Requests": "1"})
-config.set(
-    "content.user_stylesheets",
-    ["~/.config/qutebrowser/styles/messenger.css"],
-    "https://www.messenger.com/*"
-)
+
+config.set("content.user_stylesheets", ["~/.config/qutebrowser/styles/messenger.css"])
+
 # -------------------------
 # Load interceptor LAST
 # -------------------------
