@@ -1,0 +1,12 @@
+/* ~/.config/qutebrowser/userstyles/messenger.css */
+
+/* Hide the top nav bar on Messenger */
+[aria-label="New message"],
+a[aria-label*="Facebook"] {
+  display: none !important;
+}
+
+/* Or nuke the whole outer container — target by role+structure */
+div:has(> div > a[aria-label*="Facebook"]) {
+  display: none !important;
+}
