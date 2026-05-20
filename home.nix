@@ -13,7 +13,11 @@
   #################################
   home.file = {
     ".config/sway/config".source = ./sway/config;
-    ".config/sway/nixos-wallpaper.png".source = ./sway/nixos-wallpaper.png;
+
+    # BG Wallpaper (light or dark)
+    # ".config/sway/nixos-wallpaper.png".source = ./sway/nixos-wallpaper.png;
+    ".config/sway/nixos-wallpaper-dark.png".source = ./sway/nixos-wallpaper-dark.png;
+
     ".config/tmux/tmux.conf".source = ./tmux/tmux.conf;
     ".config/qutebrowser/config.py".source = ./qutebrowser/config.py;
     ".config/qutebrowser/greasemonkey".source = ./qutebrowser/greasemonkey;
