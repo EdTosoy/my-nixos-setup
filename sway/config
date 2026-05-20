@@ -29,7 +29,7 @@ gaps outer 0
 font pango:JetBrainsMono Nerd Font Mono 11
 
 # ── Output ────────────────────────────────────────────────
-output * bg ./nixos-wallpaper.png fill
+output * bg ./nixos-wallpaper-dark.png fill
 
 # ── Focus ─────────────────────────────────────────────────
 focus_follows_mouse no
