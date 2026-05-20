@@ -14,6 +14,7 @@
   home.file = {
 
     ".config/sway".source = ./sway;
+    ".config/nvim".source = ./nvim;
     ".config/tmux/tmux.conf".source = ./tmux/tmux.conf;
     ".config/qutebrowser/config.py".source = ./qutebrowser/config.py;
     ".config/qutebrowser/greasemonkey".source = ./qutebrowser/greasemonkey;
