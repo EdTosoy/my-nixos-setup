@@ -177,7 +177,7 @@ c.scrolling.bar = 'overlay'
 # -------------------------
 # Privacy / Security
 # -------------------------
-c.content.javascript.enabled = False
+c.content.javascript.enabled = True
 c.content.webgl = False
 c.content.canvas_reading = False
 c.content.geolocation = False

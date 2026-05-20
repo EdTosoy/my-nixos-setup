@@ -140,8 +140,8 @@
     shellAliases = {
       btw = "echo I use nixos, btw";
       # NixOS
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos-btw";
-      hms = "home-manager switch --flake ~/nixos-dotfiles#nixos-btw";
+      nrs = "sudo nixos-rebuild switch --flake ~/nixos-setup#nixos-btw";
+      hms = "home-manager switch --flake ~/nixos-setup#nixos-btw";
       nix-clean = "sudo nix-collect-garbage -d";
       # Git
       gs = "git status";
