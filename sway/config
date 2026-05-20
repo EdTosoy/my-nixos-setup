@@ -24,12 +24,12 @@ client.urgent           #E06C75   #E06C75   #1d2021   #E06C75   #E06C75
 # ── Appearance ────────────────────────────────────────────
 default_border pixel 2
 default_floating_border pixel 2
-gaps inner 4
+gaps inner 4    
 gaps outer 0
 font pango:JetBrainsMono Nerd Font Mono 11
 
 # ── Output ────────────────────────────────────────────────
-output * bg #1E1E1E solid_color
+output * bg ./nixos-wallpaper.png fill
 
 # ── Focus ─────────────────────────────────────────────────
 focus_follows_mouse no
