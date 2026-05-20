@@ -97,7 +97,7 @@
   #################################
   # User
   #################################
-  users.users.johncarlojose = {
+  users.users.edtosoy = {
     isNormalUser = true;
     extraGroups = [
       "wheel"
@@ -184,4 +184,3 @@
   #################################
   system.stateVersion = "25.11";
 }
-
