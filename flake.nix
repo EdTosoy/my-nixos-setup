@@ -10,30 +10,39 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }:
-  let
-    system = "x86_64-linux";
-    pkgs-unstable = import nixpkgs-unstable {
-      inherit system;
-      config.allowUnfree = true;
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgs-unstable,
+      home-manager,
+      ...
+    }:
+    let
+      system = "x86_64-linux";
+      pkgs-unstable = import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+    in
+    {
+      nixosConfigurations.nixos-btw = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./configuration.nix
+          (if builtins.pathExists ./secrets.nix then ./secrets.nix else { })
+          home-manager.nixosModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.edtosoy = import ./home.nix;
+              backupFileExtension = "backup";
+              extraSpecialArgs = { inherit pkgs-unstable; };
+            };
+          }
+        ];
+      };
     };
-  in {
-    nixosConfigurations.nixos-btw = nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        ./configuration.nix
-        (if builtins.pathExists ./secrets.nix then ./secrets.nix else {})
-        home-manager.nixosModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.johncarlojose = import ./home.nix;
-            backupFileExtension = "backup";
-            extraSpecialArgs = { inherit pkgs-unstable; };
-          };
-        }
-      ];
-    };
-  };
 }
+
