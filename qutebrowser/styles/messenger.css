@@ -10,3 +10,8 @@ a[aria-label*="Facebook"] {
 div:has(> div > a[aria-label*="Facebook"]) {
   display: none !important;
 }
+
+/* Hide left sidebar */
+div:has([aria-label*="Settings, help and more"]) {
+  display: none !important;
+}
