@@ -11,7 +11,12 @@ div:has(> div > a[aria-label*="Facebook"]) {
   display: none !important;
 }
 
-/* Hide left sidebar */
-div:has([aria-label*="Settings, help and more"]) {
+/* Hide nav icons bar (Chats, Marketplace, Requests, Archive) */
+.xb57i2i.x1q594ok.x5lxg6s {
+  display: none !important;
+}
+
+/* Hide "Expand inbox sidebar" button */
+[aria-label="Expand inbox sidebar"] {
   display: none !important;
 }
