@@ -5,35 +5,22 @@
   ...
 }:
 {
-  home.username = "johncarlojose";
-  home.homeDirectory = "/home/johncarlojose";
+  home.username = "edtosoy";
+  home.homeDirectory = "/home/edtosoy";
   home.stateVersion = "25.11";
   #################################
   # Dotfiles
   #################################
   home.file = {
-    ".config/sway/config".source = ./sway/config;
 
-    # BG Wallpaper (light or dark)
-    # ".config/sway/nixos-wallpaper.png".source = ./sway/nixos-wallpaper.png;
-    ".config/sway/nixos-wallpaper-dark.png".source = ./sway/nixos-wallpaper-dark.png;
-
+    ".config/sway".source = ./sway;
     ".config/tmux/tmux.conf".source = ./tmux/tmux.conf;
     ".config/qutebrowser/config.py".source = ./qutebrowser/config.py;
     ".config/qutebrowser/greasemonkey".source = ./qutebrowser/greasemonkey;
     ".config/qutebrowser/styles".source = ./qutebrowser/styles;
     ".config/rofi/config.rasi".source = ./rofi/config.rasi;
     ".config/rofi/oneDarkPro.rasi".source = ./rofi/oneDarkPro.rasi;
-    ".config/Code/User/keybindings.json".source = ./vscode/keybindings.json;
-    ".config/Code/User/settings.json" = {
-      text = builtins.toJSON (
-        builtins.fromJSON (builtins.readFile ./vscode/settings.json)
-        // {
-          "vscode-neovim.neovimExecutablePaths.linux" =
-            "/etc/profiles/per-user/${config.home.username}/bin/nvim";
-        }
-      );
-    };
+
   };
   home.sessionPath = [
     "$HOME/.local/bin"

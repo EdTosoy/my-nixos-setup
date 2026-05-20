@@ -28,7 +28,9 @@ gaps inner 4
 gaps outer 0
 font pango:JetBrainsMono Nerd Font Mono 11
 
-# ── Output ────────────────────────────────────────────────
+# ── Wallpaper ────────────────────────────────────────────────
+
+# output * bg  ./nixos-wallpaper.png fill
 output * bg  ./nixos-wallpaper-dark.png fill
 
 # ── Focus ─────────────────────────────────────────────────
