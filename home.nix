@@ -25,6 +25,7 @@
   };
   home.sessionPath = [
     "$HOME/.local/bin"
+    "$HOME/.local/share/pnpm"
   ];
   #################################
   # User Packages
@@ -108,6 +109,7 @@
   home.sessionVariables = {
     XCURSOR_THEME = "Banana";
     XCURSOR_SIZE = "36";
+    PNPM_HOME = "$HOME/.local/share/pnpm";
   };
   #################################
   # GTK / Qt
