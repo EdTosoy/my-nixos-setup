@@ -22,6 +22,11 @@
     ".config/rofi/config.rasi".source = ./rofi/config.rasi;
     ".config/rofi/oneDarkPro.rasi".source = ./rofi/oneDarkPro.rasi;
 
+    ".local/bin/tmux-sessionizer" = {
+      source = ./scripts/tmux-sessionizer;
+      executable = true;
+    };
+
   };
   home.sessionPath = [
     "$HOME/.local/bin"
