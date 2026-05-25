@@ -21,6 +21,8 @@
   #################################
   networking.hostName = "nixos-btw";
   networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.powersave = false;
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   #################################
   # Timezone / Locale
@@ -66,8 +68,6 @@
     lidSwitch = "suspend";
     settings.Login = {
       HandleSuspendKey = "suspend";
-      IdleAction = "suspend";
-      IdleActionSec = "300";
     };
   };
 
@@ -185,7 +185,7 @@
   #################################
   virtualisation.docker = {
     enable = true;
-    enableOnBoot = true;
+    enableOnBoot = false;
     autoPrune.enable = true;
   };
 
