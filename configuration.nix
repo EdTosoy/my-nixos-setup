@@ -61,6 +61,17 @@
   #################################
   hardware.graphics.enable = true;
 
+  # Sleep / Power Management
+  services.logind = {
+    lidSwitch = "suspend";
+    settings.Login = {
+      HandleSuspendKey = "suspend";
+      HandleHibernateKey = "hibernate";
+      IdleAction = "suspend";
+      IdleActionSec = "300";
+    };
+  };
+
   #################################
   # Sound (PipeWire)
   #################################

@@ -48,6 +48,7 @@
     libnotify
     swaybg
     swayidle
+    swaylock
     # file management
     yazi
     wl-clipboard

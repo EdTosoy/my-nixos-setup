@@ -33,6 +33,16 @@ font pango:JetBrainsMono Nerd Font Mono 11
 # output * bg  ./nixos-wallpaper.png fill
 output * bg  ./nixos-wallpaper-dark.png fill
 
+# Idle management
+exec swayidle -w \
+    timeout 300 'swaylock -f -c 000000' \
+    timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'swaylock -f -c 000000'
+
+# Manual sleep binding
+bindsym $mod+shift+s exec systemctl suspend
+
 # ── Focus ─────────────────────────────────────────────────
 focus_follows_mouse no
 
