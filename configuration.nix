@@ -66,7 +66,6 @@
     lidSwitch = "suspend";
     settings.Login = {
       HandleSuspendKey = "suspend";
-      HandleHibernateKey = "hibernate";
       IdleAction = "suspend";
       IdleActionSec = "300";
     };
