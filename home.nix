@@ -176,6 +176,7 @@
       grl = "git reflog";
       ## Stash
       gst = "git stash";
+      gstm = "git stash -m";
       gstp = "git stash pop";
       gstl = "git stash list";
       ## Worktree
