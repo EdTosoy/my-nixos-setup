@@ -152,16 +152,40 @@
       nrs = "sudo nixos-rebuild switch --flake ~/nixos-setup#nixos-btw";
       hms = "home-manager switch --flake ~/nixos-setup#nixos-btw";
       nix-clean = "sudo nix-collect-garbage -d";
+
       # Git
+      ## Basic workflow
       gs = "git status";
       ga = "git add .";
       gc = "git commit -m";
       gp = "git push";
       gl = "git pull";
+      gfetch = "git fetch";
       glo = "git log --oneline --graph --decorate";
-      gco = "git checkout";
+      ## Branch & cherry-pick
       gb = "git branch";
+      gco = "git checkout";
+      gcb = "git checkout -b";
+      gcp = "git cherry-pick";
+      greset = "git reset --soft HEAD~1";
+      ## Rebase
+      grb = "git rebase";
+      grbi = "git rebase -i";
+      grc = "git rebase --continue";
+      gra = "git rebase --abort";
+      grl = "git reflog";
+      ## Stash
+      gst = "git stash";
+      gstp = "git stash pop";
+      gstl = "git stash list";
+      ## Worktree
+      gwta = "git worktree add";
+      gwtl = "git worktree list";
+      gwtr = "git worktree remove";
+      ## Inspect
       gd = "git diff";
+      gcf = "git cat-file -p";
+
       # Navigation
       ".." = "cd ..";
       "..." = "cd ../..";

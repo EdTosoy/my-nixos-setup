@@ -48,10 +48,7 @@ focus_follows_mouse no
 # Apps
 bindsym $mod+Return exec $term
 bindsym $mod+o      exec $menu
-bindsym $mod+w      exec firefox
-bindsym $mod+n      exec kitty yazi
-bindsym $mod+b      exec beeper
-bindsym $mod+Escape exec kitty -e htop
+bindsym $mod+n      exec kitty yazi 
 
 # Window
 bindsym $mod+q kill
