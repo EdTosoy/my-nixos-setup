@@ -24,7 +24,7 @@ client.urgent           #E06C75   #E06C75   #1d2021   #E06C75   #E06C75
 # ── Appearance ────────────────────────────────────────────
 default_border pixel 2
 default_floating_border pixel 2
-gaps inner 4    
+gaps inner 0    
 gaps outer 0
 font pango:JetBrainsMono Nerd Font Mono 11
 
