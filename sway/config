@@ -46,7 +46,7 @@ focus_follows_mouse no
 # ── Keybindings ───────────────────────────────────────────
 
 # Apps
-bindsym $mod+Return exec $term
+bindsym $mod+Return exec $term tmux
 bindsym $mod+o      exec $menu
 bindsym $mod+n      exec kitty yazi 
 

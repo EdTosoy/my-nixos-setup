@@ -42,6 +42,7 @@
     eza
     # browsers
     qutebrowser
+    chromium
     # WM tooling
     rofi
     dunst
@@ -160,19 +161,22 @@
       gc = "git commit -m";
       gp = "git push";
       gl = "git pull";
-      gfetch = "git fetch";
+      gf = "git fetch";
       glo = "git log --oneline --graph --decorate";
-      ## Branch & cherry-pick
+      ## Branch
       gb = "git branch";
       gco = "git checkout";
       gcb = "git checkout -b";
-      gcp = "git cherry-pick";
-      greset = "git reset --soft HEAD~1";
       ## Rebase
       grb = "git rebase";
       grbi = "git rebase -i";
       grc = "git rebase --continue";
       gra = "git rebase --abort";
+      ## Cherry-pick & revert
+      gcp = "git cherry-pick";
+      grev = "git revert";
+      ## Reset & recovery
+      grs = "git reset --soft HEAD~1";
       grl = "git reflog";
       ## Stash
       gst = "git stash";
@@ -183,8 +187,15 @@
       gwta = "git worktree add";
       gwtl = "git worktree list";
       gwtr = "git worktree remove";
+      ## Bisect
+      gbs = "git bisect start";
+      gbsg = "git bisect good";
+      gbsb = "git bisect bad";
+      gbsr = "git bisect reset";
       ## Inspect
+      grm = "git remote";
       gd = "git diff";
+      gsh = "git show";
       gcf = "git cat-file -p";
 
       # Navigation
@@ -212,6 +223,39 @@
   };
 
   #################################
+  # Kitty
+  #################################
+  programs.kitty = {
+    enable = true;
+    settings = {
+      background = "#1e1e1e";
+      foreground = "#abb2bf";
+      cursor = "#61afef";
+      cursor_text_color = "#1e1e1e";
+
+      selection_background = "#094771";
+      selection_foreground = "#abb2bf";
+
+      color0 = "#3f4451";
+      color8 = "#4f5666";
+      color1 = "#e06c75";
+      color9 = "#e06c75";
+      color2 = "#98c379";
+      color10 = "#98c379";
+      color3 = "#e5c07b";
+      color11 = "#e5c07b";
+      color4 = "#61afef";
+      color12 = "#61afef";
+      color5 = "#c678dd";
+      color13 = "#c678dd";
+      color6 = "#56b6c2";
+      color14 = "#56b6c2";
+      color7 = "#828997";
+      color15 = "#abb2bf";
+    };
+  };
+
+  #################################
   # Git
   #################################
   programs.git = {
@@ -219,6 +263,7 @@
     settings = {
       user.name = "EdTosoy";
       user.email = "68400105+EdTosoy@users.noreply.github.com";
+      rerere.enabled = true;
     };
   };
 }

@@ -28,10 +28,11 @@ vim.o.inccommand = "split"
 vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
-vim.o.tabstop = 2 -- 2 spaces for TS/Angular/Nix convention
+vim.o.tabstop = 2
 vim.o.shiftwidth = 2
 vim.o.expandtab = true
-vim.o.wrap = true -- matches VSCode editor.wordWrap = "on"
+vim.o.wrap = true
+vim.o.linebreak = true
 vim.opt.swapfile = false
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
@@ -569,7 +570,9 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				javascript = { "prettierd" },
+				javascriptreact = { "prettierd" },
 				typescript = { "prettierd" },
+				typescriptreact = { "prettierd" },
 				htmlangular = { "prettierd" }, -- ALL .html files
 				css = { "prettierd" },
 				json = { "prettierd" },

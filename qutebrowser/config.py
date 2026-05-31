@@ -232,6 +232,7 @@ config.set(
 # -------------------------
 # Keybindings
 # -------------------------
+config.unbind(".")
 
 # --- Quicklaunch sites ---
 config.bind("<space>m", "open -t https://music.youtube.com")
