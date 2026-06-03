@@ -228,30 +228,48 @@
   programs.kitty = {
     enable = true;
     settings = {
-      background = "#1e1e1e";
-      foreground = "#abb2bf";
-      cursor = "#61afef";
-      cursor_text_color = "#1e1e1e";
+      background = "#22272e";
+      foreground = "#adbac7";
 
-      selection_background = "#094771";
-      selection_foreground = "#abb2bf";
+      cursor = "#539bf5";
+      cursor_text_color = "#22272e";
 
-      color0 = "#3f4451";
-      color8 = "#4f5666";
-      color1 = "#e06c75";
-      color9 = "#e06c75";
-      color2 = "#98c379";
-      color10 = "#98c379";
-      color3 = "#e5c07b";
-      color11 = "#e5c07b";
-      color4 = "#61afef";
-      color12 = "#61afef";
-      color5 = "#c678dd";
-      color13 = "#c678dd";
-      color6 = "#56b6c2";
-      color14 = "#56b6c2";
-      color7 = "#828997";
-      color15 = "#abb2bf";
+      selection_background = "#264466";
+      selection_foreground = "#cdd9e5";
+
+      color0 = "#1c2128";
+      color8 = "#444c56";
+
+      color1 = "#f47067";
+      color9 = "#ff938a";
+
+      color2 = "#57ab5a";
+      color10 = "#6bc46d";
+
+      color3 = "#daaa3f";
+      color11 = "#eac55f";
+
+      color4 = "#539bf5";
+      color12 = "#6cb6ff";
+
+      color5 = "#986ee2";
+      color13 = "#b083f0";
+
+      color6 = "#39c5cf";
+      color14 = "#56d4dd";
+
+      color7 = "#909dab";
+      color15 = "#cdd9e5";
+
+      active_border_color = "#539bf5";
+      inactive_border_color = "#444c56";
+
+      tab_bar_background = "#1c2128";
+      active_tab_background = "#22272e";
+      inactive_tab_background = "#1c2128";
+
+      active_tab_foreground = "#cdd9e5";
+      inactive_tab_foreground = "#768390";
     };
   };
 

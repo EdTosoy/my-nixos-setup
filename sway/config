@@ -14,12 +14,14 @@ input * {
     xkb_layout real-prog-dvorak
 }
 
-# ── Colors (Gruvbox) ──────────────────────────────────────
+# ── Colors (GitHub Dark Dimmed) ───────────────────────────
+
 # class                 border    bg        text      indicator child_border
-client.focused          #98971a   #98971a   #1d2021   #98971a   #98971a
-client.unfocused        #1d2021   #1d2021   #7A7A7A   #1d2021   #1d2021
-client.focused_inactive #1d2021   #1d2021   #7A7A7A   #1d2021   #1d2021
-client.urgent           #E06C75   #E06C75   #1d2021   #E06C75   #E06C75
+
+client.focused          #539bf5   #22272e   #cdd9e5   #539bf5   #539bf5
+client.unfocused        #444c56   #22272e   #768390   #444c56   #444c56
+client.focused_inactive #444c56   #22272e   #768390   #444c56   #444c56
+client.urgent           #f47067   #f47067   #22272e   #f47067   #f47067
 
 # ── Appearance ────────────────────────────────────────────
 default_border pixel 2

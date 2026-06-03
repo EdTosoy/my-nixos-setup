@@ -1,120 +1,194 @@
 from qutebrowser.api import interceptor
 from PyQt6.QtCore import QUrl
 
-# ==========================
-# qutebrowser — Focused Dev Setup
-# Synced with VSCode config (One Dark Pro Night Flat)
-# ==========================
 config.load_autoconfig(False)
 
 # -------------------------
-# Status bar colors by mode
+# GitHub Dark Dimmed × VSCode
 # -------------------------
-c.colors.statusbar.normal.bg = '#3C3C3C'
-c.colors.statusbar.normal.fg = '#CCCCCC'
-c.colors.statusbar.insert.bg = '#4B6E6E'
-c.colors.statusbar.insert.fg = '#CCCCCC'
-c.colors.statusbar.passthrough.bg = '#5C4B6E'
-c.colors.statusbar.passthrough.fg = '#CCCCCC'
-c.colors.statusbar.command.bg = '#3C3C3C'
-c.colors.statusbar.command.fg = '#CCCCCC'
-c.colors.statusbar.caret.bg = '#5C4B6E'
-c.colors.statusbar.caret.fg = '#CCCCCC'
-c.colors.statusbar.caret.selection.bg = '#6E6E4B'
-c.colors.statusbar.caret.selection.fg = '#CCCCCC'
-c.colors.statusbar.progress.bg = '#2D2D2D'
 
-# Status bar URL colors
-c.colors.statusbar.url.fg = '#CCCCCC'
-c.colors.statusbar.url.success.http.fg = '#98C379'
-c.colors.statusbar.url.success.https.fg = '#98C379'
-c.colors.statusbar.url.error.fg = '#E06C75'
-c.colors.statusbar.url.warn.fg = '#D19A66'
-c.colors.statusbar.url.hover.fg = '#61AFEF'
+BG       = "#22272e"
+SURFACE  = "#1c2128"
+INSET    = "#2d333b"
+BORDER   = "#6d737a"
+
+FG       = "#adbac7"
+FG_MUTE  = "#768390"
+FG_BRT   = "#cdd9e5"
+
+BLUE      = "#539bf5"
+BLUE_BG   = "#264466"
+
+GREEN     = "#57ab5a"
+GREEN_BG  = "#1f3325"
+
+YELLOW     = "#daaa3f"
+YELLOW_BG  = "#2f2411"
+
+RED       = "#f47067"
+RED_BG    = "#351515"
+
+PURPLE     = "#986ee2"
+PURPLE_BG  = "#211d41"
+
+ORANGE = "#cc6b2c"
+
+# -------------------------
+# Statusbar
+# -------------------------
+
+c.colors.statusbar.normal.bg = BG
+c.colors.statusbar.normal.fg = FG
+
+c.colors.statusbar.insert.bg = GREEN_BG
+c.colors.statusbar.insert.fg = FG_BRT
+
+c.colors.statusbar.passthrough.bg = PURPLE_BG
+c.colors.statusbar.passthrough.fg = FG_BRT
+
+c.colors.statusbar.command.bg = INSET
+c.colors.statusbar.command.fg = FG
+
+c.colors.statusbar.caret.bg = PURPLE_BG
+c.colors.statusbar.caret.fg = FG_BRT
+
+c.colors.statusbar.caret.selection.bg = YELLOW_BG
+c.colors.statusbar.caret.selection.fg = FG_BRT
+
+c.colors.statusbar.progress.bg = BLUE
+
+c.colors.statusbar.url.fg = FG
+c.colors.statusbar.url.success.http.fg = GREEN
+c.colors.statusbar.url.success.https.fg = GREEN
+c.colors.statusbar.url.error.fg = RED
+c.colors.statusbar.url.warn.fg = YELLOW
+c.colors.statusbar.url.hover.fg = BLUE
 
 # -------------------------
 # Tabs
 # -------------------------
-c.tabs.position = 'right'
-c.tabs.show = 'multiple'
-c.tabs.padding = {"top": 3, "bottom": 3, "left": 6, "right": 6}
-c.tabs.width = "15%"
-c.tabs.indicator.width = 2
-c.tabs.title.format = '{audio}{index}: {current_title}'
-c.tabs.last_close = 'close'
-c.colors.tabs.bar.bg = '#2D2D2D'
-c.colors.tabs.odd.bg = '#2D2D2D'
-c.colors.tabs.odd.fg = '#7A7A7A'
-c.colors.tabs.even.bg = '#2D2D2D'
-c.colors.tabs.even.fg = '#7A7A7A'
-c.colors.tabs.selected.even.bg = '#3C3C3C'
-c.colors.tabs.selected.odd.bg = '#3C3C3C'
-c.colors.tabs.selected.even.fg = '#CCCCCC'
-c.colors.tabs.selected.odd.fg = '#CCCCCC'
-c.colors.tabs.pinned.even.bg = '#2D2D2D'
-c.colors.tabs.pinned.odd.bg = '#2D2D2D'
-c.colors.tabs.pinned.even.fg = '#7A7A7A'
-c.colors.tabs.pinned.odd.fg = '#7A7A7A'
-c.colors.tabs.pinned.selected.even.bg = '#3C3C3C'
-c.colors.tabs.pinned.selected.odd.bg = '#3C3C3C'
-c.colors.tabs.indicator.start = '#61AFEF'
-c.colors.tabs.indicator.stop = '#98C379'
-c.colors.tabs.indicator.error = '#E06C75'
+
+c.colors.tabs.bar.bg = INSET
+
+c.colors.tabs.odd.bg = INSET
+c.colors.tabs.odd.fg = FG_MUTE
+
+c.colors.tabs.even.bg = INSET
+c.colors.tabs.even.fg = FG_MUTE
+
+# VSCode-style active tab
+c.colors.tabs.selected.odd.bg = SURFACE
+c.colors.tabs.selected.odd.fg = FG_BRT
+
+c.colors.tabs.selected.even.bg = SURFACE
+c.colors.tabs.selected.even.fg = FG_BRT
+
+c.colors.tabs.pinned.odd.bg = INSET
+c.colors.tabs.pinned.odd.fg = FG_MUTE
+
+c.colors.tabs.pinned.even.bg = INSET
+c.colors.tabs.pinned.even.fg = FG_MUTE
+
+c.colors.tabs.pinned.selected.odd.bg = SURFACE
+c.colors.tabs.pinned.selected.odd.fg = FG_BRT
+
+c.colors.tabs.pinned.selected.even.bg = SURFACE
+c.colors.tabs.pinned.selected.even.fg = FG_BRT
+
+c.colors.tabs.indicator.start = BLUE
+c.colors.tabs.indicator.stop = GREEN
+c.colors.tabs.indicator.error = RED
+c.colors.tabs.indicator.system = "none"
 
 # -------------------------
 # Hints
 # -------------------------
-c.colors.hints.bg = '#2D2D2D'
-c.colors.hints.fg = '#D19A66'
-c.colors.hints.match.fg = '#E5C07B'
-c.hints.border = '1px solid #3C3C3C'
-c.hints.padding = {"top": 2, "bottom": 2, "left": 4, "right": 4}
-c.hints.chars = "aouehtns"  # removed 'd'
+
+c.colors.hints.bg = SURFACE
+c.colors.hints.fg = ORANGE
+c.colors.hints.match.fg = YELLOW
+
+c.hints.border = f"1px solid {BORDER}"
 
 # -------------------------
-# Completion widget
+# Completion
 # -------------------------
-c.colors.completion.fg = '#CCCCCC'
-c.colors.completion.odd.bg = '#2D2D2D'
-c.colors.completion.even.bg = '#252526'
-c.colors.completion.category.fg = '#61AFEF'
-c.colors.completion.category.bg = '#1E1E1E'
-c.colors.completion.category.border.top = '#1E1E1E'
-c.colors.completion.category.border.bottom = '#1E1E1E'
-c.colors.completion.item.selected.fg = '#FFFFFF'
-c.colors.completion.item.selected.bg = '#094771'
-c.colors.completion.item.selected.border.top = '#094771'
-c.colors.completion.item.selected.border.bottom = '#094771'
-c.colors.completion.item.selected.match.fg = '#E5C07B'
-c.colors.completion.match.fg = '#E5C07B'
-c.colors.completion.scrollbar.fg = '#3C3C3C'
-c.colors.completion.scrollbar.bg = '#2D2D2D'
+
+c.colors.completion.fg = FG
+
+c.colors.completion.odd.bg = BG
+c.colors.completion.even.bg = SURFACE
+
+# GitHub uses muted section labels
+c.colors.completion.category.bg = INSET
+c.colors.completion.category.fg = FG_MUTE
+
+c.colors.completion.category.border.top = BORDER
+c.colors.completion.category.border.bottom = BORDER
+
+# Subtle selection instead of giant blue block
+c.colors.completion.item.selected.bg = SURFACE
+c.colors.completion.item.selected.fg = FG_BRT
+
+c.colors.completion.item.selected.border.top = BLUE
+c.colors.completion.item.selected.border.bottom = BLUE
+
+c.colors.completion.item.selected.match.fg = BLUE
+c.colors.completion.match.fg = YELLOW
+
+c.colors.completion.scrollbar.fg = BORDER
+c.colors.completion.scrollbar.bg = BG
 
 # -------------------------
-# Keyhint / Messages
+# Keyhint
 # -------------------------
-c.colors.keyhint.bg = '#2D2D2D'
-c.colors.keyhint.fg = '#CCCCCC'
-c.colors.keyhint.suffix.fg = '#E5C07B'
-c.colors.messages.info.bg = '#2D2D2D'
-c.colors.messages.info.fg = '#CCCCCC'
-c.colors.messages.info.border = '#3C3C3C'
-c.colors.messages.warning.bg = '#6E4B4B'
-c.colors.messages.warning.fg = '#CCCCCC'
-c.colors.messages.warning.border = '#6E4B4B'
-c.colors.messages.error.bg = '#6E4B4B'
-c.colors.messages.error.fg = '#E06C75'
-c.colors.messages.error.border = '#6E4B4B'
+
+c.colors.keyhint.bg = SURFACE
+c.colors.keyhint.fg = FG
+c.colors.keyhint.suffix.fg = YELLOW
 
 # -------------------------
-# Webpage background (dark)
+# Messages
 # -------------------------
-c.colors.webpage.bg = '#1E1E1E'
+
+c.colors.messages.info.bg = SURFACE
+c.colors.messages.info.fg = FG_BRT
+c.colors.messages.info.border = BORDER
+
+c.colors.messages.warning.bg = YELLOW_BG
+c.colors.messages.warning.fg = FG_BRT
+c.colors.messages.warning.border = YELLOW
+
+c.colors.messages.error.bg = RED_BG
+c.colors.messages.error.fg = FG_BRT
+c.colors.messages.error.border = RED
+
+# -------------------------
+# Webpage background
+# -------------------------
+
+c.colors.webpage.bg = BG
+
 c.colors.webpage.darkmode.enabled = True
-c.colors.webpage.darkmode.algorithm = 'lightness-cielab'
+c.colors.webpage.darkmode.algorithm = "lightness-cielab"
 c.colors.webpage.darkmode.threshold.foreground = 150
 c.colors.webpage.darkmode.threshold.background = 100
+# -------------------------
+# Tabs
+# -------------------------
 
+c.tabs.position = "right"
+c.tabs.show = "multiple"
+c.tabs.width = "15%"
+c.tabs.padding = {
+    "top": 3,
+    "bottom": 3,
+    "left": 6,
+    "right": 6,
+}
+c.tabs.indicator.width = 2
+c.tabs.title.format = "{audio}{index}: {current_title}"
+c.tabs.last_close = "close"
 # -------------------------
 # Fonts
 # -------------------------
