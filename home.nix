@@ -20,7 +20,7 @@
     ".config/qutebrowser/greasemonkey".source = ./qutebrowser/greasemonkey;
     ".config/qutebrowser/styles".source = ./qutebrowser/styles;
     ".config/rofi/config.rasi".source = ./rofi/config.rasi;
-    ".config/rofi/oneDarkPro.rasi".source = ./rofi/oneDarkPro.rasi;
+    ".config/rofi/theme.rasi".source = ./rofi/theme.rasi;
 
     ".local/bin/tmux-sessionizer" = {
       source = ./scripts/tmux-sessionizer;
