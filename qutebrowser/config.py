@@ -109,7 +109,7 @@ c.colors.hints.fg = ORANGE
 c.colors.hints.match.fg = YELLOW
 
 c.hints.border = f"1px solid {BORDER}"
-
+c.hints.chars = "aouehtns"  # removed 'd'
 # -------------------------
 # Completion
 # -------------------------

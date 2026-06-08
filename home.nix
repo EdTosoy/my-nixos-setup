@@ -67,7 +67,7 @@
     playerctl
     discord
     # dev
-    nodejs
+    nodejs_24
     yarn
     pnpm
     python3
