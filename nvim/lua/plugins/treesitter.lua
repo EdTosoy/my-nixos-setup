@@ -8,6 +8,10 @@
 --   prisma  — schema syntax highlighting
 --   angular — Angular template syntax
 --   html    — base HTML (needed by htmlangular)
+--
+-- NOTE: 'jsonc' is not a separate installable parser — Neovim maps
+-- the jsonc filetype to the 'json' grammar automatically (see the
+-- FileType autocmd below, via vim.treesitter.language.get_lang).
 -- ============================================================
 return {
 	"nvim-treesitter/nvim-treesitter",
@@ -33,7 +37,6 @@ return {
 			"angular",
 			"css",
 			"json",
-			"jsonc",
 			"yaml",
 			"nix",
 			"prisma",

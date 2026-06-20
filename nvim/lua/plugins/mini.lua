@@ -56,12 +56,13 @@ return {
 		local statusline = require("mini.statusline")
 		statusline.setup({ use_icons = vim.g.have_nerd_font })
 
+		-- GitHub Dark Dimmed palette (mirrors qutebrowser theme)
 		local function set_mode_highlights()
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { bg = "#3C3C3C", fg = "#CCCCCC", bold = true })
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert", { bg = "#4B6E6E", fg = "#CCCCCC", bold = true })
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual", { bg = "#094771", fg = "#CCCCCC", bold = true })
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { bg = "#6E4B4B", fg = "#CCCCCC", bold = true })
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { bg = "#2D2D2D", fg = "#CCCCCC", bold = true })
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal",  { bg = "#2d333b", fg = "#cdd9e5", bold = true }) -- INSET
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert",  { bg = "#1f3325", fg = "#cdd9e5", bold = true }) -- GREEN_BG
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual",  { bg = "#264466", fg = "#cdd9e5", bold = true }) -- BLUE_BG
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { bg = "#351515", fg = "#cdd9e5", bold = true }) -- RED_BG
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { bg = "#1c2128", fg = "#cdd9e5", bold = true }) -- SURFACE
 		end
 		set_mode_highlights()
 		vim.api.nvim_create_autocmd("ColorScheme", { callback = set_mode_highlights })

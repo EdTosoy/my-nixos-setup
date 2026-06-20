@@ -209,6 +209,7 @@
       ll = "eza -al --icons";
       la = "eza -A --icons";
       ng = "npx @angular/cli@latest";
+      ts = "tmux-sessionizer";
     };
   };
 
