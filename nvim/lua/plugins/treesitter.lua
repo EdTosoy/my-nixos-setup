@@ -1,60 +1,58 @@
 -- ============================================================
--- TREESITTER
+-- TREESITTER (legacy/master API)
 --
--- NixOS fix: add gcc to home.nix so parsers can compile:
---   home.packages = with pkgs; [ gcc ];
+-- IMPORTANT: 'main' is now nvim-treesitter's DEFAULT branch (the
+-- new rewrite). 'master' (the classic API used below) must be
+-- pinned explicitly or lazy.nvim silently pulls 'main' instead.
 --
--- Parsers included:
---   prisma  — schema syntax highlighting
---   angular — Angular template syntax
---   html    — base HTML (needed by htmlangular)
+-- Switched off 'main' because it requires Neovim >=0.12 and
+-- tree-sitter-cli >=0.26.1 — neither of which nixos-25.11 (a
+-- frozen stable channel) ships yet. 'master' only needs a C
+-- compiler (gcc, already in home.nix) and works fine here.
 --
--- NOTE: 'jsonc' is not a separate installable parser — Neovim maps
--- the jsonc filetype to the 'json' grammar automatically (see the
--- FileType autocmd below, via vim.treesitter.language.get_lang).
+-- htmlangular → mapped straight to the 'angular' grammar (richer
+-- than plain html: understands @if/@for, *ngIf, [binding],
+-- (event), {{ interpolation }}).
+--
+-- Inline @Component({ template: `...` }) strings inside .ts files
+-- are handled separately via after/queries/typescript/injections.scm
+-- — Neovim's injection engine is core functionality, unaffected
+-- by which nvim-treesitter branch is active.
 -- ============================================================
+vim.treesitter.language.register("angular", "htmlangular")
+
 return {
 	"nvim-treesitter/nvim-treesitter",
-	lazy = false,
+	branch = "master",
 	build = ":TSUpdate",
-	branch = "main",
 	config = function()
-		local parsers = {
-			"bash",
-			"c",
-			"diff",
-			"html",
-			"lua",
-			"luadoc",
-			"markdown",
-			"markdown_inline",
-			"query",
-			"vim",
-			"vimdoc",
-			"typescript",
-			"javascript",
-			"tsx",
-			"angular",
-			"css",
-			"json",
-			"yaml",
-			"nix",
-			"prisma",
-		}
-		require("nvim-treesitter").install(parsers)
-		vim.api.nvim_create_autocmd("FileType", {
-			callback = function(args)
-				local buf, filetype = args.buf, args.match
-				local language = vim.treesitter.language.get_lang(filetype)
-				if not language then
-					return
-				end
-				if not vim.treesitter.language.add(language) then
-					return
-				end
-				vim.treesitter.start(buf, language)
-				vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-			end,
+		require("nvim-treesitter.configs").setup({
+			ensure_installed = {
+				"bash",
+				"c",
+				"diff",
+				"html",
+				"lua",
+				"luadoc",
+				"markdown",
+				"markdown_inline",
+				"query",
+				"vim",
+				"vimdoc",
+				"typescript",
+				"javascript",
+				"tsx",
+				"angular",
+				"css",
+				"json",
+				"jsonc",
+				"yaml",
+				"nix",
+				"prisma",
+			},
+			auto_install = true,
+			highlight = { enable = true },
+			indent = { enable = true },
 		})
 	end,
 }
