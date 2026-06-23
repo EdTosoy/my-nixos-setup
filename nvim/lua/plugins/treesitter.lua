@@ -23,6 +23,7 @@ vim.treesitter.language.register("angular", "htmlangular")
 
 return {
 	"nvim-treesitter/nvim-treesitter",
+	lazy = false,
 	branch = "master",
 	build = ":TSUpdate",
 	config = function()

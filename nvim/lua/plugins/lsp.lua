@@ -1,6 +1,14 @@
 -- ============================================================
 -- LSP — no Mason, binaries managed by Nix
 --
+-- Uses vim.lsp.config() / vim.lsp.enable() (lspconfig v3+ API).
+--
+-- angularls requires an explicit cmd with --tsProbeLocations and
+-- --ngProbeLocations pointing to node_modules. Without these,
+-- ngserver starts but can't find TypeScript or Angular packages
+-- and silently detaches. We build the cmd dynamically from the
+-- workspace root so it works across projects.
+--
 -- home.nix packages:
 --   typescript-language-server              → ts_ls
 --   angular-language-server                 → angularls
@@ -12,9 +20,6 @@
 --   lua-language-server                     → lua_ls
 --   prettierd, stylua                       → formatters
 --   gcc                                     → Treesitter parser builds
---
--- NOTE: All HTML-related servers explicitly list 'htmlangular'
--- because that is the filetype every .html file gets assigned in autocmds.lua.
 -- ============================================================
 return {
 	"neovim/nvim-lspconfig",
@@ -22,6 +27,9 @@ return {
 		{ "j-hui/fidget.nvim", opts = {} },
 	},
 	config = function()
+		-- --------------------------------------------------------
+		-- On attach — keymaps + document highlight + inlay hints
+		-- --------------------------------------------------------
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 			callback = function(event)
@@ -35,6 +43,14 @@ return {
 				map("K", vim.lsp.buf.hover, "Hover docs")
 
 				local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+				-- Disable semantic tokens: treesitter owns highlighting.
+				-- Multiple servers (ts_ls, angularls, html) attaching to the
+				-- same .ts buffer would cause concurrent repaint races → flicker.
+				if client then
+					client.server_capabilities.semanticTokensProvider = nil
+				end
+
 				if client and client:supports_method("textDocument/documentHighlight", event.buf) then
 					local hl = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
 					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -64,125 +80,170 @@ return {
 			end,
 		})
 
-		local servers = {
-			-- TypeScript — auto-imports and full completions
-			ts_ls = {
-				settings = {
-					typescript = {
-						suggest = {
-							autoImports = true,
-							includeCompletionsForModuleExports = true,
-							includeCompletionsWithInsertText = true,
-						},
-						preferences = { importModuleSpecifier = "non-relative" },
+		-- --------------------------------------------------------
+		-- TypeScript
+		-- --------------------------------------------------------
+		vim.lsp.config("ts_ls", {
+			settings = {
+				typescript = {
+					suggest = {
+						autoImports = true,
+						includeCompletionsForModuleExports = true,
+						includeCompletionsWithInsertText = true,
 					},
-					javascript = {
-						suggest = {
-							autoImports = true,
-							includeCompletionsForModuleExports = true,
-						},
-					},
+					preferences = { importModuleSpecifier = "non-relative" },
 				},
-			},
-
-			-- Angular — explicit filetypes so it attaches to htmlangular buffers
-			angularls = {
-				root_dir = require("lspconfig.util").root_pattern("angular.json", "nx.json", "project.json"),
-				filetypes = { "typescript", "htmlangular" },
-			},
-
-			-- html LSP — htmlangular so it attaches for attribute completions
-			html = {
-				filetypes = { "html", "htmlangular" },
-			},
-
-			-- CSS LSP
-			cssls = {},
-
-			-- ESLint — lint TypeScript and templates
-			eslint = {
-				filetypes = {
-					"javascript",
-					"javascriptreact",
-					"typescript",
-					"typescriptreact",
-					"htmlangular",
-				},
-			},
-
-			nil_ls = {},
-
-			-- Tailwind — htmlangular is the filetype for all .html files
-			tailwindcss = {
-				filetypes = {
-					"htmlangular",
-					"css",
-					"typescript",
-					"javascript",
-					"typescriptreact",
-					"javascriptreact",
-				},
-				settings = {
-					tailwindCSS = {
-						experimental = {
-							classRegex = {
-								{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-								{ "cx\\(([^)]*)\\)", "(?:'|\"|`)([^'\"]*)(?:'|\"|`)" },
-							},
-						},
+				javascript = {
+					suggest = {
+						autoImports = true,
+						includeCompletionsForModuleExports = true,
 					},
 				},
 			},
+		})
+		vim.lsp.enable("ts_ls")
 
-			-- Emmet — works through blink.cmp completions
-			-- Usage: type abbreviation in insert mode → Tab/Enter to expand
-			--   div.container   →  <div class="container"></div>
-			--   ul>li*3         →  3 list items
-			--   app-header      →  <app-header></app-header>
-			emmet_language_server = {
-				filetypes = {
-					"htmlangular",
-					"css",
-					"javascript",
-					"typescript",
-					"javascriptreact",
-					"typescriptreact",
+		-- --------------------------------------------------------
+		-- Angular
+		--
+		-- ngserver needs --tsProbeLocations and --ngProbeLocations
+		-- set to the project's node_modules. Without them it starts
+		-- but immediately fails to find @angular/compiler and exits.
+		-- We build the cmd per-workspace via on_new_config so it
+		-- works regardless of where the project lives.
+		-- --------------------------------------------------------
+		vim.lsp.config("angularls", {
+			filetypes = { "typescript", "htmlangular" },
+			root_dir = function(fname)
+				return vim.fs.dirname(
+					vim.fs.find({ "angular.json", "nx.json", "project.json" }, { upward = true, path = fname })[1]
+				)
+			end,
+			on_new_config = function(config, root)
+				local probe = root .. "/node_modules"
+				local cmd = {
+					"ngserver",
+					"--stdio",
+					"--tsProbeLocations",
+					probe,
+					"--ngProbeLocations",
+					probe,
+				}
+				config.cmd = cmd
+			end,
+		})
+		vim.lsp.enable("angularls")
+
+		-- --------------------------------------------------------
+		-- HTML
+		-- --------------------------------------------------------
+		vim.lsp.config("html", {
+			filetypes = { "html", "htmlangular" },
+		})
+		vim.lsp.enable("html")
+
+		-- --------------------------------------------------------
+		-- CSS
+		-- --------------------------------------------------------
+		vim.lsp.config("cssls", {})
+		vim.lsp.enable("cssls")
+
+		-- --------------------------------------------------------
+		-- ESLint
+		-- --------------------------------------------------------
+		vim.lsp.config("eslint", {
+			filetypes = {
+				"javascript",
+				"javascriptreact",
+				"typescript",
+				"typescriptreact",
+				"htmlangular",
+			},
+		})
+		vim.lsp.enable("eslint")
+
+		-- --------------------------------------------------------
+		-- Nix
+		-- --------------------------------------------------------
+		vim.lsp.config("nil_ls", {})
+		vim.lsp.enable("nil_ls")
+
+		-- --------------------------------------------------------
+		-- Tailwind
+		-- --------------------------------------------------------
+		vim.lsp.config("tailwindcss", {
+			filetypes = {
+				"htmlangular",
+				"css",
+				"typescript",
+				"javascript",
+				"typescriptreact",
+				"javascriptreact",
+			},
+			settings = {
+				tailwindCSS = {
+					experimental = {
+						classRegex = {
+							{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
+							{ "cx\\(([^)]*)\\)", "(?:'|\"|`)([^'\"]*)(?:'|\"|`)" },
+						},
+					},
 				},
 			},
+		})
+		vim.lsp.enable("tailwindcss")
 
-			-- Prisma — schema completions, hover docs, go-to-definition
-			-- Install: nodePackages.prisma in home.nix
-			-- Also install prettier-plugin-prisma in your project:
-			--   npm i -D prettier-plugin-prisma
-			-- Add to .prettierrc: { "plugins": ["prettier-plugin-prisma"] }
-			prismals = {},
+		-- --------------------------------------------------------
+		-- Emmet
+		-- Usage: type abbreviation → Tab/Enter to expand
+		--   div.container   →  <div class="container"></div>
+		--   ul>li*3         →  3 list items
+		--   app-header      →  <app-header></app-header>
+		-- --------------------------------------------------------
+		vim.lsp.config("emmet_language_server", {
+			filetypes = {
+				"htmlangular",
+				"css",
+				"javascript",
+				"typescript",
+				"javascriptreact",
+				"typescriptreact",
+			},
+		})
+		vim.lsp.enable("emmet_language_server")
 
-			lua_ls = {
-				on_init = function(client)
-					if client.workspace_folders then
-						local path = client.workspace_folders[1].name
-						if
-							path ~= vim.fn.stdpath("config")
-							and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
-						then
-							return
-						end
+		-- --------------------------------------------------------
+		-- Prisma
+		-- Also: npm i -D prettier-plugin-prisma in your project
+		-- Add to .prettierrc: { "plugins": ["prettier-plugin-prisma"] }
+		-- --------------------------------------------------------
+		vim.lsp.config("prismals", {})
+		vim.lsp.enable("prismals")
+
+		-- --------------------------------------------------------
+		-- Lua
+		-- --------------------------------------------------------
+		vim.lsp.config("lua_ls", {
+			on_init = function(client)
+				if client.workspace_folders then
+					local path = client.workspace_folders[1].name
+					if
+						path ~= vim.fn.stdpath("config")
+						and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+					then
+						return
 					end
-					client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-						runtime = { version = "LuaJIT" },
-						workspace = {
-							checkThirdParty = false,
-							library = vim.api.nvim_get_runtime_file("", true),
-						},
-					})
-				end,
-				settings = { Lua = {} },
-			},
-		}
-
-		for name, server in pairs(servers) do
-			vim.lsp.config(name, server)
-			vim.lsp.enable(name)
-		end
+				end
+				client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+					runtime = { version = "LuaJIT" },
+					workspace = {
+						checkThirdParty = false,
+						library = vim.api.nvim_get_runtime_file("", true),
+					},
+				})
+			end,
+			settings = { Lua = {} },
+		})
+		vim.lsp.enable("lua_ls")
 	end,
 }
