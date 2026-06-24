@@ -1,16 +1,13 @@
--- ============================================================
--- OPTIONS
--- ============================================================
 vim.o.number = true
-vim.o.relativenumber = true -- relative numbers help with jump motions (5j, 3k)
+vim.o.relativenumber = true
 vim.o.mouse = "a"
-vim.o.showmode = false -- mode shown in statusline already
+vim.o.showmode = false
 vim.o.breakindent = true
-vim.o.undofile = true -- persistent undo across sessions
+vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.signcolumn = "yes"
-vim.o.updatetime = 251
+vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 vim.o.splitright = true
 vim.o.splitbelow = true

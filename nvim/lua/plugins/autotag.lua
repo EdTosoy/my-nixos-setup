@@ -1,7 +1,3 @@
--- ============================================================
--- HTML / ANGULAR — auto close + rename tags
--- per_filetype ensures htmlangular gets the same treatment as html
--- ============================================================
 return {
 	"windwp/nvim-ts-autotag",
 	event = { "BufReadPre", "BufNewFile" },

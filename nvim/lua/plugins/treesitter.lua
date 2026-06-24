@@ -1,32 +1,32 @@
 -- ============================================================
--- TREESITTER (legacy/master API)
+-- TREESITTER — legacy master branch
 --
--- IMPORTANT: 'main' is now nvim-treesitter's DEFAULT branch (the
--- new rewrite). 'master' (the classic API used below) must be
--- pinned explicitly or lazy.nvim silently pulls 'main' instead.
+-- WHY master not main:
+--   nvim-treesitter 'main' requires Neovim >=0.12 and
+--   tree-sitter-cli >=0.26.1. nixos-25.11 ships neither.
+--   'master' only needs gcc (already in home.nix) and works
+--   on Neovim 0.11.
 --
--- Switched off 'main' because it requires Neovim >=0.12 and
--- tree-sitter-cli >=0.26.1 — neither of which nixos-25.11 (a
--- frozen stable channel) ships yet. 'master' only needs a C
--- compiler (gcc, already in home.nix) and works fine here.
+-- WHY lazy = false:
+--   Without this, treesitter loads on the first BufReadPost.
+--   The config function runs right after — but the FileType
+--   autocmd for the triggering buffer already fired before
+--   config ran, so that buffer never gets highlighting.
+--   lazy = false loads at startup so every buffer gets it.
 --
--- htmlangular → mapped straight to the 'angular' grammar (richer
--- than plain html: understands @if/@for, *ngIf, [binding],
--- (event), {{ interpolation }}).
---
--- Inline @Component({ template: `...` }) strings inside .ts files
--- are handled separately via after/queries/typescript/injections.scm
--- — Neovim's injection engine is core functionality, unaffected
--- by which nvim-treesitter branch is active.
+-- htmlangular → angular grammar (knows @if/@for, *ngIf,
+--   [binding], (event), {{ interpolation }}).
 -- ============================================================
-vim.treesitter.language.register("angular", "htmlangular")
-
 return {
 	"nvim-treesitter/nvim-treesitter",
 	lazy = false,
 	branch = "master",
 	build = ":TSUpdate",
 	config = function()
+		-- Must be called before setup so htmlangular buffers
+		-- get the angular parser instead of falling back to html
+		vim.treesitter.language.register("angular", "htmlangular")
+
 		require("nvim-treesitter.configs").setup({
 			ensure_installed = {
 				"bash",

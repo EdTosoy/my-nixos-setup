@@ -1,6 +1,3 @@
--- ============================================================
--- PLUGIN MANAGER (lazy.nvim)
--- ============================================================
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -11,27 +8,17 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- ============================================================
--- PLUGINS
--- Each file in lua/plugins/ returns a plugin spec (or a list).
--- ============================================================
 require("lazy").setup({
 	{ import = "plugins" },
 }, {
+	-- NixOS: ~/.config/nvim is a read-only Nix store symlink.
+	-- Redirect lockfile to writable data dir.
+	lockfile = vim.fn.stdpath("data") .. "/lazy-lock.json",
 	ui = {
 		icons = vim.g.have_nerd_font and {} or {
-			cmd = "⌘",
-			config = "🛠",
-			event = "📅",
-			ft = "📂",
-			init = "⚙",
-			keys = "🗝",
-			plugin = "🔌",
-			runtime = "💻",
-			require = "🌙",
-			source = "📄",
-			start = "🚀",
-			task = "📌",
+			cmd = "⌘", config = "🛠", event = "📅", ft = "📂",
+			init = "⚙", keys = "🗝", plugin = "🔌", runtime = "💻",
+			require = "🌙", source = "📄", start = "🚀", task = "📌",
 			lazy = "💤 ",
 		},
 	},

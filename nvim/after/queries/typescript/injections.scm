@@ -1,12 +1,8 @@
 ; extends
 
-; ------------------------------------------------------------
-; Angular inline templates
-; @Component({ template: `<div>...</div>` })
-; Injects the 'angular' grammar so directives, bindings, and
-; control-flow (@if/@for, *ngIf, [prop], (event), {{ interp }})
-; get real highlighting instead of being treated as plain text.
-; ------------------------------------------------------------
+; Inject 'angular' grammar into @Component({ template: `...` })
+; so directives, bindings, and control-flow blocks get full
+; Angular syntax highlighting inside TypeScript files.
 ((call_expression
   function: (identifier) @_component
   arguments: (arguments
@@ -19,11 +15,7 @@
  (#set! injection.language "angular")
  (#offset! @injection.content 0 1 0 -1))
 
-; ------------------------------------------------------------
-; Angular inline styles
-; @Component({ styles: [`.foo { color: red; }`] })
-; Injects 'css' into each template string inside the styles array.
-; ------------------------------------------------------------
+; Inject 'css' into @Component({ styles: [`...`] })
 ((call_expression
   function: (identifier) @_component
   arguments: (arguments

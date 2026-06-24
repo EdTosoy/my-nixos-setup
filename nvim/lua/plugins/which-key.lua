@@ -1,6 +1,3 @@
--- ============================================================
--- WHICH-KEY
--- ============================================================
 return {
 	"folke/which-key.nvim",
 	event = "VimEnter",
@@ -8,10 +5,10 @@ return {
 		delay = 0,
 		icons = { mappings = vim.g.have_nerd_font },
 		spec = {
-			{ "<leader>s", group = "[S]earch", mode = { "n", "v" } },
-			{ "<leader>t", group = "[T]oggle" },
-			{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
-			{ "gr", group = "LSP Actions", mode = { "n" } },
+			{ "<leader>s", group = "Search",   mode = { "n", "v" } },
+			{ "<leader>h", group = "Git hunks", mode = { "n", "v" } },
+			{ "<leader>t", group = "Toggle" },
+			{ "gr",        group = "LSP" },
 		},
 	},
 }

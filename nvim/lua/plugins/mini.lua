@@ -1,37 +1,21 @@
--- ============================================================
--- MINI.NVIM
--- ============================================================
 return {
 	"echasnovski/mini.nvim",
 	config = function()
-		-- Text objects: va), vi", etc.
 		require("mini.ai").setup({ n_lines = 500 })
-
-		-- Surround: sa/sd/sr
 		require("mini.surround").setup()
-
-		-- Auto-pairs
 		require("mini.pairs").setup()
 
-		-- Move lines/selections with Alt+hjkl (replaces VSCode alt+arrow)
 		require("mini.move").setup({
 			mappings = {
-				left = "<M-h>",
-				right = "<M-l>",
-				down = "<M-j>",
-				up = "<M-k>",
-				line_left = "<M-h>",
-				line_right = "<M-l>",
-				line_down = "<M-j>",
-				line_up = "<M-k>",
+				left = "<M-h>", right = "<M-l>", down = "<M-j>", up = "<M-k>",
+				line_left = "<M-h>", line_right = "<M-l>", line_down = "<M-j>", line_up = "<M-k>",
 			},
 		})
 
-		-- gS splits one-liner → multi-line, gJ joins back
-		-- Great for Angular decorators: @Component({...}) →gS→ expanded
+		-- gS → split one-liner to multi-line | gJ → join back
 		require("mini.splitjoin").setup()
 
-		-- Extended bracket navigation: ]b/[b ]t/[t ]c/[c
+		-- Extended bracket navigation: ]b/[b ]t/[t etc.
 		require("mini.bracketed").setup()
 
 		-- File explorer
@@ -41,57 +25,51 @@ return {
 		})
 		vim.keymap.set("n", "<leader>.", function()
 			local mf = require("mini.files")
-			if not mf.close() then
-				mf.open(vim.api.nvim_buf_get_name(0))
-			end
+			if not mf.close() then mf.open(vim.api.nvim_buf_get_name(0)) end
 		end, { desc = "File explorer (current file)" })
-		vim.keymap.set("n", "<leader>e", function()
+		vim.keymap.set("n", "<leader>E", function()
 			local mf = require("mini.files")
-			if not mf.close() then
-				mf.open()
-			end
+			if not mf.close() then mf.open() end
 		end, { desc = "File explorer (cwd)" })
 
-		-- Statusline with mode colors matching VSCode nvim-ui-modes
-		local statusline = require("mini.statusline")
-		statusline.setup({ use_icons = vim.g.have_nerd_font })
+		-- Statusline
+		require("mini.statusline").setup({ use_icons = vim.g.have_nerd_font })
 
-		-- GitHub Dark Dimmed palette (mirrors qutebrowser theme)
-		local function set_mode_highlights()
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal",  { bg = "#2d333b", fg = "#cdd9e5", bold = true }) -- INSET
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert",  { bg = "#1f3325", fg = "#cdd9e5", bold = true }) -- GREEN_BG
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual",  { bg = "#264466", fg = "#cdd9e5", bold = true }) -- BLUE_BG
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { bg = "#351515", fg = "#cdd9e5", bold = true }) -- RED_BG
-			vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { bg = "#1c2128", fg = "#cdd9e5", bold = true }) -- SURFACE
+		-- Mode colors — GitHub Dark Dimmed palette (matches qutebrowser theme)
+		local function set_mode_hl()
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal",  { bg = "#2d333b", fg = "#cdd9e5", bold = true })
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert",  { bg = "#1f3325", fg = "#cdd9e5", bold = true })
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual",  { bg = "#264466", fg = "#cdd9e5", bold = true })
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { bg = "#351515", fg = "#cdd9e5", bold = true })
+			vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { bg = "#1c2128", fg = "#cdd9e5", bold = true })
 		end
-		set_mode_highlights()
-		vim.api.nvim_create_autocmd("ColorScheme", { callback = set_mode_highlights })
+		set_mode_hl()
+		vim.api.nvim_create_autocmd("ColorScheme", { callback = set_mode_hl })
 
 		local mode_map = {
-			["n"] = { label = "NORMAL", hl = "MiniStatuslineModeNormal" },
-			["i"] = { label = "INSERT", hl = "MiniStatuslineModeInsert" },
-			["v"] = { label = "VISUAL", hl = "MiniStatuslineModeVisual" },
-			["V"] = { label = "V-LINE", hl = "MiniStatuslineModeVisual" },
-			["\22"] = { label = "V-BLOCK", hl = "MiniStatuslineModeVisual" },
-			["R"] = { label = "REPLACE", hl = "MiniStatuslineModeReplace" },
-			["c"] = { label = "COMMAND", hl = "MiniStatuslineModeCommand" },
-			["t"] = { label = "TERMINAL", hl = "MiniStatuslineModeInsert" },
+			["n"]  = { label = "NORMAL",  hl = "MiniStatuslineModeNormal" },
+			["i"]  = { label = "INSERT",  hl = "MiniStatuslineModeInsert" },
+			["v"]  = { label = "VISUAL",  hl = "MiniStatuslineModeVisual" },
+			["V"]  = { label = "V-LINE",  hl = "MiniStatuslineModeVisual" },
+			["\22"]= { label = "V-BLOCK", hl = "MiniStatuslineModeVisual" },
+			["R"]  = { label = "REPLACE", hl = "MiniStatuslineModeReplace" },
+			["c"]  = { label = "COMMAND", hl = "MiniStatuslineModeCommand" },
+			["t"]  = { label = "TERMINAL",hl = "MiniStatuslineModeInsert" },
 		}
 
 		MiniStatusline.config.content.active = function()
 			local m = mode_map[vim.fn.mode()] or { label = vim.fn.mode(), hl = "MiniStatuslineModeNormal" }
-			local git = MiniStatusline.section_git({ trunc_width = 75 })
+			local git  = MiniStatusline.section_git({ trunc_width = 75 })
 			local diag = MiniStatusline.section_diagnostics({ trunc_width = 75 })
 			local file = MiniStatusline.section_filename({ trunc_width = 140 })
-			local loc = "%2l:%-2v"
 			return MiniStatusline.combine_groups({
-				{ hl = m.hl, strings = { m.label } },
-				{ hl = "MiniStatuslineDevinfo", strings = { git } },
+				{ hl = m.hl,                        strings = { m.label } },
+				{ hl = "MiniStatuslineDevinfo",     strings = { git } },
 				"%<",
-				{ hl = "MiniStatuslineFilename", strings = { file } },
+				{ hl = "MiniStatuslineFilename",    strings = { file } },
 				"%=",
-				{ hl = "MiniStatuslineDevinfo", strings = { diag } },
-				{ hl = m.hl, strings = { loc } },
+				{ hl = "MiniStatuslineDevinfo",     strings = { diag } },
+				{ hl = m.hl,                        strings = { "%2l:%-2v" } },
 			})
 		end
 	end,

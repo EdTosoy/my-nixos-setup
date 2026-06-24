@@ -1,8 +1,5 @@
--- ============================================================
--- FILETYPE DETECTION
--- ============================================================
 -- ALL .html files → htmlangular
--- Single source of truth — every plugin references 'htmlangular' consistently
+-- Single source of truth: every plugin/server references 'htmlangular'
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	pattern = "*.html",
 	callback = function()
@@ -10,9 +7,7 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 	end,
 })
 
--- ============================================================
--- AUTOCOMMANDS
--- ============================================================
+-- Highlight yanked text briefly
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking text",
 	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
