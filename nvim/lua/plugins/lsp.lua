@@ -65,11 +65,13 @@ return {
 				if client and client:supports_method("textDocument/documentHighlight", event.buf) then
 					local hl = vim.api.nvim_create_augroup("lsp-highlight", { clear = false })
 					vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-						buffer = event.buf, group = hl,
+						buffer = event.buf,
+						group = hl,
 						callback = vim.lsp.buf.document_highlight,
 					})
 					vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-						buffer = event.buf, group = hl,
+						buffer = event.buf,
+						group = hl,
 						callback = vim.lsp.buf.clear_references,
 					})
 					vim.api.nvim_create_autocmd("LspDetach", {
@@ -126,23 +128,24 @@ return {
 		-- chain and kills treesitter highlighting on the buffer.
 		-- --------------------------------------------------------
 		vim.lsp.config("angularls", {
-			filetypes = { "typescript", "htmlangular" },
-			root_dir = function(fname)
-				local found = vim.fs.find(
-					{ "angular.json", "nx.json", "project.json" },
-					{ upward = true, path = vim.fs.dirname(fname) }
-				)
-				if found and found[1] then
-					return vim.fs.dirname(found[1])
-				end
-			end,
+			filetypes = { "typescript", "html", "htmlangular" },
+
+			root_markers = {
+				"angular.json",
+				"nx.json",
+				"project.json",
+			},
+
 			on_new_config = function(config, root)
 				local probe = root .. "/node_modules"
+
 				config.cmd = {
 					"ngserver",
 					"--stdio",
-					"--tsProbeLocations", probe,
-					"--ngProbeLocations", probe,
+					"--tsProbeLocations",
+					probe,
+					"--ngProbeLocations",
+					probe,
 				}
 			end,
 		})
@@ -167,8 +170,10 @@ return {
 		-- --------------------------------------------------------
 		vim.lsp.config("eslint", {
 			filetypes = {
-				"javascript", "javascriptreact",
-				"typescript", "typescriptreact",
+				"javascript",
+				"javascriptreact",
+				"typescript",
+				"typescriptreact",
 				"htmlangular",
 			},
 		})
@@ -185,16 +190,19 @@ return {
 		-- --------------------------------------------------------
 		vim.lsp.config("tailwindcss", {
 			filetypes = {
-				"htmlangular", "css",
-				"typescript", "javascript",
-				"typescriptreact", "javascriptreact",
+				"htmlangular",
+				"css",
+				"typescript",
+				"javascript",
+				"typescriptreact",
+				"javascriptreact",
 			},
 			settings = {
 				tailwindCSS = {
 					experimental = {
 						classRegex = {
 							{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-							{ "cx\\(([^)]*)\\)", "(?:'|\"|`)([^'\"]*)(?:'|\"|`)" },
+							{ "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^'\"]*)(?:'|\"|`)" },
 						},
 					},
 				},
@@ -211,9 +219,12 @@ return {
 		-- --------------------------------------------------------
 		vim.lsp.config("emmet_language_server", {
 			filetypes = {
-				"htmlangular", "css",
-				"javascript", "typescript",
-				"javascriptreact", "typescriptreact",
+				"htmlangular",
+				"css",
+				"javascript",
+				"typescript",
+				"javascriptreact",
+				"typescriptreact",
 			},
 		})
 		vim.lsp.enable("emmet_language_server")
@@ -233,22 +244,20 @@ return {
 			on_init = function(client)
 				if client.workspace_folders then
 					local path = client.workspace_folders[1].name
-					if path ~= vim.fn.stdpath("config")
-						and (vim.uv.fs_stat(path .. "/.luarc.json")
-							or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+					if
+							path ~= vim.fn.stdpath("config")
+							and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
 					then
 						return
 					end
 				end
-				client.config.settings.Lua = vim.tbl_deep_extend(
-					"force", client.config.settings.Lua, {
-						runtime = { version = "LuaJIT" },
-						workspace = {
-							checkThirdParty = false,
-							library = vim.api.nvim_get_runtime_file("", true),
-						},
-					}
-				)
+				client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+					runtime = { version = "LuaJIT" },
+					workspace = {
+						checkThirdParty = false,
+						library = vim.api.nvim_get_runtime_file("", true),
+					},
+				})
 			end,
 			settings = { Lua = {} },
 		})

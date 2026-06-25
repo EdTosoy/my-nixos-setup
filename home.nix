@@ -81,15 +81,20 @@
     # network
     protonvpn-gui
     # neovim LSP
-    nodePackages.typescript-language-server
-    nodePackages.vscode-langservers-extracted # html, cssls, eslint
-    nodePackages."@tailwindcss/language-server"
-    emmet-language-server
+    typescript
+    typescript-language-server
     angular-language-server
-    nil # nil_ls
+    vscode-langservers-extracted
+    tailwindcss-language-server
+    emmet-language-server
+    nodePackages.prisma
+    nil
     lua-language-server
-    prettierd
-    stylua
+    gopls
+    terraform-ls
+    dockerfile-language-server-nodejs
+    docker-compose-language-service
+    yaml-language-server  
   ];
   #################################
   # Cursor
