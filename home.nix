@@ -83,18 +83,18 @@
     # neovim LSP
     typescript
     typescript-language-server
-    angular-language-server
     vscode-langservers-extracted
     tailwindcss-language-server
     emmet-language-server
     nodePackages.prisma
+    pkgs-unstable.angular-language-server # line 88 in home.nix
     nil
     lua-language-server
     gopls
     terraform-ls
     dockerfile-language-server-nodejs
     docker-compose-language-service
-    yaml-language-server  
+    yaml-language-server
   ];
   #################################
   # Cursor
