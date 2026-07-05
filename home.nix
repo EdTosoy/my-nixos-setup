@@ -91,7 +91,7 @@
     lua-language-server
     gopls
     terraform-ls
-    dockerfile-language-server-nodejs
+    dockerfile-language-server
     docker-compose-language-service
     yaml-language-server
   ];

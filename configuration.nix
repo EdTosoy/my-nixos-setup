@@ -65,8 +65,8 @@
 
   # Sleep / Power Management
   services.logind = {
-    lidSwitch = "suspend";
     settings.Login = {
+      HandleLidSwitch = "suspend";
       HandleSuspendKey = "suspend";
     };
   };
