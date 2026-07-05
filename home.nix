@@ -38,6 +38,7 @@
   home.packages = with pkgs; [
     # applications
     obsidian
+    obs-studio
     # terminals
     kitty
     eza

@@ -59,6 +59,31 @@
   };
 
   #################################
+  # Webcam / Virtual Camera (OBS)
+  #################################
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+  boot.kernelModules = [ "v4l2loopback" ];
+  boot.extraModprobeConfig = ''
+    options v4l2loopback devices=1 video_nr=10 card_label="OBS Virtual Camera" exclusive_caps=1
+  '';
+
+  #################################
+  # XDG Desktop Portal (screen share, file pickers)
+  #################################
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [
+      pkgs.xdg-desktop-portal-wlr
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    config.sway.default = lib.mkForce [
+      "wlr"
+      "gtk"
+    ];
+  };
+
+  #################################
   # Graphics
   #################################
   hardware.graphics.enable = true;
