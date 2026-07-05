@@ -36,9 +36,10 @@
   # User Packages
   #################################
   home.packages = with pkgs; [
+    # applications
+    obsidian
     # terminals
     kitty
-    bat
     eza
     # browsers
     qutebrowser
@@ -78,8 +79,6 @@
     pkgs-unstable.bruno
     openssl
     firefox-devedition
-    # network
-    protonvpn-gui
     # neovim LSP
     typescript
     typescript-language-server
@@ -87,7 +86,7 @@
     tailwindcss-language-server
     emmet-language-server
     nodePackages.prisma
-    pkgs-unstable.angular-language-server # line 88 in home.nix
+    pkgs-unstable.angular-language-server
     nil
     lua-language-server
     gopls
@@ -209,7 +208,6 @@
       # Dev
       v = "nvim";
       grep = "rg";
-      cat = "bat";
       ls = "eza --icons";
       ll = "eza -al --icons";
       la = "eza -A --icons";
