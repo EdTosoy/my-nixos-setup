@@ -39,12 +39,14 @@
     # applications
     obsidian
     obs-studio
+
     # terminals
     kitty
-    eza
+
     # browsers
     qutebrowser
-    chromium
+    brave
+
     # WM tooling
     rofi
     dunst
@@ -52,34 +54,45 @@
     swaybg
     swayidle
     swaylock
+
     # file management
     yazi
-    wl-clipboard
     grim # for screenshots
     slurp # for region selection
     satty
+
     # CLI
+    eza
     ripgrep
     fd
+    fzf
     fzf
     gnumake
     gcc
     tree-sitter
+    jq
+    wl-clipboard
+
     # media
     playerctl
     discord
+
     # dev
     nodejs_24
-    yarn
     pnpm
     python3
-    python3Packages.pip
-    python3Packages.virtualenv
     uv
     tmux
     pkgs-unstable.bruno
     openssl
-    firefox-devedition
+
+    # cloud / infra
+    terraform
+    terraform-ls
+    kubectl
+    k9s
+    awscli2
+
     # neovim LSP
     typescript
     typescript-language-server
