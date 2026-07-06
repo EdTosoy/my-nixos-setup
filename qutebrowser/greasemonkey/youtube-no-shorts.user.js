@@ -22,6 +22,18 @@
       const label = a?.getAttribute('title') || a?.getAttribute('aria-label');
       if (label && label !== 'Subscriptions') e.remove();
     });
+
+    // Redirect the top-left YouTube logo to Subscriptions instead of Home.
+    document.querySelectorAll('ytd-topbar-logo-renderer a#logo').forEach(a => {
+      if (a.dataset.ytCleanupBound) return;
+      a.dataset.ytCleanupBound = 'true';
+      a.setAttribute('href', '/feed/subscriptions');
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        window.location.href = '/feed/subscriptions';
+      }, true);
+    });
   };
 
   // Debounce so we only run once per animation frame, not on every mutation
