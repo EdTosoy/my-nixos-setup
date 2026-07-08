@@ -75,7 +75,6 @@
 
     # media
     playerctl
-    discord
 
     # dev
     nodejs_24

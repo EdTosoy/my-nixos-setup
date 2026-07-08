@@ -124,13 +124,17 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-  };
-  services.blueman.enable = true;
-  hardware.bluetooth.settings = {
-    Policy = {
-      AutoEnable = true;
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+        MultiProfile = "multiple";
+      };
+      Policy = {
+        AutoEnable = true;
+      };
     };
   };
+  services.blueman.enable = true;
 
   #################################
   # User
