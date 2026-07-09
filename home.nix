@@ -84,6 +84,8 @@
     tmux
     pkgs-unstable.bruno
     openssl
+    prettierd
+    stylua
 
     # cloud / infra
     terraform
@@ -136,6 +138,16 @@
     XCURSOR_SIZE = "36";
     PNPM_HOME = "$HOME/.local/share/pnpm";
   };
+
+  #################################
+  # Defualt System Preference to Darkmode
+  #################################
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+    };
+  };
+
   #################################
   # GTK / Qt
   #################################
@@ -145,11 +157,19 @@
       name = "Banana";
       size = 36;
     };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
   };
+
   qt = {
     enable = true;
     platformTheme.name = "gtk";
   };
+
   #################################
   # Shell
   #################################

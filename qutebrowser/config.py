@@ -167,9 +167,9 @@ c.colors.messages.error.border = RED
 # Webpage background
 # -------------------------
 
-c.colors.webpage.bg = BG
+c.colors.webpage.bg = "#fff"
 
-c.colors.webpage.darkmode.enabled = True
+c.colors.webpage.darkmode.enabled = False
 c.colors.webpage.darkmode.algorithm = "lightness-cielab"
 c.colors.webpage.darkmode.threshold.foreground = 150
 c.colors.webpage.darkmode.threshold.background = 100
@@ -322,7 +322,7 @@ config.bind("<ctrl-s>", "session-save", mode="normal")
 config.bind("<ctrl-j>",
     "config-cycle content.javascript.enabled true false",
     mode="normal")
-config.bind("<ctrl-d>", "config-cycle colors.webpage.darkmode.enabled true false")
+config.bind("<ctrl-d>", "config-cycle colors.webpage.darkmode.enabled false true")
 config.bind("<ctrl-b>", "config-cycle content.blocking.enabled true false", mode="normal")
 config.bind("<space>.", "config-cycle tabs.show always never")
 
