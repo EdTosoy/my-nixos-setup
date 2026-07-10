@@ -141,11 +141,12 @@
   };
 
   #################################
-  # Defualt System Preference to Darkmode
+  # Defualt System Theme to Darkmode
   #################################
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
+      gtk-theme = "adw-gtk3-dark";
     };
   };
 
@@ -154,6 +155,10 @@
   #################################
   gtk = {
     enable = true;
+    theme = {
+      name = "adw-gtk3-dark";
+      package = pkgs.adw-gtk3;
+    };
     cursorTheme = {
       name = "Banana";
       size = 36;
@@ -169,6 +174,10 @@
   qt = {
     enable = true;
     platformTheme.name = "gtk";
+    style = {
+      name = "adwaita-dark";
+      package = pkgs.adwaita-qt;
+    };
   };
 
   #################################

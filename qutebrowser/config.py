@@ -170,6 +170,7 @@ c.colors.messages.error.border = RED
 c.colors.webpage.bg = "#fff"
 
 c.colors.webpage.darkmode.enabled = False
+c.colors.webpage.preferred_color_scheme = "dark"
 c.colors.webpage.darkmode.algorithm = "lightness-cielab"
 c.colors.webpage.darkmode.threshold.foreground = 150
 c.colors.webpage.darkmode.threshold.background = 100
