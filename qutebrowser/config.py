@@ -370,6 +370,10 @@ config.bind("<ctrl-a>", "fake-key <ctrl-a>", mode="normal")
 # --- Reload ---
 config.bind("<ctrl-shift-r>", "reload -f", mode="normal")
 
+# --- tab-move ---
+config.bind("<alt-j>", "tab-move -", mode="normal")
+config.bind("<alt-k>", "tab-move +", mode="normal")
+
 # -------------------------
 # Adblock
 # -------------------------

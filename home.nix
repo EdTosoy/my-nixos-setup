@@ -93,6 +93,7 @@
     kubectl
     k9s
     awscli2
+    azure-cli
 
     # neovim LSP
     typescript

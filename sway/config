@@ -133,3 +133,13 @@ exec dunst
 exec nm-applet
 exec gsettings set org.gnome.desktop.interface cursor-theme Banana
 exec gsettings set org.gnome.desktop.interface cursor-size 36
+
+
+
+# ── Auto-fullscreen everything else ────────────────────────
+for_window [app_id=".*"] fullscreen enable
+for_window [class=".*"] fullscreen enable
+
+# ── Exceptions ────────────
+for_window [app_id="rofi"] floating enable
+for_window [app_id="dunst"] floating enable
