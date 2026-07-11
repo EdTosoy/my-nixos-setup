@@ -86,6 +86,8 @@
     openssl
     prettierd
     stylua
+    ansible
+    ansible-lint
 
     # cloud / infra
     terraform
