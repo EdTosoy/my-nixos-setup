@@ -188,7 +188,21 @@ return {
 		-- --------------------------------------------------------
 		-- Terraform
 		-- --------------------------------------------------------
-		vim.lsp.config("terraformls", {})
+		vim.lsp.config("terraformls", {
+			cmd = { "terraform-ls", "serve" },
+			filetypes = { "tf" },
+			root_markers = {
+				".terraform",
+				".git",
+				"terraform.tf",
+				"main.tf",
+			},
+
+			on_attach = function()
+				print("terraformls attached")
+			end,
+		})
+
 		vim.lsp.enable("terraformls")
 
 		-- --------------------------------------------------------

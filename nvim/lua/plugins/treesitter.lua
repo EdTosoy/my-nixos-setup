@@ -26,6 +26,8 @@ return {
 		-- Must be called before setup so htmlangular buffers
 		-- get the angular parser instead of falling back to html
 		vim.treesitter.language.register("angular", "htmlangular")
+		vim.treesitter.language.register("terraform", "tf")
+		vim.treesitter.language.register("hcl", "tfvars")
 
 		require("nvim-treesitter.configs").setup({
 			ensure_installed = {
@@ -50,6 +52,8 @@ return {
 				"yaml",
 				"nix",
 				"prisma",
+				"terraform",
+				"hcl",
 			},
 			auto_install = true,
 			highlight = { enable = true },
