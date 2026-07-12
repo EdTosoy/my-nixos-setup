@@ -186,6 +186,12 @@ return {
 		vim.lsp.enable("nil_ls")
 
 		-- --------------------------------------------------------
+		-- Terraform
+		-- --------------------------------------------------------
+		vim.lsp.config("terraformls", {})
+		vim.lsp.enable("terraformls")
+
+		-- --------------------------------------------------------
 		-- Tailwind CSS
 		-- --------------------------------------------------------
 		vim.lsp.config("tailwindcss", {
@@ -202,7 +208,7 @@ return {
 					experimental = {
 						classRegex = {
 							{ "cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]" },
-							{ "cx\\(([^)]*)\\)",  "(?:'|\"|`)([^'\"]*)(?:'|\"|`)" },
+							{ "cx\\(([^)]*)\\)", "(?:'|\"|`)([^'\"]*)(?:'|\"|`)" },
 						},
 					},
 				},
@@ -245,8 +251,8 @@ return {
 				if client.workspace_folders then
 					local path = client.workspace_folders[1].name
 					if
-							path ~= vim.fn.stdpath("config")
-							and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+						path ~= vim.fn.stdpath("config")
+						and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
 					then
 						return
 					end

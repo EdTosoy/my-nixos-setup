@@ -247,6 +247,27 @@
       gsh = "git show";
       gcf = "git cat-file -p";
 
+      # Terraform
+      tf = "terraform";
+      tfi = "terraform init";
+      tfp = "terraform plan";
+      tfa = "terraform apply";
+      tfaa = "terraform apply -auto-approve";
+      tfd = "terraform destroy";
+      tfda = "terraform destroy -auto-approve";
+      tfv = "terraform validate";
+      tff = "terraform fmt";
+      tffr = "terraform fmt -recursive";
+      tfo = "terraform output";
+      tfs = "terraform state";
+      tfsl = "terraform state list";
+      tfw = "terraform workspace";
+      tfwl = "terraform workspace list";
+      tfws = "terraform workspace select";
+      tfc = "terraform console";
+      tfg = "terraform graph";
+      tfsh = "terraform show";
+
       # Navigation
       ".." = "cd ..";
       "..." = "cd ../..";
@@ -258,6 +279,7 @@
       la = "eza -A --icons";
       ng = "npx @angular/cli@latest";
       ts = "tmux-sessionizer";
+      tks = "tmux kill-server";
     };
   };
 
