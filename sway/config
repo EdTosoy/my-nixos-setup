@@ -138,3 +138,6 @@ for_window [class=".*"] fullscreen enable
 # ── Exceptions ────────────
 for_window [app_id="rofi"] floating enable
 for_window [app_id="dunst"] floating enable
+for_window [app_id="com.gabm.satty"] floating enable
+# this for file seletion window when you upload file. not the brave-brower itself. 
+for_window [app_id="brave"] floating enable

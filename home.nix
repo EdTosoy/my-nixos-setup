@@ -60,6 +60,7 @@
     grim # for screenshots
     slurp # for region selection
     satty
+    zip
 
     # CLI
     eza
@@ -82,8 +83,9 @@
     python3
     uv
     tmux
-    pkgs-unstable.bruno
+    bruno
     openssl
+    nest-cli
     prettierd
     stylua
     ansible
@@ -103,7 +105,7 @@
     vscode-langservers-extracted
     tailwindcss-language-server
     emmet-language-server
-    nodePackages.prisma
+    prisma
     pkgs-unstable.angular-language-server
     nil
     lua-language-server
@@ -161,6 +163,7 @@
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
     };
+    gtk4.theme = config.gtk.theme;
     cursorTheme = {
       name = "Banana";
       size = 36;
@@ -200,7 +203,6 @@
       btw = "echo I use nixos, btw";
       # NixOS
       nrs = "sudo nixos-rebuild switch --flake ~/nixos-setup#nixos-btw";
-      hms = "home-manager switch --flake ~/nixos-setup#nixos-btw";
       nix-clean = "sudo nix-collect-garbage -d";
 
       # Git
@@ -291,6 +293,8 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    withRuby = true;
+    withPython3 = true;
   };
 
   #################################

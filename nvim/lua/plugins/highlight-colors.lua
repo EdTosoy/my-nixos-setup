@@ -10,6 +10,5 @@ return {
 		enable_rgb = true,
 		enable_hsl = true,
 		enable_named_colors = true,
-		enable_tailwind = true,
 	},
 }
