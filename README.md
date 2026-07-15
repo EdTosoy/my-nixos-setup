@@ -8,24 +8,24 @@ My personal NixOS dotfiles. Minimal, keyboard-driven, and built for development.
 
 ## What's inside
 
-| Component           | Details                                            |
-| ------------------- | -------------------------------------------------- |
-| **OS**              | NixOS 25.11 (flakes)                               |
-| **Window Manager**  | Sway (Wayland)                                     |
-| **Display Manager** | LightDM — select **"Sway"** at login               |
-| **User Config**     | Home Manager (release-25.11)                       |
-| **Shell**           | Bash                                               |
-| **Editor**          | Neovim (default editor, `vi`/`vim` aliased)        |
-| **Terminal**        | Kitty                                              |
-| **Browser**         | Qutebrowser (JS off by default)                    |
-| **Launcher**        | Rofi                                               |
-| **File Manager**    | Yazi                                               |
-| **Audio**           | PipeWire + WirePlumber                             |
-| **Notifications**   | Dunst                                              |
-| **Screen Locker**   | swaylock                                           |
-| **Idle Daemon**     | swayidle                                           |
-| **Cursor**          | Banana cursor                                      |
-| **Fonts**           | JetBrainsMono Nerd Font, Hack Nerd Font, Noto Sans |
+| Component           | Details                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| **OS**              | NixOS 26.05 "Yarara" (flakes)                                                              |
+| **Window Manager**  | Sway (Wayland)                                                                             |
+| **Display Manager** | LightDM — select **"Sway"** at login                                                       |
+| **User Config**     | Home Manager (release-26.05), managed via the flake — no standalone `home-manager` package |
+| **Shell**           | Bash                                                                                       |
+| **Editor**          | Neovim (default editor, `vi`/`vim` aliased)                                                |
+| **Terminal**        | Kitty                                                                                      |
+| **Browser**         | Qutebrowser (JS off by default)                                                            |
+| **Launcher**        | Rofi                                                                                       |
+| **File Manager**    | Yazi                                                                                       |
+| **Audio**           | PipeWire + WirePlumber                                                                     |
+| **Notifications**   | Dunst                                                                                      |
+| **Screen Locker**   | swaylock                                                                                   |
+| **Idle Daemon**     | swayidle                                                                                   |
+| **Cursor**          | Banana cursor                                                                              |
+| **Fonts**           | JetBrainsMono Nerd Font, Hack Nerd Font, Noto Sans                                         |
 
 ---
 
@@ -123,8 +123,9 @@ programs.git.settings = {
 
 ```nix
 nrs = "sudo nixos-rebuild switch --flake ~/nixos-setup#your-hostname";
-hms = "home-manager switch --flake ~/nixos-setup#your-hostname";
 ```
+
+> Note: Home Manager is applied automatically as part of `nixos-rebuild switch` via the flake's `home-manager.nixosModules.home-manager` module, so there's no separate `home-manager switch` step and no standalone `home-manager` package needed. An `hms` alias isn't defined here for that reason.
 
 ### 5. Rebuild
 
@@ -233,11 +234,10 @@ Manual suspend keybinding: `mod + Shift + s`
 
 ### NixOS
 
-| Alias       | Command                                                     |
-| ----------- | ----------------------------------------------------------- |
-| `nrs`       | `sudo nixos-rebuild switch --flake ~/nixos-setup#nixos-btw` |
-| `hms`       | `home-manager switch --flake ~/nixos-setup#nixos-btw`       |
-| `nix-clean` | `sudo nix-collect-garbage -d`                               |
+| Alias       | Command                                                                                                    |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| `nrs`       | `sudo nixos-rebuild switch --flake ~/nixos-setup#nixos-btw` (rebuilds system **and** applies Home Manager) |
+| `nix-clean` | `sudo nix-collect-garbage -d`                                                                              |
 
 ### Git
 
@@ -337,6 +337,9 @@ mount -o remount,rw /
 passwd your-username
 exec /sbin/init
 ```
+
+**Upgrading from 25.11 to 26.05 ("Yarara")**
+Bump `nixpkgs.url` and `home-manager.url` in `flake.nix` to the `26.05` refs, then rebuild. `nodePackages.prisma` was removed upstream in 26.05 — drop it from `home.nix` if present (use the Prisma CLI via `npx`/`pnpm dlx` instead). `home.stateVersion` and `system.stateVersion` should stay at the value set on first install (`25.11` here) — don't bump these on upgrade, they only track on-disk data format compatibility.
 
 **Too many boot generations**
 GC runs weekly automatically. To clean up now:
