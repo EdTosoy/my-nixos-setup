@@ -1,7 +1,5 @@
 # my-nixos-setup
 
-My personal NixOS dotfiles. Minimal, keyboard-driven, and built for development.
-
 > **Heads up — Real Programmers Dvorak.** This config uses a non-standard keyboard layout. Read the [Keyboard Layout](#keyboard-layout) section before anything else. Switching back to QWERTY is easy and covered there.
 
 ---
