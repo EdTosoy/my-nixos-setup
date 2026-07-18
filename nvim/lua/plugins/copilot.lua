@@ -4,17 +4,12 @@ return {
 		cmd = "Copilot",
 		event = "InsertEnter",
 		opts = {
-			suggestion = { enabled = false }, -- let cmp handle completions instead of inline ghost text
+			suggestion = { enabled = false }, -- blink will handle display
 			panel = { enabled = false },
 		},
 	},
 	{
-		"zbirenbaum/copilot-cmp",
+		"giuxtaposition/blink-cmp-copilot",
 		dependencies = { "zbirenbaum/copilot.lua" },
-		opts = {},
-		config = function(_, opts)
-			local copilot_cmp = require("copilot_cmp")
-			copilot_cmp.setup(opts)
-		end,
 	},
 }
