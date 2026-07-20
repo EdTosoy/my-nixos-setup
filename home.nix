@@ -45,7 +45,7 @@
 
     # browsers
     qutebrowser
-    brave
+    chromium
 
     # WM tooling
     rofi
