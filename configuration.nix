@@ -72,11 +72,15 @@
   #################################
   xdg.portal = {
     enable = true;
+    xdgOpenUsePortal = true;
+
     wlr.enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-wlr
-      pkgs.xdg-desktop-portal-gtk
+
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr
+      xdg-desktop-portal-gtk
     ];
+
     config.sway.default = lib.mkForce [
       "wlr"
       "gtk"
