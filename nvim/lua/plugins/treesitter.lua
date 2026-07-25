@@ -1,11 +1,15 @@
 -- ============================================================
--- TREESITTER — legacy master branch
+-- TREESITTER — main branch
 --
--- WHY master not main:
---   nvim-treesitter 'main' requires Neovim >=0.12 and
---   tree-sitter-cli >=0.26.1. nixos-25.11 ships neither.
---   'master' only needs gcc (already in home.nix) and works
---   on Neovim 0.11.
+-- Neovim 0.12.4 (confirmed via :version) ships the APIs that
+-- nvim-treesitter 'main' targets. Previously pinned to 'master'
+-- for nixos-25.11/Neovim 0.11 compatibility — no longer needed
+-- after the 26.05 "Yarara" upgrade. Staying on master against
+-- 0.12 causes injection-query crashes (nil method 'range' in
+-- languagetree.lua), especially on markdown.
+--
+-- main also requires tree-sitter-cli >=0.26.1 — add it to
+-- home.nix if :TSUpdate fails to build a parser.
 --
 -- WHY lazy = false:
 --   Without this, treesitter loads on the first BufReadPost.
@@ -20,16 +24,13 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
 	lazy = false,
-	branch = "master",
+	branch = "main",
 	build = ":TSUpdate",
 	config = function()
-		-- Must be called before setup so htmlangular buffers
-		-- get the angular parser instead of falling back to html
 		vim.treesitter.language.register("angular", "htmlangular")
 		vim.treesitter.language.register("terraform", "tf")
 		vim.treesitter.language.register("hcl", "tfvars")
-
-		require("nvim-treesitter.configs").setup({
+		require("nvim-treesitter").setup({
 			ensure_installed = {
 				"bash",
 				"c",
@@ -55,9 +56,12 @@ return {
 				"terraform",
 				"hcl",
 			},
-			auto_install = true,
-			highlight = { enable = true },
-			indent = { enable = true },
+		})
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = "*",
+			callback = function()
+				pcall(vim.treesitter.start)
+			end,
 		})
 	end,
 }

@@ -90,6 +90,7 @@
     stylua
     ansible
     ansible-lint
+    gh
 
     # cloud / infra
     terraform
@@ -114,6 +115,10 @@
     dockerfile-language-server
     docker-compose-language-service
     yaml-language-server
+    marksman
+    bash-language-server
+    shellcheck
+
   ];
   #################################
   # Cursor

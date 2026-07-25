@@ -29,6 +29,8 @@
 --   nodePackages.prisma         → prismals
 --   nil                         → nil_ls
 --   lua-language-server         → lua_ls
+--   marksman                    → marksman
+-- 	 bash-language-server        → bashls
 -- ============================================================
 return {
 	"neovim/nvim-lspconfig",
@@ -282,5 +284,19 @@ return {
 			settings = { Lua = {} },
 		})
 		vim.lsp.enable("lua_ls")
+
+		-- --------------------------------------------------------
+		-- Markdown
+		-- --------------------------------------------------------
+		vim.lsp.config("marksman", {})
+		vim.lsp.enable("marksman")
+
+		-- --------------------------------------------------------
+		-- Bash
+		-- --------------------------------------------------------
+		vim.lsp.config("bashls", {
+			filetypes = { "sh", "bash" },
+		})
+		vim.lsp.enable("bashls")
 	end,
 }
