@@ -56,7 +56,6 @@ return {
 			"angular",
 			"css",
 			"json",
-			"jsonc",
 			"yaml",
 			"nix",
 			"prisma",
