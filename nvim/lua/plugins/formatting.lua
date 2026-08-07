@@ -33,6 +33,7 @@ return {
 			markdown = { "prettierd" },
 			yaml = { "prettierd" },
 			prisma = { "prettierd" },
+			python = { "ruff_organize_imports", "ruff_format" },
 		},
 	},
 }

@@ -60,6 +60,7 @@ return {
 			"nix",
 			"prisma",
 			"terraform",
+			"python",
 			"hcl",
 		}
 
@@ -69,12 +70,10 @@ return {
 		vim.api.nvim_create_autocmd("FileType", {
 			pattern = "*",
 			callback = function()
-				-- Enable treesitter-based highlighting (replaces
-				-- old highlight = { enable = true })
-				pcall(vim.treesitter.start)
-				-- Enable treesitter-based indentation (replaces
-				-- old indent = { enable = true })
-				vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				local ok = pcall(vim.treesitter.start)
+				if ok then
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end
 			end,
 		})
 	end,

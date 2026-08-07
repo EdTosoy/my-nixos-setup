@@ -260,6 +260,36 @@ return {
 		vim.lsp.enable("prismals")
 
 		-- --------------------------------------------------------
+		-- Python — basedpyright (type checking/completions) + ruff (lint/format)
+		-- --------------------------------------------------------
+		vim.lsp.config("basedpyright", {
+			root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
+			settings = {
+				basedpyright = {
+					analysis = {
+						venvPath = ".",
+						venv = ".venv",
+						autoImportCompletions = true,
+						autoSearchPaths = true,
+						diagnosticMode = "openFilesOnly",
+						typeCheckingMode = "standard",
+					},
+					disableTaggedHints = true,
+				},
+			},
+		})
+		vim.lsp.enable("basedpyright")
+
+		vim.lsp.config("ruff", {
+			filetypes = { "python" },
+			-- ruff only does diagnostics/actions, not hover — avoid duplicate hover with basedpyright
+			on_attach = function(client)
+				client.server_capabilities.hoverProvider = false
+			end,
+		})
+		vim.lsp.enable("ruff")
+
+		-- --------------------------------------------------------
 		-- Lua (for editing this config)
 		-- --------------------------------------------------------
 		vim.lsp.config("lua_ls", {

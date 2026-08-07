@@ -30,7 +30,6 @@
   };
   home.sessionPath = [
     "$HOME/.local/bin"
-    "$HOME/.local/share/pnpm"
   ];
   #################################
   # User Packages
@@ -67,7 +66,6 @@
     ripgrep
     fd
     fzf
-    fzf
     gnumake
     gcc
     tree-sitter
@@ -80,9 +78,9 @@
     # dev
     nodejs_24
     pnpm
-    python3
     uv
     tmux
+    bubblewrap
     bruno
     openssl
     nest-cli
@@ -91,10 +89,12 @@
     ansible
     ansible-lint
     gh
+    python312
+    basedpyright
+    ruff
 
     # cloud / infra
     terraform
-    terraform-ls
     kubectl
     k9s
     awscli2
@@ -111,13 +111,14 @@
     nil
     lua-language-server
     gopls
-    terraform-ls
     dockerfile-language-server
     docker-compose-language-service
     yaml-language-server
     marksman
     bash-language-server
     shellcheck
+    basedpyright
+    ruff
 
   ];
   #################################
@@ -188,6 +189,11 @@
       name = "adwaita-dark";
       package = pkgs.adwaita-qt;
     };
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 
   #################################
@@ -280,6 +286,7 @@
       "..." = "cd ../..";
       # Dev
       v = "nvim";
+      nx = "pnpm nx";
       grep = "rg";
       ls = "eza --icons";
       ll = "eza -al --icons";
