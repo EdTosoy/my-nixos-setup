@@ -129,8 +129,9 @@ bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
 # ── Autostart ─────────────────────────────────────────────
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE
 exec dunst
 exec nm-applet
 exec gsettings set org.gnome.desktop.interface cursor-theme Banana
 exec gsettings set org.gnome.desktop.interface cursor-size 36
-
