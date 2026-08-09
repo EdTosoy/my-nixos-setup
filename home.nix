@@ -212,8 +212,8 @@
     '';
     shellAliases = {
       btw = "echo I use nixos, btw";
-      # NixOS
-      nrs = "sudo nixos-rebuild switch --flake ~/nixos-setup#nixos-btw";
+      # Rebuilds the NixOS system, including the "nvim submodule" content.
+      nrs = "sudo nixos-rebuild switch --flake ~/'nixos-setup?submodules=1#nixos-btw'";
       nix-clean = "sudo nix-collect-garbage -d";
 
       # Git
