@@ -222,7 +222,8 @@
       ga = "git add .";
       gc = "git commit -m";
       gp = "git push";
-      gl = "git pull";
+      gpff = "git pull --ff-only";
+      gm = "git merge";
       gf = "git fetch";
       glo = "git log --oneline --graph --decorate";
       ## Branch
