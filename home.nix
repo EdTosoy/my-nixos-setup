@@ -5,9 +5,13 @@
   ...
 }:
 {
+  imports = [
+    ./rofi/rofi.nix
+  ];
+
   home.username = "edtosoy";
   home.homeDirectory = "/home/edtosoy";
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
   #################################
   # Dotfiles
   #################################
@@ -71,6 +75,7 @@
     tree-sitter
     jq
     wl-clipboard
+    lsof
 
     # media
     playerctl
