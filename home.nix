@@ -40,8 +40,8 @@
   #################################
   home.packages = with pkgs; [
     # applications
-    obsidian
-    obs-studio
+    pkgs-unstable.zoom-us
+    codex
 
     # terminals
     kitty

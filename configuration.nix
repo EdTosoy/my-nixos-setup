@@ -17,6 +17,14 @@
   boot.loader.systemd-boot.configurationLimit = 20;
 
   #################################
+  # Storage
+  #################################
+  fileSystems."/mnt/storage" = {
+    device = "/dev/disk/by-uuid/604eb451-ea69-4bfa-b3f0-d3069c7f9014";
+    fsType = "ext4";
+    options = [ "nofail" ];
+  };
+  #################################
   # Hostname / Networking
   #################################
   networking.hostName = "nixos-btw";
