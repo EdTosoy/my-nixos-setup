@@ -1,4 +1,4 @@
 /* Hide ChatGPT composer promotional aside */
-aside {
+aside:has(button[aria-label="Dismiss ChatGPT beacon banner"]) {
   display: none !important;
 }
