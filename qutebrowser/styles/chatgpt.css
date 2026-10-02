@@ -1,0 +1,4 @@
+/* Hide ChatGPT composer promotional aside */
+aside {
+  display: none !important;
+}

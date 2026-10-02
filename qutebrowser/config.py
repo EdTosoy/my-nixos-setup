@@ -1,5 +1,5 @@
-from qutebrowser.api import interceptor
 from PyQt6.QtCore import QUrl
+from qutebrowser.api import interceptor
 
 config.load_autoconfig(False)
 
@@ -7,29 +7,29 @@ config.load_autoconfig(False)
 # GitHub Dark Dimmed × VSCode
 # -------------------------
 
-BG       = "#22272e"
-SURFACE  = "#1c2128"
-INSET    = "#2d333b"
-BORDER   = "#6d737a"
+BG = "#22272e"
+SURFACE = "#1c2128"
+INSET = "#2d333b"
+BORDER = "#6d737a"
 
-FG       = "#adbac7"
-FG_MUTE  = "#768390"
-FG_BRT   = "#cdd9e5"
+FG = "#adbac7"
+FG_MUTE = "#768390"
+FG_BRT = "#cdd9e5"
 
-BLUE      = "#539bf5"
-BLUE_BG   = "#264466"
+BLUE = "#539bf5"
+BLUE_BG = "#264466"
 
-GREEN     = "#57ab5a"
-GREEN_BG  = "#1f3325"
+GREEN = "#57ab5a"
+GREEN_BG = "#1f3325"
 
-YELLOW     = "#daaa3f"
-YELLOW_BG  = "#2f2411"
+YELLOW = "#daaa3f"
+YELLOW_BG = "#2f2411"
 
-RED       = "#f47067"
-RED_BG    = "#351515"
+RED = "#f47067"
+RED_BG = "#351515"
 
-PURPLE     = "#986ee2"
-PURPLE_BG  = "#211d41"
+PURPLE = "#986ee2"
+PURPLE_BG = "#211d41"
 
 ORANGE = "#cc6b2c"
 
@@ -222,9 +222,9 @@ c.fonts.web.size.minimum = 10
 # -------------------------
 # Status bar
 # -------------------------
-c.statusbar.show = 'always'
+c.statusbar.show = "always"
 c.statusbar.padding = {"top": 3, "bottom": 3, "left": 6, "right": 6}
-c.statusbar.widgets = ['keypress', 'url', 'scroll', 'history', 'tabs', 'progress']
+c.statusbar.widgets = ["keypress", "url", "scroll", "history", "tabs", "progress"]
 
 # -------------------------
 # Session / window restore
@@ -235,19 +235,19 @@ c.session.lazy_restore = True
 # -------------------------
 # Editor (external)
 # -------------------------
-c.editor.command = ['nvim', '{file}']
+c.editor.command = ["nvim", "{file}"]
 
 # -------------------------
 # Downloads
 # -------------------------
-c.downloads.position = 'bottom'
+c.downloads.position = "bottom"
 c.downloads.remove_finished = 5000
 
 # -------------------------
 # Scrolling
 # -------------------------
 c.scrolling.smooth = True
-c.scrolling.bar = 'overlay'
+c.scrolling.bar = "overlay"
 
 # -------------------------
 # Privacy / Security
@@ -259,7 +259,7 @@ c.content.geolocation = False
 c.content.webrtc_ip_handling_policy = "default-public-interface-only"
 c.content.cookies.accept = "all"
 c.content.cookies.store = True
-c.content.unknown_url_scheme_policy = 'allow-from-user-interaction'
+c.content.unknown_url_scheme_policy = "allow-from-user-interaction"
 
 # -------------------------
 # Trusted JS sites
@@ -289,13 +289,15 @@ for site in TRUSTED_JS_SITES:
 # -------------------------
 # YouTube overrides
 # -------------------------
-config.set("content.javascript.enabled",    False, "https://www.youtube.com/")
-config.set("content.javascript.enabled",    True,  "https://www.youtube.com/feed/subscriptions")
-config.set("content.javascript.enabled",    True,  "https://www.youtube.com/watch*")
-config.set("content.javascript.enabled",    True,  "https://www.youtube.com/results*")
-config.set("content.javascript.enabled",    False, "https://www.youtube.com/shorts/*")
-config.set("content.mute",                  True,  "https://www.youtube.com/shorts/*")
-config.set("content.autoplay",              False, "https://www.youtube.com/*")
+config.set("content.javascript.enabled", False, "https://www.youtube.com/")
+config.set(
+    "content.javascript.enabled", True, "https://www.youtube.com/feed/subscriptions"
+)
+config.set("content.javascript.enabled", True, "https://www.youtube.com/watch*")
+config.set("content.javascript.enabled", True, "https://www.youtube.com/results*")
+config.set("content.javascript.enabled", False, "https://www.youtube.com/shorts/*")
+config.set("content.mute", True, "https://www.youtube.com/shorts/*")
+config.set("content.autoplay", False, "https://www.youtube.com/*")
 config.set("content.notifications.enabled", False, "https://www.youtube.com/*")
 config.set(
     "content.headers.user_agent",
@@ -320,11 +322,13 @@ config.bind("<space>n", "open -t https://neetcode.io/roadmap")
 config.bind("<ctrl-s>", "session-save", mode="normal")
 
 # --- Toggles ---
-config.bind("<ctrl-j>",
-    "config-cycle content.javascript.enabled true false",
-    mode="normal")
+config.bind(
+    "<ctrl-j>", "config-cycle content.javascript.enabled true false", mode="normal"
+)
 config.bind("<ctrl-d>", "config-cycle colors.webpage.darkmode.enabled false true")
-config.bind("<ctrl-b>", "config-cycle content.blocking.enabled true false", mode="normal")
+config.bind(
+    "<ctrl-b>", "config-cycle content.blocking.enabled true false", mode="normal"
+)
 config.bind("<space>.", "config-cycle tabs.show always never")
 
 # --- Search / highlight ---
@@ -334,20 +338,20 @@ config.bind("<Escape>", "search", mode="normal")
 config.bind("yy", "yank url")
 config.bind("yt", "yank title")
 config.bind("ys", "yank selection")
-config.bind("p",  "open {clipboard}",    mode="normal")
-config.bind("P",  "open -t {clipboard}", mode="normal")
+config.bind("p", "open {clipboard}", mode="normal")
+config.bind("P", "open -t {clipboard}", mode="normal")
 config.bind("p", "yank selection ;; message-info 'yanked selection'", mode="caret")
 
 # --- Hints ---
 # d now triggers hint all (replaces f)
 # f removed
-config.bind("d",  "hint all",             mode="normal")
-config.bind("D",  "hint all tab",         mode="normal")
+config.bind("d", "hint all", mode="normal")
+config.bind("D", "hint all tab", mode="normal")
 config.bind(";r", "hint --rapid all tab", mode="normal")
 
 # --- Navigation ---
-config.bind("H", "back",     mode="normal")
-config.bind("L", "forward",  mode="normal")
+config.bind("H", "back", mode="normal")
+config.bind("L", "forward", mode="normal")
 config.bind("J", "tab-prev", mode="normal")
 config.bind("K", "tab-next", mode="normal")
 
@@ -356,16 +360,16 @@ config.bind("a", "mode-enter insert", mode="normal")
 config.bind("i", "mode-enter insert", mode="normal")
 
 # --- Scrolling ---
-config.bind("gg", "scroll-to-perc 0",        mode="normal")
-config.bind("G",  "scroll-to-perc 100",       mode="normal")
+config.bind("gg", "scroll-to-perc 0", mode="normal")
+config.bind("G", "scroll-to-perc 100", mode="normal")
 config.bind("<ctrl-u>", "scroll-page 0 -0.5", mode="normal")
 
 # --- Tabs ---
 config.bind("<space>;", "tab-close", mode="normal")  # safe close — no accidental d
-config.bind("u", "undo",             mode="normal")
+config.bind("u", "undo", mode="normal")
 
 # --- Passthrough ---
-config.bind("<ctrl-f>", "search",            mode="normal")
+config.bind("<ctrl-f>", "search", mode="normal")
 config.bind("<ctrl-a>", "fake-key <ctrl-a>", mode="normal")
 
 # --- Reload ---
@@ -393,7 +397,17 @@ c.content.blocking.adblock.lists = [
 # -------------------------
 config.set("content.headers.custom", {"Upgrade-Insecure-Requests": "1"})
 
-config.set("content.user_stylesheets", ["~/.config/qutebrowser/styles/messenger.css"])
+config.set(
+    "content.user_stylesheets",
+    ["~/.config/qutebrowser/styles/messenger.css"],
+    "https://www.messenger.com/*",
+)
+config.set(
+    "content.user_stylesheets",
+    ["~/.config/qutebrowser/styles/chatgpt.css"],
+    "https://chatgpt.com/*",
+)
+
 
 # -------------------------
 # Load interceptor LAST
