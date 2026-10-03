@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/projects ~/nixos-setup -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find -H ~/projects ~/nixos-setup -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
@@ -11,27 +11,21 @@ if [[ -z $selected ]]; then
 fi
 
 selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
 
 # my tmux start at index 1 : please read "tmux.conf"
-switch_to(){
-    tmux new-session -ds "$selected_name" -c "$selected"
-    tmux rename-window -t "$selected_name:1" nvim
-    tmux send-keys -t "$selected_name:1" "nvim ." Enter
-    tmux new-window -t "$selected_name" -n scratch -c "$selected"
+create_session(){
+    tmux new-session -ds "$selected_name" -c "$selected" || return $?
+    tmux rename-window -t "=$selected_name:1" nvim || return $?
+    tmux send-keys -t "=$selected_name:1" "nvim ." Enter || return $?
+    tmux new-window -t "=$selected_name:" -n scratch -c "$selected" || return $?
 }
 
-
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    switch_to
-    tmux attach-session -t "$selected_name:1"
-    exit 0
-fi
-
 if ! tmux has-session -t="$selected_name" 2>/dev/null; then
-    switch_to
-    tmux switch-client -t "$selected_name:1"
-    exit 0
+    create_session || exit $?
 fi
 
-tmux switch-client -t "$selected_name:1"
+if [[ -z $TMUX ]]; then
+    tmux attach-session -t "=$selected_name:1"
+else
+    tmux switch-client -t "=$selected_name:1"
+fi
