@@ -122,22 +122,22 @@ guarded link creation and the known top-level projects ownership prerequisite.
 read during activation, not imported into Git or the Nix store. Builds do not
 require its contents; installation/activation requires a non-empty file.
 
-Provision the directory as root:root mode `0700` and the file as root:root mode
-`0600`, containing exactly one salted hash followed by a newline. On installation
-media, after mounting the target root at `/mnt`, the destination is
-`/mnt/etc/nixos/secrets/edtosoy-password-hash`. With `mkpasswd` available, the
-following intentionally creates private state and refuses an existing file:
+Provision a real, non-symlink directory as root:root mode `0700` and a regular,
+non-symlink file as root:root mode `0600`. The file contains exactly one yescrypt
+hash line followed by a newline. The destinations are:
 
-```bash
-sudo install -d -o root -g root -m 0700 /mnt/etc/nixos/secrets
-sudo sh -c 'umask 077; set -C; mkpasswd -m sha-512 > /mnt/etc/nixos/secrets/edtosoy-password-hash'
-```
+- Installation media, with the target root mounted at `/mnt`:
+  `/mnt/etc/nixos/secrets/edtosoy-password-hash`.
+- Already-installed/running system:
+  `/etc/nixos/secrets/edtosoy-password-hash`.
 
-Enter the password interactively. Verify the resulting file's type, permissions
-and one non-empty hash line without displaying it. Stop if generation fails;
-do not overwrite an existing credential blindly. On an existing installation,
-provision under `/etc/nixos/secrets` instead. The ignored legacy `secrets.nix` is
-not imported and must never be force-added.
+Follow the [complete private password procedure](docs/provisioning.md#private-password-provisioning).
+It supplies `mkpasswd` through Nix, uses interactive `mkpasswd --method=yescrypt`,
+redirects the hash into an exclusively created private file, and validates metadata
+and format without printing the hash. It also describes narrowly guarded recovery
+of a known newly-created empty failed artifact. Never overwrite an existing
+credential or put a password in arguments, environment variables, examples or Git.
+The ignored legacy `secrets.nix` is not imported and must never be force-added.
 
 Older Git history contains literal login-password settings. Treat those historical
 credentials as exposed and never reuse them; see the
@@ -146,7 +146,10 @@ from the current tree does not erase Git history.
 
 `users.mutableUsers = true` preserves an existing account's password. The private
 file provisions a new account; changing it does not reset an existing password.
-`passwd` changes do not update the provisioning file automatically.
+`passwd` changes do not update the provisioning file automatically. This
+repository's activation guard still requires the file to exist and be non-empty
+on every activation, including for an existing account. Build-only commands and
+non-activating evaluation do not require the private file.
 
 ## Installation and adaptation
 

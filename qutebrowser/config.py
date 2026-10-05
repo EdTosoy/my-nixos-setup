@@ -163,6 +163,11 @@ c.colors.messages.error.bg = RED_BG
 c.colors.messages.error.fg = FG_BRT
 c.colors.messages.error.border = RED
 
+# Hide this internal cursor-positioning error in the UI; keep JS logging intact.
+c.content.javascript.log_message.excludes["userscript:_qute_js"] = [
+    "Uncaught TypeError: Cannot read properties of undefined (reading 'length')",
+]
+
 # -------------------------
 # Webpage background
 # -------------------------

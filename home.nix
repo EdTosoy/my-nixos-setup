@@ -3,25 +3,11 @@
   pkgs-unstable,
   ...
 }:
-let
-  codexNotify = pkgs.writeShellScript "codex-desktop-notify" ''
-    payload=$(cat)
-    event=$(${pkgs.jq}/bin/jq -r '.hook_event_name' <<< "$payload")
-    project=$(${pkgs.jq}/bin/jq -r '.cwd | rtrimstr("/") | split("/") | last | if . == null or . == "" then "/" else . end' <<< "$payload")
-    case "$event" in
-      Stop) title="Codex — Turn finished"; detail="Turn finished." ;;
-      PermissionRequest) title="Codex — Permission requested"; detail="Permission requested." ;;
-      *) exit 0 ;;
-    esac
-    project=$(${pkgs.jq}/bin/jq -nr --arg value "$project" '$value | @html')
-    ${pkgs.libnotify}/bin/notify-send --app-name=Codex --urgency=normal -- "$title" "$project: $detail" >&2 || true
-    printf '{}\n'
-  '';
-in
 {
   imports = [
     ./home/desktop.nix
     ./home/shell.nix
+    ./home/codex.nix
     ./rofi/rofi.nix
   ];
 
@@ -32,33 +18,6 @@ in
   # Dotfiles
   #################################
   home.file = {
-
-    # Native Codex CLI 0.160.0 hooks. Review both with /hooks after activation.
-    # Keep mutable config.toml (including existing plugin trust) unmanaged.
-    ".codex/hooks.json".text = builtins.toJSON {
-      hooks = builtins.listToAttrs (
-        map
-          (event: {
-            name = event;
-            value = [
-              {
-                hooks = [
-                  {
-                    type = "command";
-                    command = "${codexNotify}";
-                    timeout = 3;
-                  }
-                ];
-              }
-            ];
-          })
-          [
-            "Stop"
-            "PermissionRequest"
-          ]
-      );
-    };
-
     ".config/sway".source = ./sway;
     ".config/nvim".source = ./nvim;
     ".config/tmux/tmux.conf".source = ./tmux/tmux.conf;
@@ -93,7 +52,7 @@ in
 
     # WM tooling
     rofi
-    papirus-icon-theme # supplies Rofi's native Papirus-Dark setting
+    papirus-icon-theme
     dunst
     libnotify
     swaybg
@@ -102,8 +61,8 @@ in
 
     # file management
     yazi
-    grim # for screenshots
-    slurp # for region selection
+    grim
+    slurp
     satty
     zip
 
