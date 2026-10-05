@@ -28,7 +28,6 @@ home/
   desktop.nix              # cursor and GTK/Qt/Dconf appearance
   shell.nix                # Bash, aliases, Prisma function, direnv
 real-prog-dvorak            # custom XKB layout registered by NixOS
-secrets.nix.example         # historical example; see password limitation below
 nvim/                      # Neovim configuration, Git submodule
 sway/                      # native Sway config and wallpapers
 tmux/                     # native tmux config
@@ -37,7 +36,7 @@ rofi/                      # config.rasi, theme.rasi, launcher visibility module
 scripts/tmux-sessionizer   # installed as ~/.local/bin/tmux-sessionizer
 ```
 
-`flake.nix` imports `configuration.nix`, the optional password module, and Home Manager's NixOS module. `configuration.nix` imports the hardware file. Home Manager imports `home.nix`, which imports the two `home/` modules and `rofi/rofi.nix`.
+`flake.nix` imports `configuration.nix` and Home Manager's NixOS module. `configuration.nix` imports the hardware file. Home Manager imports `home.nix`, which imports the two `home/` modules and `rofi/rofi.nix`.
 
 NixOS owns system services, hardware, mounts, account creation, and system fonts. Home Manager owns personal packages, shell settings, dotfiles, and desktop preferences. Home Manager runs as part of the system rebuild; there is no separate `home-manager switch` step.
 
@@ -108,15 +107,23 @@ The sessionizer invokes `find` on `~/projects` and `~/nixos-setup`, so it depend
 
 Other mutable state includes account passwords, NetworkManager connection credentials, application sessions, cloud credentials, Codex settings, and Neovim plugin/parser downloads. Restoring this repository does not restore those files. Keep private backups without adding credentials to Git.
 
-## Password provisioning limitation
+## Private password provisioning
 
-`secrets.nix` contains local login-password configuration and is intentionally ignored by Git. Switching branches in the same checkout leaves this ignored file in place. A fresh clone does not contain it.
+The public repository contains no login password or password hash. NixOS references `/etc/nixos/secrets/edtosoy-password-hash` as an absolute string through `users.users.edtosoy.hashedPasswordFile`. This file is private machine state outside Git and the Nix store; its contents are read during activation, not evaluation. Normal builds do not need access to it. Installation and activation fail if it is missing or empty.
 
-The flake imports it only when `builtins.pathExists ./secrets.nix` is true. **Normal Git-backed flake evaluation excludes untracked files, including this ignored file**, so merely copying it into the checkout does not make the normal rebuild command use it. The conditional allows the build to succeed without that module. An existing account's working password is not evidence that this module was imported. See the [Nix 2.34 flake reference](https://nix.dev/manual/nix/2.34/command-ref/new-cli/nix3-flake.html).
+Provision `/etc/nixos/secrets` as root:root mode `0700` and the hash file as root:root mode `0600`. The file must contain exactly one salted password hash followed by a newline. Never put a password or hash into a Nix expression, command argument, Git, or terminal output. On an existing machine, securely copying the active hash from `/etc/shadow` preserves the current credential; do not copy the old plaintext configuration.
 
-Git ignore prevents ordinary Git staging; it does not protect secret values from entering the Nix store if imported. Do not force-add the file or switch to a whole-directory `path:` flake as a workaround. Password provisioning is deferred for separate work. The historical example also names a different user, so it is not a working recovery procedure for `edtosoy`.
+`users.mutableUsers = true` preserves an existing account's password during rebuilds. The provisioning file supplies the password when the account is first created. Changing the account password with `passwd` does not automatically update this file; regenerate it separately if future provisioning should use the changed credential.
 
-For recovery today, maintain a working account/password through the base installation or reset it through a recovery environment. Keep a private backup of the local password file, but do not rely on it being applied by the documented flake rebuild.
+For a replacement machine, generate a new salted hash from an interactively entered password; preserving the old hash is unnecessary. From installation media, after mounting the target system at `/mnt`, provision `/mnt/etc/nixos/secrets/edtosoy-password-hash` before `nixos-install`. For example, with `mkpasswd` available:
+
+```bash
+sudo install -d -o root -g root -m 0700 /mnt/etc/nixos/secrets
+# Use only when the destination does not already exist; refuse overwriting.
+sudo sh -c 'umask 077; set -C; mkpasswd -m sha-512 > /mnt/etc/nixos/secrets/edtosoy-password-hash'
+```
+
+Verify the private directory/file types, ownership, permissions, and one non-empty salted hash line without displaying it before installation. If generation fails, stop and inspect metadata before retrying. The legacy ignored `secrets.nix` mechanism is no longer imported or used; do not force-add it or use a whole-directory flake to import its contents.
 
 ## Restoring this machine
 
@@ -137,7 +144,7 @@ For recovery today, maintain a working account/password through the base install
    The recorded submodule URL uses SSH (`git@github.com:EdTosoy/nvim.git`), so recursive checkout requires working GitHub SSH access. Restoring a private backup is an alternative. Do not use `--remote`: recovery should use the recorded submodule revision.
 
 4. Confirm the root/EFI/swap devices and `/mnt/storage` disk still match the declarations. Restore the manual storage links only after checking existing files and directories; do not overwrite them blindly.
-5. Ensure the `edtosoy` account has a usable password; follow the limitation above. Restore private mutable state separately.
+5. Provision the private password-hash file as described above before installation or activation. For an existing account, confirm its current password remains usable. Restore private mutable state separately.
 6. Run the non-activating build command, review the result, then activate when ready. After reboot, select Sway in LightDM.
 
 ## Rollback and recovery
@@ -159,7 +166,7 @@ This changes the active system and boot default. After a `test` activation, a re
 
 If the machine cannot boot normally, hold **Space** during boot to show the systemd-boot menu and choose a known-good NixOS generation. This machine uses systemd-boot, not GRUB. See the [systemd-boot key documentation](https://github.com/systemd/systemd-stable/blob/v255-stable/docs/BOOT.md).
 
-If no usable generation or password is available, boot a NixOS installation USB. Identify and mount this machine's root partition at `/mnt` and EFI partition at `/mnt/boot`; do not format them. Enter the installed system with `sudo nixos-enter --root /mnt` and use `passwd edtosoy` to reset the password if needed. This assumes an intact installed system that `nixos-enter` can enter. If its system closure is missing or the disk is empty, follow the NixOS installation procedure with the reviewed flake and verified mounts; do not run `nixos-rebuild switch` against the live USB system as a substitute for installation. Rebuilding from recovery additionally requires the checkout, its submodule, and dependencies to be available. See the [NixOS installation manual](https://nixos.org/manual/nixos/stable/#sec-installation).
+If no usable generation or password is available, boot a NixOS installation USB. Identify and mount this machine's root partition at `/mnt` and EFI partition at `/mnt/boot`; do not format them. Enter the installed system with `sudo nixos-enter --root /mnt` and use `passwd edtosoy` to reset the password if needed. Provision or regenerate the private hash file separately before activating: with mutable users, replacing that file does not reset an existing account password. This assumes an intact installed system that `nixos-enter` can enter. If its system closure is missing or the disk is empty, follow the NixOS installation procedure with the reviewed flake and verified mounts; do not run `nixos-rebuild switch` against the live USB system as a substitute for installation. Rebuilding from recovery additionally requires the checkout, its submodule, and dependencies to be available. See the [NixOS installation manual](https://nixos.org/manual/nixos/stable/#sec-installation).
 
 Rollback does not restore project data, mutable application state, or a password changed with `passwd`. Keep private backups for those.
 
@@ -192,5 +199,5 @@ These are recorded for later review; the current configuration is preserved:
 - Neovim's `terraform-ls` command without an explicit package here.
 - Qutebrowser's repeated global stylesheet assignment (the later assignment wins).
 - Neovim reproducibility: runtime Lazy bootstrap, mutable plugin lockfile, and downloaded Treesitter parsers.
-- Password provisioning and declarative storage links.
+- Declarative storage links.
 - Repeated `basedpyright` and `ruff` entries in `home.packages`. Retained in Phase 1 to preserve the evaluated list exactly; deduplicate in a separately reviewed cleanup.
