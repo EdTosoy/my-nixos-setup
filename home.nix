@@ -107,6 +107,8 @@
     azure-cli
 
     # neovim LSP
+    terraform-ls
+    prisma-language-server
     typescript
     typescript-language-server
     vscode-langservers-extracted
