@@ -14,11 +14,6 @@
       "ignoredups"
       "erasedups"
     ];
-    bashrcExtra = ''
-      prisma() {
-        nix-shell -p prisma_7 --run "prisma $*"
-      }
-    '';
     shellAliases = {
       btw = "echo I use nixos, btw";
       # Rebuilds the NixOS system, including the "nvim submodule" content.
@@ -101,7 +96,6 @@
       ls = "eza --icons";
       ll = "eza -al --icons";
       la = "eza -A --icons";
-      ng = "npx @angular/cli@latest";
       ts = "tmux-sessionizer";
       tks = "tmux kill-server";
     };
