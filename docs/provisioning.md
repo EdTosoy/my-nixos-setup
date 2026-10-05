@@ -21,6 +21,12 @@ before installation or activation. On installation media the destination is
 `/mnt/etc/nixos/secrets/edtosoy-password-hash`, under the mounted target system.
 Do not put its contents, credentials, or tokens in Git or Nix expressions.
 
+The current tree contains no login password values. Older Git history contains
+literal login-password settings: removing them from the current tree does not
+erase that history. Treat those historical credentials as exposed and do not
+reuse them. Credential retirement and any history removal require separate,
+deliberate action before publishing additional history.
+
 Project contents, downloads, personal files, browser profiles, application
 history/state, and other user data are outside this repository. A configuration
 clone or system rollback does not recover them.
@@ -125,9 +131,9 @@ sudo chown --no-dereference -- "$(id -u):$(id -g)" /mnt/storage/projects
 stat -c '%n: uid=%u gid=%g mode=%a' /mnt/storage/projects
 ```
 
-This correction has not been performed as part of the documentation phase. It
-does not prove that existing contents have suitable permissions. If subsequent
-access encounters unexpected ownership or permissions, stop and investigate
+Changing the directory owner does not prove that existing contents have suitable
+permissions. If subsequent access encounters unexpected ownership or permissions,
+stop and investigate
 those specific paths separately; do not apply `chown -R` or broad `chmod` fixes.
 
 Before making links, inspect all three existing home paths. The checks below
@@ -168,8 +174,8 @@ local filesystem; they are not an automatic provisioning service.
 
 ## Anonymous configuration checkout
 
-Once the HTTPS `.gitmodules` change is committed and published, a public checkout
-can include Neovim without SSH keys:
+The public submodule URL in `.gitmodules` uses HTTPS, so a checkout can include
+Neovim without SSH keys:
 
 ```bash
 git clone --recurse-submodules https://github.com/EdTosoy/my-nixos-setup.git ~/nixos-setup
@@ -181,9 +187,6 @@ commit and running `git submodule update --init --recursive`. Do not use
 An older parent commit can contain the older SSH URL. Private provisioning and
 user-data recovery remain necessary after an anonymous configuration clone.
 
-The Phase 4 anonymous check successfully initialized the published Neovim
-revision using the pending HTTPS metadata. On 2026-10-05, the current local
-Neovim revision `6ed1f698ceb7b5fc6641293a1273b6e8ce2b9306` was not available from
-its public remote. Publish the referenced Neovim commit before publishing a
-parent commit that requires it, or retain a recovery backup containing both.
-Until then, the public clone cannot recover the current local configuration.
+Publish the referenced Neovim commit before publishing a parent commit that
+requires it, or retain a recovery backup containing both. Both recorded commits
+must be available for a public clone to recover the intended configuration.

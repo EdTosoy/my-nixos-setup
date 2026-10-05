@@ -1,3 +1,2 @@
 # Never track legacy local password configuration.
 secrets.nix
-hardware-configuration.nix

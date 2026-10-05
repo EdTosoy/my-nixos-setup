@@ -93,6 +93,7 @@ in
 
     # WM tooling
     rofi
+    papirus-icon-theme # supplies Rofi's native Papirus-Dark setting
     dunst
     libnotify
     swaybg
@@ -136,8 +137,6 @@ in
     ansible-lint
     gh
     python312
-    basedpyright
-    ruff
 
     # cloud / infra
     terraform

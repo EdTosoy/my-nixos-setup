@@ -151,6 +151,7 @@
   #################################
   # User
   #################################
+  users.mutableUsers = true; # passwd changes persist; the private hash provisions new accounts
   users.users.edtosoy = {
     isNormalUser = true;
     extraGroups = [
