@@ -84,6 +84,9 @@ No automatic dependency-update service or update alias is declared here. The Pri
 
 ## Storage and local state
 
+See [the provisioning contract](docs/provisioning.md) for machine adaptation,
+mount checks, directory ownership, and safe manual link recovery.
+
 The hardware configuration declares ext4 `/`, FAT `/boot`, and swap using device UUIDs. `configuration.nix` declares the ext4 data disk at `/mnt/storage` with `nofail`, allowing boot to continue when it is unavailable. There is no storage provisioning or data migration in this repository.
 
 Existing manually created home links are:
@@ -103,7 +106,7 @@ ls -ld ~/storage ~/Downloads ~/projects
 
 `findmnt --mountpoint` must show `/mnt/storage` itself and the expected data disk. If it exits unsuccessfully, stop and check the disk; an existing mountpoint directory or home symlink does not prove the disk is mounted.
 
-The sessionizer invokes `find` on `~/projects` and `~/nixos-setup`, so it depends on that local layout. Its current command does not follow the manually created `~/projects` symlink and therefore does not search the projects target directory. This behavior is deferred for repair. Back up storage data separately; a NixOS generation is not a data backup.
+The sessionizer invokes `find` on `~/projects` and `~/nixos-setup`, so it depends on that local layout. Its current command does not follow the manually created `~/projects` symlink and therefore does not search the projects target directory. This behavior is deferred for repair. Configuration recovery is not data backup.
 
 Other mutable state includes account passwords, NetworkManager connection credentials, application sessions, cloud credentials, Codex settings, and Neovim plugin/parser downloads. Restoring this repository does not restore those files. Keep private backups without adding credentials to Git.
 
@@ -139,9 +142,9 @@ Verify the private directory/file types, ownership, permissions, and one non-emp
    git submodule update --init --recursive
    ```
 
-   The default branch may not match the system you intend to recover. Record the parent configuration commit and ensure it and the referenced Neovim commit are available from backups or their remotes. Phase 1 is currently uncommitted: its new modules are staged, but a remote clone will not contain these changes until they are committed and published. Use a working-tree backup to recover uncommitted changes; submodule checkout does not restore local edits.
+   The default branch may not match the system you intend to recover. Record the parent configuration commit and ensure it and the referenced Neovim commit are available from backups or their remotes. A remote clone contains only published commits. Use a working-tree backup to recover uncommitted changes; submodule checkout does not restore local edits.
 
-   The recorded submodule URL uses SSH (`git@github.com:EdTosoy/nvim.git`), so recursive checkout requires working GitHub SSH access. Restoring a private backup is an alternative. Do not use `--remote`: recovery should use the recorded submodule revision.
+   The public Neovim submodule uses HTTPS, allowing anonymous recursive checkout without GitHub SSH credentials. Older recovery commits may still record an SSH URL. Do not use `--remote`: recovery should use the recorded submodule revision.
 
 4. Confirm the root/EFI/swap devices and `/mnt/storage` disk still match the declarations. Restore the manual storage links only after checking existing files and directories; do not overwrite them blindly.
 5. Provision the private password-hash file as described above before installation or activation. For an existing account, confirm its current password remains usable. Restore private mutable state separately.
@@ -199,5 +202,5 @@ These are recorded for later review; the current configuration is preserved:
 - Neovim's `terraform-ls` command without an explicit package here.
 - Qutebrowser's repeated global stylesheet assignment (the later assignment wins).
 - Neovim reproducibility: runtime Lazy bootstrap, mutable plugin lockfile, and downloaded Treesitter parsers.
-- Declarative storage links.
+- Manual storage-link provisioning is documented in `docs/provisioning.md`; the links remain outside Home Manager.
 - Repeated `basedpyright` and `ruff` entries in `home.packages`. Retained in Phase 1 to preserve the evaluated list exactly; deduplicate in a separately reviewed cleanup.
