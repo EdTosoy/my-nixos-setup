@@ -59,7 +59,7 @@ change in the application's native files.
 | Projects | Frameworks, dependencies, lockfiles and project-local commands |
 | Git | Configuration, locked Nix inputs, the Neovim submodule revision and reviewed editor state |
 | Mutable runtime state | Downloaded plugins/parsers, caches, history, sessions, authentication and deliberately unmanaged settings |
-| Private provisioning | Password-hash file, correct filesystem identities, directory permissions and service credentials |
+| Private provisioning | Correct filesystem identities, directory permissions and service credentials |
 
 Home Manager runs within the system rebuild; there is no separate
 `home-manager switch` step. It deploys native files through Nix-store links.
@@ -101,10 +101,9 @@ as recovery operations.
 
 **Configuration recovery is not data backup.**
 
-No login password or password hash belongs in this repository. The private hash
-is provisioned at `/etc/nixos/secrets/edtosoy-password-hash` before installation or
-activation. Authentication, project contents, downloads and personal application
-data require separate provisioning or recovery.
+No login password or password hash belongs in this repository. Login passwords
+are managed manually with `passwd`. Authentication, project contents, downloads
+and personal application data require separate provisioning or recovery.
 
 NixOS mounts the optional ext4 disk at `/mnt/storage` with `nofail`. A missing
 data disk should allow a usable recovery environment. The filesystem contents,
@@ -116,40 +115,29 @@ hidden when the disk mounts.
 Read [the provisioning contract](docs/provisioning.md) for hardware UUIDs,
 guarded link creation and the known top-level projects ownership prerequisite.
 
-### Private password provisioning
+### Login password and recovery
 
-`users.users.edtosoy.hashedPasswordFile` is an absolute string path. The hash is
-read during activation, not imported into Git or the Nix store. Builds do not
-require its contents; installation/activation requires a non-empty file.
+NixOS creates and configures `edtosoy`; `users.mutableUsers = true` keeps the
+login password under normal Linux management. Use interactive `passwd edtosoy`
+from an appropriate privileged environment. `/etc/shadow` is the authoritative
+runtime password state; neither the password nor its hash is reproducible from
+Git. Never put password material in Git or Nix expressions.
 
-Provision a real, non-symlink directory as root:root mode `0700` and a regular,
-non-symlink file as root:root mode `0600`. The file contains exactly one yescrypt
-hash line followed by a newline. The destinations are:
+After a fresh installation, the account has no usable login password until you
+set one manually. From installation media, verify the installed target is mounted
+at `/mnt`, enter it with `nixos-enter --root /mnt`, then run `passwd edtosoy` as
+root in that target environment. On an installed system, a root recovery TTY can
+run `passwd edtosoy` directly. Do not accidentally set the live media's password.
 
-- Installation media, with the target root mounted at `/mnt`:
-  `/mnt/etc/nixos/secrets/edtosoy-password-hash`.
-- Already-installed/running system:
-  `/etc/nixos/secrets/edtosoy-password-hash`.
-
-Follow the [complete private password procedure](docs/provisioning.md#private-password-provisioning).
-It supplies `mkpasswd` through Nix, uses interactive `mkpasswd --method=yescrypt`,
-redirects the hash into an exclusively created private file, and validates metadata
-and format without printing the hash. It also describes narrowly guarded recovery
-of a known newly-created empty failed artifact. Never overwrite an existing
-credential or put a password in arguments, environment variables, examples or Git.
-The ignored legacy `secrets.nix` is not imported and must never be force-added.
+Changing or rebuilding this configuration must not reset an existing mutable
+user's password. Activation preserves the existing password while the account
+and `users.mutableUsers = true` remain in place. No private password file is
+required. Configuration recovery is separate from authentication recovery and
+personal-data recovery.
 
 Older Git history contains literal login-password settings. Treat those historical
-credentials as exposed and never reuse them; see the
-[provisioning contract](docs/provisioning.md#recovery-boundaries). Removing values
-from the current tree does not erase Git history.
-
-`users.mutableUsers = true` preserves an existing account's password. The private
-file provisions a new account; changing it does not reset an existing password.
-`passwd` changes do not update the provisioning file automatically. This
-repository's activation guard still requires the file to exist and be non-empty
-on every activation, including for an existing account. Build-only commands and
-non-activating evaluation do not require the private file.
+credentials as exposed and never reuse them; removing values from the current
+tree does not erase Git history.
 
 ## Installation and adaptation
 
@@ -168,12 +156,13 @@ before installation on another machine:
 2. Review or generate a candidate hardware configuration for the target machine.
    Verify root, EFI/boot, swap and optional storage identities. Do not blindly
    reuse this workstation's UUIDs. Follow [hardware adaptation](docs/provisioning.md#adapt-hardware-before-installation).
-3. Review `edtosoy`, `/home/edtosoy`, hostname, Git identity, groups and private hash
-   paths wherever referenced. Keep these consistent with the intended account.
+3. Review `edtosoy`, `/home/edtosoy`, hostname, Git identity and groups wherever
+   referenced. Keep these consistent with the intended account.
    Preserve state versions (`25.11` system, `26.05` home) during ordinary upgrades;
    they are compatibility settings, not release labels.
-4. Provision the private password file. Review optional storage and existing
-   home paths before using the guarded provisioning instructions.
+4. Plan privileged access to set the password after a fresh installation. Review
+   optional storage and existing home paths before using the guarded provisioning
+   instructions.
 5. Review the diff and build without activation or lock updates. From the checkout:
 
    ```bash
@@ -200,11 +189,12 @@ before installation on another machine:
    not add the lockfile-protection flags above.
 
 A build is not an empty-disk installation. From installation media, identify and
-mount the target filesystems, adapt the checkout and provision the target hash
-before following the [NixOS installation procedure](https://nixos.org/manual/nixos/stable/#sec-installation)
+mount the target filesystems and adapt the checkout before following the
+[NixOS installation procedure](https://nixos.org/manual/nixos/stable/#sec-installation)
 with this flake's `nixos-btw` output. Do not run `switch` against the live USB as a
-substitute for installation. No partitioning, formatting or data migration is
-performed by this repository.
+substitute for installation. After installation, set the target account password
+from a privileged environment as described above. No partitioning, formatting
+or data migration is performed by this repository.
 
 ## Update workflow
 

@@ -151,7 +151,7 @@
   #################################
   # User
   #################################
-  users.mutableUsers = true; # passwd changes persist; the private hash provisions new accounts
+  users.mutableUsers = true; # Login passwords are managed manually with passwd.
   users.users.edtosoy = {
     isNormalUser = true;
     extraGroups = [
@@ -162,17 +162,7 @@
       "docker"
       "sway"
     ];
-    hashedPasswordFile = "/etc/nixos/secrets/edtosoy-password-hash";
   };
-
-  # The private file is provisioned separately before installation or activation.
-  system.activationScripts.users.text = lib.mkBefore ''
-    if [ ! -f /etc/nixos/secrets/edtosoy-password-hash ] ||
-       [ ! -s /etc/nixos/secrets/edtosoy-password-hash ]; then
-      echo "Provision /etc/nixos/secrets/edtosoy-password-hash before activation." >&2
-      exit 1
-    fi
-  '';
 
   #################################
   # Fonts
