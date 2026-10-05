@@ -83,7 +83,6 @@ in
   home.packages = with pkgs; [
     # applications
     pkgs-unstable.zoom-us
-    codex
 
     # terminals
     kitty
