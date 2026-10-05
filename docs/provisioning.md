@@ -31,6 +31,200 @@ Project contents, downloads, personal files, browser profiles, application
 history/state, and other user data are outside this repository. A configuration
 clone or system rollback does not recover them.
 
+## Private password provisioning
+
+This procedure creates private machine state, not repository files. Use a new
+password, never a historical exposed credential. Do not run concurrent provisioning
+or change mounts/paths during these steps. Never enable shell tracing (`set -x`),
+pass passwords as arguments/environment variables, or display the hash with `cat`.
+
+### Obtain the tools and select the destination
+
+From NixOS installation media or the installed system, enter a temporary root
+Bash shell with Nix-provided `mkpasswd` and Bash. The revision below matches the
+stable Nixpkgs revision recorded in this repository's `flake.lock`; downloading
+uncached tools requires network access. This does not rebuild or activate NixOS,
+update the repository lockfile, or permanently install these tools:
+
+```bash
+sudo nix --extra-experimental-features 'nix-command flakes' shell \
+  --no-update-lock-file --no-write-lock-file \
+  'github:NixOS/nixpkgs/c508844df6c28fa6dabc1b6af70f3ccbd65c5201#mkpasswd' \
+  'github:NixOS/nixpkgs/c508844df6c28fa6dabc1b6af70f3ccbd65c5201#bash' \
+  --command bash --noprofile --norc
+```
+
+Choose **one** context in that root shell. For a fresh installation, first verify
+that `/mnt` is the intended mounted target root, then use:
+
+```bash
+mountpoint -q /mnt || { echo 'STOP: target root is not mounted' >&2; exit 1; }
+findmnt --mountpoint /mnt -o TARGET,SOURCE,UUID,FSTYPE
+# Compare the displayed filesystem identity with your reviewed target root.
+target_root=/mnt
+secret_dir=/mnt/etc/nixos/secrets
+secret_file="$secret_dir/edtosoy-password-hash"
+```
+
+For an already-installed/running system, use instead:
+
+```bash
+target_root=
+secret_dir=/etc/nixos/secrets
+secret_file="$secret_dir/edtosoy-password-hash"
+```
+
+Do not use the running-system destination from installation media: it would
+provision the live environment rather than the target installation.
+
+### Define silent checks
+
+These checks report only generic failures, never password/hash contents. They
+require the actual numeric root UID/GID and exact modes; they refuse symlinks.
+The format check requires one non-empty, newline-terminated yescrypt line using
+[libxcrypt's yescrypt syntax](https://github.com/besser82/libxcrypt/blob/develop/doc/crypt.5).
+It checks structure, not whether you entered the intended password.
+
+```bash
+secret_error() { printf 'STOP: %s\n' "$1" >&2; return 1; }
+check_secret_directory() {
+    [[ -d "$secret_dir" && ! -L "$secret_dir" ]] || {
+        secret_error 'secret directory is missing or is a symlink'; return 1;
+    }
+    [[ $(stat -c '%u:%g:%a' -- "$secret_dir") == 0:0:700 ]] || {
+        secret_error 'secret directory must be root:root mode 0700'; return 1;
+    }
+}
+check_secret_file_metadata() {
+    [[ -f "$secret_file" && ! -L "$secret_file" ]] || {
+        secret_error 'secret must be a regular non-symlink file'; return 1;
+    }
+    [[ $(stat -c '%u:%g:%a' -- "$secret_file") == 0:0:600 ]] || {
+        secret_error 'secret file must be root:root mode 0600'; return 1;
+    }
+}
+validate_secret() {
+    local LC_ALL=C
+    local -a lines
+    check_secret_directory && check_secret_file_metadata || return 1
+    mapfile -t lines < "$secret_file" || return 1
+    [[ ${#lines[@]} -eq 1 ]] || {
+        secret_error 'secret must contain exactly one line'; return 1;
+    }
+    [[ $(wc -l < "$secret_file") -eq 1 &&
+       $(wc -c < "$secret_file") -eq $((${#lines[0]} + 1)) &&
+       ${lines[0]} =~ ^\$y\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{1,86}\$[./A-Za-z0-9]{43}$ ]] || {
+        secret_error 'secret must be one newline-terminated yescrypt hash'; return 1;
+    }
+}
+```
+
+### Prepare the directory and create the hash
+
+Create only missing directories. Existing secret-directory ownership/mode is
+validated, not silently changed. Stop on an unexpected path or metadata; preserve
+and investigate it rather than applying broad permission fixes.
+
+```bash
+[[ $EUID -eq 0 ]] || { echo 'STOP: use the root tool shell above' >&2; exit 1; }
+for parent in "$target_root/etc" "$target_root/etc/nixos"; do
+    if [[ ! -e "$parent" && ! -L "$parent" ]]; then
+        mkdir -m 0755 -- "$parent" || exit 1
+    fi
+    [[ -d "$parent" && ! -L "$parent" && $(stat -c '%u:%g' -- "$parent") == 0:0 ]] || {
+        echo 'STOP: unexpected parent directory' >&2; exit 1;
+    }
+    (( (8#$(stat -c '%a' -- "$parent") & 0022) == 0 )) || {
+        echo 'STOP: parent directory is writable by group/others' >&2; exit 1;
+    }
+done
+if [[ ! -e "$secret_dir" && ! -L "$secret_dir" ]]; then
+    mkdir -m 0700 -- "$secret_dir" || exit 1
+fi
+check_secret_directory || exit 1
+```
+
+Define and call this creation function. Password entry remains interactive on the
+terminal; only the hash goes to the exclusively opened file. An existing path,
+including an empty file or dangling symlink, is refused. A successful creation
+is validated before you proceed:
+
+```bash
+create_provisioning_hash() {
+    local hash_fd created_id
+    failed_empty_id=
+    check_secret_directory || return 1
+    [[ ! -e "$secret_file" && ! -L "$secret_file" ]] || {
+        secret_error 'destination exists; validate it or investigate, do not overwrite'; return 1;
+    }
+    umask 077
+    set -o noclobber
+    exec {hash_fd}> "$secret_file" || return 1
+    created_id=$(stat -Lc '%d:%i' -- "/proc/$$/fd/$hash_fd")
+    if mkpasswd --method=yescrypt >&"$hash_fd"; then
+        exec {hash_fd}>&-
+        validate_secret
+    else
+        exec {hash_fd}>&-
+        if check_secret_file_metadata && [[ ! -s "$secret_file" &&
+           $(stat -c '%d:%i' -- "$secret_file") == "$created_id" ]]; then
+            failed_empty_id=$created_id
+        fi
+        secret_error 'generation failed; stop and follow failed-creation recovery'
+    fi
+}
+create_provisioning_hash
+```
+
+For an **existing** provisioning file, skip creation and run `validate_secret`.
+It prints no hash and exits successfully only when every check passes. Do not
+continue to installation/activation after any failed command or validation.
+
+### Recover only a known new empty failed artifact
+
+If generation failed after this shell exclusively created a file, the function
+records its device/inode identity **only if it is still empty and has the expected
+metadata**. In the same shell, before retrying creation, the following optional
+cleanup removes only that identified empty artifact:
+
+```bash
+remove_failed_empty_artifact() {
+    check_secret_directory && check_secret_file_metadata || return 1
+    [[ -n ${failed_empty_id:-} && ! -s "$secret_file" &&
+       $(stat -c '%d:%i' -- "$secret_file") == "$failed_empty_id" ]] || {
+        secret_error 'not the recorded new empty failure artifact; preserve it'; return 1;
+    }
+    rm -- "$secret_file" || return 1
+    failed_empty_id=
+}
+remove_failed_empty_artifact
+```
+
+After successful cleanup, fix the cause of generation failure, then call
+`create_provisioning_hash` again. This is not a deletion recipe for pre-existing
+credentials: an existing file, non-empty partial result, changed identity, wrong
+metadata, symlink, or lost shell/session record must be preserved for deliberate
+investigation. Never reconstruct a cleanup token merely because a file is empty.
+
+Once `validate_secret` succeeds, leave the root tool shell with `exit`. Private
+provisioning is complete; installation/activation remains a separate step.
+
+### Fresh accounts versus existing accounts
+
+With `users.mutableUsers = true`, a fresh account's password is initialized from
+this file. An existing account's password is preserved, including `passwd`
+changes; changing this provisioning hash does not reset that password. `passwd`
+does not update the file, so refresh it separately if future provisioning should
+use the new credential. Replacing an existing file requires a separate reviewed
+procedure; do not bypass this workflow's no-clobber protection.
+
+NixOS reads the file during activation. This repository's additional activation
+guard aborts if it is missing or empty, even when the account already exists. The
+guard does not validate format or permissions; the silent checks above do that.
+Build-only commands and non-activating evaluation do not read or require the
+private file. Neither provisioning nor a rebuild recovers application credentials,
+mutable sessions, or personal data. Configuration recovery is not data backup.
+
 ## Adapt hardware before installation
 
 These identifiers describe this workstation, not arbitrary replacement hardware:
