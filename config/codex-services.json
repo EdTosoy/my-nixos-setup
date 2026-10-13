@@ -1,0 +1,46 @@
+{
+  "cloudflare-docs": {
+    "url": "https://docs.mcp.cloudflare.com/mcp",
+    "oauth": false,
+    "tools": ["search_cloudflare_documentation"],
+    "probe": "Search the Cloudflare documentation for Workers observability. Report the source URL and one relevant fact."
+  },
+  "linear": {
+    "url": "https://mcp.linear.app/mcp/readonly",
+    "oauth": true,
+    "scopes": ["read"],
+    "tools": ["list_teams", "list_projects", "get_issue", "list_issues"],
+    "probe": "List accessible Linear teams. Report only whether the request succeeded and the count; do not print names or issue contents."
+  },
+  "vercel": {
+    "url": "https://mcp.vercel.com",
+    "oauth": true,
+    "tools": ["list_projects", "list_deployments", "get_deployment"],
+    "probe": "List accessible Vercel projects. Report only whether the request succeeded and the count; do not print account or project identifiers."
+  },
+  "cloudflare": {
+    "url": "https://mcp.cloudflare.com/mcp",
+    "oauth": true,
+    "tools": ["search"],
+    "probe": "Use the Cloudflare search tool to locate the Workers observability API documentation. Do not call an API or execute code against an account. Report the documentation path only."
+  },
+  "render": {
+    "url": "https://mcp.render.com/mcp",
+    "oauth": true,
+    "tools": ["list_services", "get_service"],
+    "probe": "List Render services in the selected workspace. Report only success and count. If no workspace is selected, stop and ask the user to select it; do not change workspace or any resource."
+  },
+  "supabase": {
+    "url": "https://mcp.supabase.com/mcp?read_only=true&features=database,docs",
+    "oauth": true,
+    "project_required": true,
+    "tools": ["list_tables", "list_migrations", "search_docs"],
+    "probe": "List migration metadata for the selected development project. Report only success and count. Do not query table contents or mutate the database."
+  },
+  "neon": {
+    "url": "https://mcp.neon.tech/mcp?readonly=true&category=projects&category=branches",
+    "oauth": true,
+    "tools": ["list_projects", "describe_project", "get_project", "list_branches"],
+    "probe": "List accessible Neon projects. Report only success and count. Do not request connection strings, SQL data, or branch creation."
+  }
+}

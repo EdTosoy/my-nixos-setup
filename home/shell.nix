@@ -70,9 +70,7 @@
       tfi = "terraform init";
       tfp = "terraform plan";
       tfa = "terraform apply";
-      tfaa = "terraform apply -auto-approve";
       tfd = "terraform destroy";
-      tfda = "terraform destroy -auto-approve";
       tfv = "terraform validate";
       tff = "terraform fmt";
       tffr = "terraform fmt -recursive";
