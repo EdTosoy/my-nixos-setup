@@ -1,5 +1,10 @@
 # Codex engineering workflows: implemented capabilities
 
+The [P2 activation and validation record](codex-p2-validation.md) contains the
+current runtime status, corrected browser boundary, and Linear connection
+evidence. The implementation-stage activation/authentication limitations below
+are historical; consult P2 before repeating setup.
+
 These changes extend P 0/P 1. No application logic, financial core, database,
 deployment, publishing, or Git history was changed. Existing project tracked
 diffs, Terraform source changes, command rules, and Dunst hook contents were

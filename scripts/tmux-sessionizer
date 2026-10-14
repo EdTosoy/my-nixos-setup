@@ -3,7 +3,8 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find -H ~/projects ~/nixos-setup -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find -H ~/projects ~/nixos-setup \
+        -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
@@ -12,20 +13,31 @@ fi
 
 selected_name=$(basename "$selected" | tr . _)
 
-# my tmux start at index 1 : please read "tmux.conf"
-create_session(){
+create_session() {
+    # Terminal 1: Codex
     tmux new-session -ds "$selected_name" -c "$selected" || return $?
-    tmux rename-window -t "=$selected_name:1" nvim || return $?
-    tmux send-keys -t "=$selected_name:1" "nvim ." Enter || return $?
-    tmux new-window -t "=$selected_name:" -n scratch -c "$selected" || return $?
+    tmux rename-window -t "=$selected_name:1" codex || return $?
+    tmux send-keys -t "=$selected_name:1" "codex" Enter || return $?
+
+    # Terminal 2: Neovim
+    tmux new-window -t "=$selected_name:2" \
+        -n nvim -c "$selected" || return $?
+    tmux send-keys -t "=$selected_name:2" "nvim ." Enter || return $?
+
+    # Terminal 3: Scratch
+    tmux new-window -t "=$selected_name:3" \
+        -n scratch -c "$selected" || return $?
+
+    # Default to Neovim
+    tmux select-window -t "=$selected_name:2"
 }
 
-if ! tmux has-session -t="$selected_name" 2>/dev/null; then
+if ! tmux has-session -t "=$selected_name" 2>/dev/null; then
     create_session || exit $?
 fi
 
 if [[ -z $TMUX ]]; then
-    tmux attach-session -t "=$selected_name:1"
+    tmux attach-session -t "=$selected_name:2"
 else
-    tmux switch-client -t "=$selected_name:1"
+    tmux switch-client -t "=$selected_name:2"
 fi
