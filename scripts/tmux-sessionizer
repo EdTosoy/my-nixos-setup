@@ -1,43 +1,161 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-if [[ $# -eq 1 ]]; then
-    selected=$1
-else
-    selected=$(find -H ~/projects ~/nixos-setup \
-        -mindepth 1 -maxdepth 1 -type d | fzf)
-fi
-
-if [[ -z $selected ]]; then
-    exit 0
-fi
-
-selected_name=$(basename "$selected" | tr . _)
-
-create_session() {
-    # Terminal 1: Codex
-    tmux new-session -ds "$selected_name" -c "$selected" || return $?
-    tmux rename-window -t "=$selected_name:1" codex || return $?
-    tmux send-keys -t "=$selected_name:1" "codex" Enter || return $?
-
-    # Terminal 2: Neovim
-    tmux new-window -t "=$selected_name:2" \
-        -n nvim -c "$selected" || return $?
-    tmux send-keys -t "=$selected_name:2" "nvim ." Enter || return $?
-
-    # Terminal 3: Scratch
-    tmux new-window -t "=$selected_name:3" \
-        -n scratch -c "$selected" || return $?
-
-    # Default to Neovim
-    tmux select-window -t "=$selected_name:2"
+die() {
+    printf 'project-tmux: %s\n' "$*" >&2
+    exit 1
 }
 
-if ! tmux has-session -t "=$selected_name" 2>/dev/null; then
-    create_session || exit $?
+# --- Dependencies and arguments ---
+
+(( $# <= 1 )) || die 'usage: project-tmux [directory]'
+
+for tool in tmux realpath sha256sum flock; do
+    command -v "$tool" >/dev/null 2>&1 ||
+        die "missing dependency: $tool"
+done
+
+# --- Project selection ---
+
+if (( $# == 1 )); then
+    selected=$1
+else
+    command -v fzf >/dev/null 2>&1 ||
+        die 'missing dependency: fzf'
+
+    roots=()
+
+    for root in "$HOME/projects" "$HOME/nixos-setup"; do
+        [[ -d $root ]] && roots+=("$root")
+    done
+
+    (( ${#roots[@]} )) ||
+        die 'no project search directories found'
+
+    # NUL delimiters preserve spaces and newlines in paths.
+    IFS= read -r -d '' selected < <(
+        find -L "${roots[@]}" \
+            -mindepth 1 -maxdepth 1 -type d -print0 |
+            fzf --read0 --print0 --prompt='Project > '
+    ) || exit 0
 fi
 
-if [[ -z $TMUX ]]; then
-    tmux attach-session -t "=$selected_name:2"
+# --- Normalize and validate the path ---
+
+project=$(realpath -e -- "$selected") ||
+    die "path not found: $selected"
+
+[[ -d $project && -x $project ]] ||
+    die "not an accessible directory: $project"
+
+# Stable, readable, collision-resistant session name.
+base=${project##*/}
+slug=$(printf '%s' "$base" | LC_ALL=C tr -c 'A-Za-z0-9_-' '_')
+
+hash=$(printf '%s' "$project" | sha256sum)
+hash=${hash%% *}
+
+session="p-${slug:0:30}-${hash:0:10}"
+target="=$session"
+
+# --- Prevent simultaneous initialization ---
+
+lock_dir=${XDG_RUNTIME_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}}/project-tmux
+
+mkdir -p -m 700 -- "$lock_dir"
+
+exec {lock_fd}>"$lock_dir/${hash:0:20}.lock"
+flock -x "$lock_fd"
+
+# --- Cleanup only newly created, incomplete sessions ---
+
+created=0
+ready=0
+
+cleanup() {
+    if (( created && ! ready )); then
+        tmux kill-session -t "$target" 2>/dev/null || true
+    fi
+}
+
+trap cleanup EXIT
+
+# --- Window management ---
+
+window_exists() {
+    tmux list-windows -t "$target" -F '#{window_index}' |
+        grep -Fx "$1" >/dev/null
+}
+
+ensure_window() {
+    local index=$1 name=$2 command=${3:-} actual_name
+
+    if window_exists "$index"; then
+        actual_name=$(tmux display-message -p \
+            -t "$target:$index" '#{window_name}')
+
+        [[ $actual_name == "$name" ]] ||
+            die "window $index is '$actual_name', not '$name'; refusing to overwrite it"
+
+        return
+    fi
+
+    tmux new-window -d \
+        -t "$target:$index" \
+        -n "$name" \
+        -c "$project"
+
+    if [[ -n $command ]]; then
+        tmux send-keys -t "$target:$index" "$command" Enter
+    fi
+}
+
+# --- Initialize or reuse session ---
+
+if ! tmux has-session -t "$target" 2>/dev/null; then
+    tmux new-session -d \
+        -s "$session" \
+        -n codex \
+        -c "$project"
+
+    created=1
+
+    first_index=$(tmux display-message -p \
+        -t "$target" '#{window_index}')
+
+    [[ $first_index == 1 ]] ||
+        die "tmux starts at window $first_index; set base-index to 1 in tmux.conf"
+
+    tmux set-option -t "$target" @project_directory "$project"
+    tmux set-option -t "$target" renumber-windows off
+
+    tmux send-keys -t "$target:1" codex Enter
 else
-    tmux switch-client -t "=$selected_name:2"
+    owner=$(tmux show-options -qv \
+        -t "$target" @project_directory)
+
+    [[ $owner == "$project" ]] ||
+        die "session '$session' already exists but is not registered to this directory"
+
+    tmux set-option -t "$target" renumber-windows off
+fi
+
+# --- Ensure all three windows exist ---
+
+ensure_window 1 codex codex
+ensure_window 2 nvim 'nvim .'
+ensure_window 3 scratch
+
+ready=1
+
+# Release the lock before attaching.
+flock -u "$lock_fd"
+exec {lock_fd}>&-
+
+# --- Open Neovim by default ---
+
+if [[ -n ${TMUX:-} ]]; then
+    tmux switch-client -t "$target:2"
+else
+    tmux attach-session -t "$target:2"
 fi
