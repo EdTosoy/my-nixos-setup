@@ -80,6 +80,7 @@
 
     # media
     playerctl
+    ffmpeg
 
     # dev
     nodejs_24
