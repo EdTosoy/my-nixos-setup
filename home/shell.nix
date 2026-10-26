@@ -1,4 +1,14 @@
-{ ... }:
+{ config, ... }:
+let
+  pnpmShellInit = ''
+    # Refresh long-lived parent environments even when HM session vars were sourced.
+    export PNPM_HOME="${config.home.sessionVariables.PNPM_HOME}"
+    case ":$PATH:" in
+      *:"$PNPM_HOME/bin":*) ;;
+      *) export PATH="$PNPM_HOME/bin''${PATH:+:$PATH}" ;;
+    esac
+  '';
+in
 {
   programs.direnv = {
     enable = true;
@@ -10,6 +20,8 @@
   #################################
   programs.bash = {
     enable = true;
+    profileExtra = pnpmShellInit;
+    initExtra = pnpmShellInit;
     historyControl = [
       "ignoredups"
       "erasedups"
