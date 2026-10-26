@@ -35,6 +35,7 @@
   };
   home.sessionPath = [
     "$HOME/.local/bin"
+    "$HOME/.local/share/pnpm/bin"
   ];
   #################################
   # User Packages
@@ -42,6 +43,7 @@
   home.packages = with pkgs; [
     # applications
     pkgs-unstable.zoom-us
+    audacity
 
     # terminals
     kitty
