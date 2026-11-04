@@ -44,6 +44,8 @@
     # applications
     pkgs-unstable.zoom-us
     audacity
+    kdePackages.kdenlive
+    gimp
 
     # terminals
     kitty
@@ -79,6 +81,7 @@
     jq
     wl-clipboard
     lsof
+    dnsutils
 
     # media
     playerctl
@@ -99,6 +102,7 @@
     ansible-lint
     gh
     python312
+    ssm-session-manager-plugin
 
     # cloud / infra
     terraform
@@ -135,6 +139,8 @@
     XCURSOR_SIZE = "36";
     PNPM_HOME = "$HOME/.local/share/pnpm";
   };
+
+  xdg.configFile."kdenliverc".source = ./kdenlive/kdenliverc;
 
   #################################
   # NeoVim
