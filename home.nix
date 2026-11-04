@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   pkgs-unstable,
   ...
@@ -141,17 +139,6 @@
     XCURSOR_SIZE = "36";
     PNPM_HOME = "$HOME/.local/share/pnpm";
   };
-
-  xdg.dataFile."color-schemes/GitHubDarkStudio.colors".source = ./kdenlive/GitHubDarkStudio.colors;
-
-  # Convert the old managed link before linkGeneration can remove it. Kdenlive
-  # owns the resulting writable file; later activations preserve GUI choices.
-  home.activation.kdenliveWritableConfig = lib.hm.dag.entryBetween [ "linkGeneration" ] [ "writeBoundary" ] ''
-    run ${pkgs.bash}/bin/bash ${./kdenlive/migrate-config.sh} \
-      ${lib.escapeShellArg "${config.xdg.configHome}/kdenliverc"} \
-      ${./kdenlive/kdenliverc} \
-      ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6
-  '';
 
   #################################
   # NeoVim
