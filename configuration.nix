@@ -22,7 +22,13 @@
   fileSystems."/mnt/storage" = {
     device = "/dev/disk/by-uuid/604eb451-ea69-4bfa-b3f0-d3069c7f9014";
     fsType = "ext4";
-    options = [ "nofail" ];
+    options = [
+      "nofail"
+      # Keep an autofs mount over the underlying directory while the SSD is absent.
+      "x-systemd.automount"
+      "x-systemd.device-timeout=5s"
+      "x-systemd.device-bound"
+    ];
   };
   #################################
   # Hostname / Networking
