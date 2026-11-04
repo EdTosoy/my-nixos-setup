@@ -5,6 +5,13 @@ Home Manager installs `GitHubDarkStudio.colors` under
 a selectable KDE color scheme without changing Sway, GTK, Qt style or the global
 KDE color scheme. Kdenlive is already installed in `home.nix`.
 
+This is a separate custom copy of the **Breeze Light** scheme bundled with KDE
+ColorScheme 6.26.0, recolored with the GitHub Dark palette and saved under its own
+name. The original **Breeze Light** and **Breeze Dark** schemes remain intact and
+selectable. The copy retains the light scheme's state effects and group structure,
+including a recolored inactive header, so switching focus does not reveal a light
+header. Its scheme ID and display name are independent of both built-in schemes.
+
 Close Kdenlive before activation. After reviewing and approving a system switch,
 use the repository's normal activation command:
 
@@ -43,6 +50,8 @@ Version checks used the flake's Kdenlive **26.04.3** and KDE ColorScheme
   reads `color-schemes/*.colors` through Qt's generic data locations.
 - [KDE palette reader](https://invent.kde.org/frameworks/kcolorscheme/-/blob/v6.26.0/src/kcolorscheme.cpp)
   defines the `Colors:*`, foreground, background, decoration and state-effect keys.
+- [Breeze Light base](https://invent.kde.org/frameworks/kcolorscheme/-/blob/v6.26.0/src/color-schemes/BreezeLight.colors)
+  supplies the structure and state-effect defaults for this separate custom scheme.
 - [Kdenlive Color Scheme manual](https://docs.kdenlive.org/en/user_interface/menu/settings_menu/themes.html)
   describes choosing a scheme from the application menu.
 

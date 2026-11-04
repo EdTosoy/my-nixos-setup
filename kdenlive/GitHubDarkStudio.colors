@@ -1,11 +1,16 @@
-[General]
-Name=GitHub Dark Studio
-ColorScheme=GitHubDarkStudio
-shadeSortColumn=true
+# SPDX-FileCopyrightText: Andrew Lake <jamboarder@gmail.com>
+# SPDX-FileCopyrightText: Marco Martin <notmart@gmail.com>
+# SPDX-FileCopyrightText: Nate Graham <nate@kde.org>
+# SPDX-FileCopyrightText: Noah Davis <noahadvs@gmail.com>
+# SPDX-FileCopyrightText: Neal Gompa <ngompa@kde.org>
+# SPDX-FileCopyrightText: David Redondo <kde@david-redondo.de>
+# SPDX-License-Identifier: LGPL-2.0-or-later
+
+# Based on KDE ColorScheme 6.26.0 src/color-schemes/BreezeLight.colors.
+# Separate custom palette; the bundled Breeze Light and Breeze Dark stay intact.
 
 [ColorEffects:Disabled]
-Enable=true
-Color=144,157,171
+Color=56,56,56
 ColorAmount=0
 ColorEffect=0
 ContrastAmount=0.65
@@ -14,106 +19,132 @@ IntensityAmount=0.1
 IntensityEffect=2
 
 [ColorEffects:Inactive]
-Enable=false
 ChangeSelectionColor=true
+Color=112,111,110
+ColorAmount=0.025
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=2
+Enable=false
+IntensityAmount=0
+IntensityEffect=0
 
 [Colors:Button]
-BackgroundNormal=45,51,59
 BackgroundAlternate=68,76,86
+BackgroundNormal=45,51,59
 DecorationFocus=83,155,245
 DecorationHover=83,155,245
-ForegroundNormal=205,217,229
-ForegroundInactive=144,157,171
 ForegroundActive=83,155,245
+ForegroundInactive=144,157,171
 ForegroundLink=83,155,245
-ForegroundVisited=144,157,171
 ForegroundNegative=244,112,103
 ForegroundNeutral=210,153,34
+ForegroundNormal=205,217,229
 ForegroundPositive=87,171,90
+ForegroundVisited=144,157,171
 
 [Colors:Complementary]
-BackgroundNormal=28,33,40
 BackgroundAlternate=34,39,46
+BackgroundNormal=28,33,40
 DecorationFocus=83,155,245
 DecorationHover=83,155,245
-ForegroundNormal=205,217,229
-ForegroundInactive=144,157,171
 ForegroundActive=83,155,245
+ForegroundInactive=144,157,171
 ForegroundLink=83,155,245
-ForegroundVisited=144,157,171
 ForegroundNegative=244,112,103
 ForegroundNeutral=210,153,34
+ForegroundNormal=205,217,229
 ForegroundPositive=87,171,90
+ForegroundVisited=144,157,171
 
 [Colors:Header]
-BackgroundNormal=45,51,59
 BackgroundAlternate=34,39,46
+BackgroundNormal=45,51,59
 DecorationFocus=83,155,245
 DecorationHover=83,155,245
-ForegroundNormal=205,217,229
-ForegroundInactive=144,157,171
 ForegroundActive=83,155,245
+ForegroundInactive=144,157,171
 ForegroundLink=83,155,245
-ForegroundVisited=144,157,171
 ForegroundNegative=244,112,103
 ForegroundNeutral=210,153,34
+ForegroundNormal=205,217,229
 ForegroundPositive=87,171,90
+ForegroundVisited=144,157,171
+
+[Colors:Header][Inactive]
+BackgroundAlternate=45,51,59
+BackgroundNormal=34,39,46
+DecorationFocus=83,155,245
+DecorationHover=83,155,245
+ForegroundActive=83,155,245
+ForegroundInactive=144,157,171
+ForegroundLink=83,155,245
+ForegroundNegative=244,112,103
+ForegroundNeutral=210,153,34
+ForegroundNormal=205,217,229
+ForegroundPositive=87,171,90
+ForegroundVisited=144,157,171
 
 [Colors:Selection]
-BackgroundNormal=83,155,245
 BackgroundAlternate=45,51,59
+BackgroundNormal=83,155,245
 DecorationFocus=83,155,245
 DecorationHover=83,155,245
-ForegroundNormal=28,33,40
-ForegroundInactive=28,33,40
 ForegroundActive=28,33,40
+ForegroundInactive=28,33,40
 ForegroundLink=28,33,40
-ForegroundVisited=28,33,40
 ForegroundNegative=28,33,40
 ForegroundNeutral=28,33,40
+ForegroundNormal=28,33,40
 ForegroundPositive=28,33,40
+ForegroundVisited=28,33,40
 
 [Colors:Tooltip]
-BackgroundNormal=45,51,59
 BackgroundAlternate=34,39,46
+BackgroundNormal=45,51,59
 DecorationFocus=83,155,245
 DecorationHover=83,155,245
-ForegroundNormal=205,217,229
-ForegroundInactive=144,157,171
 ForegroundActive=83,155,245
+ForegroundInactive=144,157,171
 ForegroundLink=83,155,245
-ForegroundVisited=144,157,171
 ForegroundNegative=244,112,103
 ForegroundNeutral=210,153,34
+ForegroundNormal=205,217,229
 ForegroundPositive=87,171,90
+ForegroundVisited=144,157,171
 
 [Colors:View]
-BackgroundNormal=28,33,40
 BackgroundAlternate=34,39,46
+BackgroundNormal=28,33,40
 DecorationFocus=83,155,245
 DecorationHover=83,155,245
-ForegroundNormal=205,217,229
-ForegroundInactive=144,157,171
 ForegroundActive=83,155,245
+ForegroundInactive=144,157,171
 ForegroundLink=83,155,245
-ForegroundVisited=144,157,171
 ForegroundNegative=244,112,103
 ForegroundNeutral=210,153,34
+ForegroundNormal=205,217,229
 ForegroundPositive=87,171,90
+ForegroundVisited=144,157,171
 
 [Colors:Window]
-BackgroundNormal=34,39,46
 BackgroundAlternate=45,51,59
+BackgroundNormal=34,39,46
 DecorationFocus=83,155,245
 DecorationHover=83,155,245
-ForegroundNormal=205,217,229
-ForegroundInactive=144,157,171
 ForegroundActive=83,155,245
+ForegroundInactive=144,157,171
 ForegroundLink=83,155,245
-ForegroundVisited=144,157,171
 ForegroundNegative=244,112,103
 ForegroundNeutral=210,153,34
+ForegroundNormal=205,217,229
 ForegroundPositive=87,171,90
+ForegroundVisited=144,157,171
+
+[General]
+ColorScheme=GitHubDarkStudio
+Name=GitHub Dark Studio
+shadeSortColumn=true
 
 [KDE]
 contrast=4
