@@ -46,6 +46,7 @@
     audacity
     kdePackages.kdenlive
     gimp
+    obsidian
 
     # terminals
     kitty
