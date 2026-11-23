@@ -77,6 +77,28 @@ in
 
   home.file.".config/codex/services.json".source = ../config/codex-services.json;
 
+  systemd.user.services.codex-question-notify = {
+    Unit.Description = "Notify when a Codex tmux pane displays a question";
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.python3}/bin/python3 ${../scripts/codex-question-notify.py} ${pkgs.tmux}/bin/tmux ${pkgs.libnotify}/bin/notify-send %t/codex-question-notify";
+      RuntimeDirectory = "codex-question-notify";
+      RuntimeDirectoryMode = "0700";
+      RuntimeDirectoryPreserve = "yes";
+      Environment = "DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus";
+    };
+  };
+
+  systemd.user.timers.codex-question-notify = {
+    Unit.Description = "Check tmux for unanswered Codex questions";
+    Timer = {
+      OnStartupSec = "3s";
+      OnUnitInactiveSec = "3s";
+      AccuracySec = "1s";
+    };
+    Install.WantedBy = [ "timers.target" ];
+  };
+
   # Native Codex CLI Stop hook. Verify with /hooks after activation.
   # Keep mutable config.toml (including existing plugin trust) unmanaged.
   home.file.".codex/hooks.json".text = builtins.toJSON {
