@@ -44,6 +44,32 @@ PERMISSION = """
   Press enter to confirm or esc to cancel
 """
 QUESTION = "When should Sway lock your screen automatically?"
+# Filtered from the live Codex 0.171.0 tmux capture. The countdown is optional.
+QUEUED = f"""? {QUESTION}
+
+  • After 15 minutes of inactivity
+  • After 5 minutes of inactivity
+  • Only before suspend
+
+• Working (34s • esc to interrupt)
+
+• Queued follow-up inputs
+  ? 1 question · 13s
+    shift+← to answer
+
+› Ask Codex to do anything
+"""
+SECOND = "Should Sway dim the screen before locking?"
+THIRD = "Should Sway lock when the lid closes?"
+
+
+def queued_screen(count, *cards):
+    history = "".join(f"? {card}\n\n  • Yes\n  • No\n\n" for card in cards)
+    suffix = "question" if count == 1 else "questions"
+    queue = (
+        f"• Queued follow-up inputs\n  ? {count} {suffix} · 3s\n    shift+← to answer\n"
+    )
+    return f"{history}• Working (15s • esc to interrupt)\n\n{queue if count else ''}"
 
 
 def pane(number, command="codex", dead=0, project="nixos-setup"):
@@ -51,6 +77,36 @@ def pane(number, command="codex", dead=0, project="nixos-setup"):
 
 
 class QuestionnaireTests(unittest.TestCase):
+    def test_queue_requires_live_count_and_answer_binding(self):
+        self.assertEqual(detector.queued_question(QUEUED), (1, QUESTION))
+        wrapped = QUEUED.replace("screen automatically?", "screen\n  automatically?")
+        self.assertEqual(detector.queued_question(wrapped), (1, QUESTION))
+        messages = QUEUED.replace("  ? 1 question · 13s", "  ↳ Run the checks")
+        history_only = QUEUED.split("• Queued follow-up inputs")[0]
+        read_only = QUEUED.replace("to answer", "edit last queued message")
+        bogus = "• " + QUEUED.replace("\n", "\n  ")
+        for output in (history_only, messages, read_only, bogus, PERMISSION, ""):
+            with self.subTest(output=output):
+                self.assertIsNone(detector.queued_question(output))
+
+    def test_multiple_queued_questions_use_latest_visible_card(self):
+        for count in (1, 2, 3):
+            with self.subTest(count=count):
+                screen = queued_screen(count, "Should Sway dim\n  before locking?")
+                self.assertEqual(
+                    detector.queued_question(screen),
+                    (count, "Should Sway dim before locking?"),
+                )
+                self.assertEqual(
+                    detector.queued_question(queued_screen(count)), (count, None)
+                )
+        screen = queued_screen(2, QUESTION, SECOND)
+        self.assertEqual(detector.queued_question(screen), (2, SECOND))
+        conversational = "• Should we continue?\n› Do you need anything else?\n"
+        self.assertEqual(
+            detector.queued_question(conversational + queued_screen(2)), (2, None)
+        )
+
     def test_freeform_and_wrapped_options(self):
         self.assertEqual(detector.questionnaire(FREEFORM), (1, 1, "Share details."))
         self.assertEqual(detector.questionnaire(CHOICES), (1, 1, QUESTION))
@@ -130,6 +186,87 @@ class PollTests(unittest.TestCase):
         self.screens["%1"] = first.replace("automatically?", "on battery?")
         self.poll(state)
         self.assertEqual(self.notify.call_count, 3)
+
+    def test_queued_question_counts_down_and_opens_without_duplicate(self):
+        self.screens["%1"] = QUEUED
+        state = self.poll()
+        self.notify.assert_called_once_with("notify-send", "nixos-setup", QUESTION)
+        self.screens["%1"] = QUEUED.replace("34s", "37s").replace(" · 13s", "")
+        self.assertEqual(self.poll(state), state)
+        self.screens["%1"] = CHOICES
+        state = self.poll(state)
+        self.screens["%1"] = QUEUED
+        self.poll(state)
+        self.assertEqual(self.notify.call_count, 1)
+
+    def test_queue_falls_back_when_card_is_missing_and_resets_when_resolved(self):
+        status = QUEUED[QUEUED.index("• Queued follow-up inputs") :]
+        self.screens["%1"] = status
+        state = self.poll()
+        self.notify.assert_called_once_with(
+            "notify-send", "nixos-setup", "Codex has 1 question waiting for your input."
+        )
+        self.screens["%1"] = QUEUED
+        state = self.poll(state)
+        self.screens["%1"] = status.replace("1 question", "2 questions")
+        state = self.poll(state)
+        self.notify.assert_called_with(
+            "notify-send",
+            "nixos-setup",
+            "Codex has 2 questions waiting for your input.",
+        )
+        self.screens["%1"] = status
+        state = self.poll(state)
+        self.assertEqual(self.notify.call_count, 2)
+        self.screens["%1"] = PERMISSION
+        self.assertEqual(self.poll(state), {})
+        self.screens["%1"] = QUEUED
+        self.poll()
+        self.assertEqual(self.notify.call_count, 3)
+
+    def test_opening_a_form_does_not_reset_the_queue_count(self):
+        self.screens["%1"] = QUEUED.replace("1 question", "2 questions")
+        state = self.poll()
+        self.screens["%1"] = CHOICES
+        state = self.poll(state)
+        deliveries = self.notify.call_count
+        self.screens["%1"] = QUEUED.replace("1 question", "2 questions")
+        self.poll(state)
+        self.assertEqual(self.notify.call_count, deliveries)
+
+    def test_new_visible_question_in_same_queue(self):
+        self.screens["%1"] = QUEUED
+        state = self.poll()
+        new_question = "Should Sway dim the screen first?"
+        self.screens["%1"] = QUEUED.replace(QUESTION, new_question)
+        self.poll(state)
+        self.assertEqual(self.notify.call_count, 2)
+        self.notify.assert_called_with("notify-send", "nixos-setup", new_question)
+
+    def test_queue_growth_drop_clear_and_countdown(self):
+        state = {}
+        for count, cards, deliveries in (
+            (0, (), 0),
+            (1, (QUESTION,), 1),
+            (2, (SECOND,), 2),
+            (1, (QUESTION, SECOND), 2),
+            (0, (), 2),
+            (1, (QUESTION,), 3),
+            (2, (QUESTION, SECOND), 4),
+            (3, (QUESTION, SECOND, THIRD), 5),
+        ):
+            with self.subTest(count=count, deliveries=deliveries):
+                self.screens["%1"] = queued_screen(count, *cards)
+                state = self.poll(state)
+                self.screens["%1"] = self.screens["%1"].replace(" · 3s", " · 2s")
+                self.assertEqual(self.poll(state), state)
+                self.assertEqual(self.notify.call_count, deliveries)
+                if not count:
+                    self.assertEqual(state, {})
+        self.assertEqual(
+            [call.args[-1] for call in self.notify.call_args_list],
+            [QUESTION, SECOND, QUESTION, SECOND, THIRD],
+        )
 
     def test_independent_sessions_and_missing_or_non_codex_panes(self):
         self.panes = "\n".join(

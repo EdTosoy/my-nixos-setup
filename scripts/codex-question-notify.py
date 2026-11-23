@@ -18,6 +18,9 @@ FOOTER = re.compile(r"\bto submit (?:answer|all)(?:\s*\||\s*…|$)")
 FOOTER_CONTINUATION = re.compile(
     r"\b(?:to (?:navigate questions|interrupt)|change question)$"
 )
+QUEUE_COUNT = re.compile(r"  \? ([1-9][0-9]*) questions?(?: · (?:[0-9]+m )?[0-9]+s)?")
+QUEUE_ANSWER = re.compile(r"    \S.* to answer")
+QUESTION_CARD = re.compile(r"^\? (.+(?:\n  [^\s•][^\n]*)*)$", re.MULTILINE)
 PANE_FORMAT = (
     "#{pid}\t#{pane_id}\t#{pane_dead}\t#{pane_current_command}\t#{pane_current_path}"
 )
@@ -53,6 +56,57 @@ def questionnaire(screen):
             return index, total, " ".join(" ".join(prompt).split())
         return None
     return None
+
+
+def queued_question(screen):
+    # The history card can outlive the request. Only the live queue and its
+    # answer binding establish that something is still waiting for input.
+    history, marker, queue = ("\n" + screen).rpartition("\n• Queued follow-up inputs\n")
+    if not marker:
+        return None
+    rows = queue.splitlines()
+    for row, hint in zip(rows, rows[1:]):
+        if not row.startswith("  "):
+            break
+        match = QUEUE_COUNT.fullmatch(row.rstrip())
+        if match and QUEUE_ANSWER.fullmatch(hint.rstrip()):
+            count = int(match[1])
+            cards = QUESTION_CARD.findall(history)
+            prompt = " ".join(cards[-1].split()) if cards else None
+            return count, prompt
+    return None
+
+
+def fingerprint(project, text):
+    return hashlib.sha256(f"{project}\0{text}".encode()).hexdigest()
+
+
+def poll_queue(queued, notify_send, project, seen):
+    count, prompt = queued
+    digest = fingerprint(project, prompt) if prompt else None
+    previous_count, latest, announced = seen.get("queue", (0, None, []))
+    new_card = digest is not None and digest != latest and digest not in announced
+    if count > previous_count or (count == previous_count and latest and new_card):
+        already_opened = count == 1 and (
+            digest in seen.values() if digest else "1/1" in seen
+        )
+        if not already_opened:
+            subject = "question" if count == 1 else "questions"
+            message = (
+                prompt
+                if new_card
+                else f"Codex has {count} {subject} waiting for your input."
+            )
+            if not notify(notify_send, project, message):
+                return seen
+        latest = digest if new_card else None
+        if latest is not None:
+            announced = [*announced, latest]
+    elif new_card and (latest is None or count < previous_count):
+        # A newly visible card can belong to a queue count we already announced.
+        latest = digest
+        announced = [*announced, latest]
+    return {**seen, "queue": [count, latest, announced]}
 
 
 def capture(*command):
@@ -105,20 +159,33 @@ def poll(tmux, notify_send, previous):
             continue
         screen = capture(tmux, "-N", "capture-pane", "-p", "-t", pane)
         question = questionnaire(screen)
+        project = Path(directory).name or "/"
+        seen = previous.get(key, {}).copy()
         if question is None:
+            queued = queued_question(screen)
+            if queued is not None:
+                current[key] = poll_queue(queued, notify_send, project, seen)
             continue
         index, total, text = question
         slot = f"{index}/{total}"
-        project = Path(directory).name or "/"
-        fingerprint = hashlib.sha256(f"{project}\0{text}".encode()).hexdigest()
-        seen = previous.get(key, {})
+        digest = fingerprint(project, text)
+        queued = seen.pop("queue", None)
         # A changed prompt in the same slot or a changed total starts a new form.
         if any(not item.endswith(f"/{total}") for item in seen) or (
-            slot in seen and seen[slot] != fingerprint
+            slot in seen and seen[slot] != digest
         ):
             seen = {}
-        if seen.get(slot) != fingerprint and notify(notify_send, project, text):
-            seen = {**seen, slot: fingerprint}
+        already_queued = queued is not None and (
+            digest in queued[2] or (queued[0] == total == 1 and queued[1] is None)
+        )
+        if (
+            seen.get(slot) == digest
+            or already_queued
+            or notify(notify_send, project, text)
+        ):
+            seen[slot] = digest
+        if queued is not None:
+            seen["queue"] = queued
         current[key] = seen
     return current
 
