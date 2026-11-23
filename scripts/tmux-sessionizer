@@ -11,7 +11,14 @@ if [[ -z $selected ]]; then
     exit 0
 fi
 
-selected_name=$(basename "$selected" | tr . _)
+if ! IFS= read -r -d '' selected < <(realpath -ez -- "$selected") || [[ ! -d $selected ]]; then
+    printf 'Select an existing project directory.\n' >&2
+    exit 1
+fi
+
+project_name=$(printf '%s' "${selected##*/}" | tr -c '[:alnum:]_-' '_')
+project_hash=$(printf '%s' "$selected" | sha256sum) || exit $?
+selected_name="${project_name:-project}-${project_hash%% *}"
 
 create_session() {
     # Terminal 1: Codex

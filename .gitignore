@@ -1,2 +1,4 @@
 # Never track legacy local password configuration.
 secrets.nix
+__pycache__/
+*.pyc

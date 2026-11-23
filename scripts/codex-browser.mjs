@@ -148,9 +148,14 @@ async function main() {
         catch { result.trace = null; result.status = "FAIL"; }
         try { await context.close(); } catch { result.status = "FAIL"; }
       } else result.trace = null;
-      if (browser) await browser.close();
-      // Include errors from popups and from screenshot/trace capture, not just navigation.
-      if (Object.entries(counts).some(([key, value]) => key !== "expectedHttpError" && value > 0)) result.status = "FAIL";
+      if (browser) {
+        try { await browser.close(); } catch { result.status = "FAIL"; }
+      }
+      // Require both artifacts and include errors reported during capture.
+      if (!result.screenshot || !result.trace ||
+          Object.entries(counts).some(([key, value]) => key !== "expectedHttpError" && value > 0)) {
+        result.status = "FAIL";
+      }
     }
     results.push(result);
   }
